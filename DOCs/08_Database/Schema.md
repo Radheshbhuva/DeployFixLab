@@ -1,0 +1,178 @@
+# 03 — Database Schema & DDL Specification
+
+---
+
+## Document Metadata
+
+| Field               | Value                                                             |
+|---------------------|-------------------------------------------------------------------|
+| **Document Name**   | Database Schema & DDL Specification                               |
+| **Document ID**     | DFIX-DB-003                                                       |
+| **Version**         | 1.0.0                                                             |
+| **Status**          | Approved                                                          |
+| **Owner**           | Database Architect                                                |
+| **Reviewer**        | Full Engineering Team                                             |
+| **Classification**  | Internal — Confidential                                           |
+| **Created Date**    | 2026-08-02                                                        |
+| **Last Updated**    | 2026-08-07                                                        |
+| **Project**         | DeployFix Lab                                                     |
+| **Project Code**    | DFIX                                                              |
+
+---
+
+# 1. Prisma Schema Definition (`prisma/schema.prisma`)
+
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum LabStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  FAILED_INJECTED
+  RECOVERED
+  VERIFIED
+}
+
+model User {
+  id            String            @id @default(uuid()) @db.Uuid
+  email         String            @unique @db.VarChar(255)
+  passwordHash  String            @map("password_hash") @db.Text
+  name          String            @db.VarChar(100)
+  role          Role              @default(STUDENT)
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+
+  tasks         Task[]
+  refreshTokens RefreshToken[]
+  labProgress   UserLabProgress[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  token     String   @unique @db.Text
+  isRevoked Boolean  @default(false) @map("is_revoked")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Task {
+  id          String     @id @default(uuid()) @db.Uuid
+  userId      String     @map("user_id") @db.Uuid
+  title       String     @db.VarChar(200)
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?  @map("due_date")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("tasks")
+}
+
+model LabScenario {
+  id            String            @id @default(uuid()) @db.Uuid
+  code          String            @unique @db.VarChar(50)
+  title         String            @db.VarChar(200)
+  category      String            @db.VarChar(100)
+  difficulty    String            @db.VarChar(50)
+  description   String            @db.Text
+  initialConfig Json              @map("initial_config")
+  createdAt     DateTime          @default(now()) @map("created_at")
+
+  failures      ChaosFailure[]
+  progress      UserLabProgress[]
+
+  @@map("lab_scenarios")
+}
+
+model ChaosFailure {
+  id             String      @id @default(uuid()) @db.Uuid
+  labId          String      @map("lab_id") @db.Uuid
+  vectorType     String      @map("vector_type") @db.VarChar(100)
+  targetService  String      @map("target_service") @db.VarChar(100)
+  payload        Json
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  lab            LabScenario @relation(fields: [labId], references: [id], onDelete: Cascade)
+
+  @@map("chaos_failures")
+}
+
+model UserLabProgress {
+  id          String            @id @default(uuid()) @db.Uuid
+  userId      String            @map("user_id") @db.Uuid
+  labId       String            @map("lab_id") @db.Uuid
+  status      LabStatus         @default(NOT_STARTED)
+  startedAt   DateTime          @default(now()) @map("started_at")
+  completedAt DateTime?         @map("completed_at")
+
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab         LabScenario       @relation(fields: [labId], references: [id], onDelete: Cascade)
+  logs        VerificationLog[]
+
+  @@unique([userId, labId])
+  @@map("user_lab_progress")
+}
+
+model VerificationLog {
+  id         String          @id @default(uuid()) @db.Uuid
+  progressId String          @map("progress_id") @db.Uuid
+  isPassed   Boolean         @map("is_passed")
+  output     Json
+  executedAt DateTime        @default(now()) @map("executed_at")
+
+  progress   UserLabProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+
+  @@map("verification_logs")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  action    String   @db.VarChar(100)
+  resource  String   @db.VarChar(100)
+  details   Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+```
