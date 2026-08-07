@@ -35,6 +35,25 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
+| `3416268` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Debugging.md Docker Troubleshooting Guide` | Pushed | Local CLI |
+| `25bb86c` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Health_Checks.md Container Health Check Specification` | Pushed | Local CLI |
+| `ee5e4be` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Security.md Container Security & Hardening Guide` | Pushed | Local CLI |
+| `4d05c66` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Image_Optimization.md Docker Image Optimization Guide` | Pushed | Local CLI |
+| `4684bf2` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Volumes.md Volume & Storage Management Guide` | Pushed | Local CLI |
+| `1b69fef` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Networking.md Container Networking Specification` | Pushed | Local CLI |
+| `d5f1d5d` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Compose_Guide.md Docker Compose Orchestration Guide` | Pushed | Local CLI |
+| `c50237a` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Dockerfile_Guidelines.md Dockerfile Authoring Standard` | Pushed | Local CLI |
+| `76c09d3` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `12_Docker` | `docs(docker): add Docker_Architecture.md Docker Container Architecture` | Pushed | Local CLI |
+| `d84e0a7` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `11_Backend` | `docs(backend): add Validation.md Input Validation & Sanitization Standard` | Pushed | Local CLI |
+| `1c82ed5` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `11_Backend` | `docs(backend): add Logging.md Structured Logging Specification` | Pushed | Local CLI |
+| `3f4b99b` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `11_Backend` | `docs(backend): add Middleware_Standard.md Express Middleware Specification` | Pushed | Local CLI |
+| `f909d45` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `11_Backend` | `docs(backend): add Module_Structure.md Backend Domain Module Structure` | Pushed | Local CLI |
+| `3aa8b16` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `11_Backend` | `docs(backend): add Backend_Guidelines.md Backend Engineering Guidelines` | Pushed | Local CLI |
+| `70fc073` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `10_Frontend` | `docs(frontend): add State_Management.md State Management Specification` | Pushed | Local CLI |
+| `a36005b` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `10_Frontend` | `docs(frontend): add UI_Standards.md UI/UX & Design Tokens Standard` | Pushed | Local CLI |
+| `c76e717` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `10_Frontend` | `docs(frontend): add Component_Architecture.md Component Architecture` | Pushed | Local CLI |
+| `9cffe4a` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `10_Frontend` | `docs(frontend): add Routing.md React Router Specification` | Pushed | Local CLI |
+| `03ef870` | 2026-08-07 08:15:05 | Radheshbhuva | `main` | `10_Frontend` | `docs(frontend): add Frontend_Guidelines.md Frontend Engineering Guidelines` | Pushed | Local CLI |
 | `383b913` | 2026-08-07 08:09:46 | Radheshbhuva | `main` | `Development_History` | `docs(history): sync Commit_History.md with Database & API commits` | Pushed | Local CLI |
 | `d430fbe` | 2026-08-07 08:09:20 | Radheshbhuva | `main` | `09_API` | `docs(api): add Error_Codes.md Master API Error Codes Register` | Pushed | Local CLI |
 | `d407496` | 2026-08-07 08:09:20 | Radheshbhuva | `main` | `09_API` | `docs(api): add Authentication_API.md Authentication & Identity API Specification` | Pushed | Local CLI |
