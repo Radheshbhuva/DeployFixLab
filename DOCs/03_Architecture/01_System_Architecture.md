@@ -28,7 +28,7 @@ The system leverages a modular, decoupled tier structure:
 * **Client / Presentation Layer:** Single Page Application (SPA) built with React 18, TypeScript, and Vite.
 * **Ingress / Reverse Proxy Layer:** Nginx Web Server serving static frontend assets, managing SSL termination, rate limiting, and routing API traffic.
 * **Application / Business Logic Layer:** RESTful Micro-service API built with Node.js, Express.js, and TypeScript.
-* **Data Storage Layer:** PostgreSQL Relational Database with Prisma ORM.
+* **Data Storage Layer:** PostgreSQL Relational Database accessed via Prisma ORM (`prisma/schema.prisma`, Prisma Migrate, Prisma Client). In local environments, a Dockerized PostgreSQL container is utilized; in cloud environments, Supabase PostgreSQL serves as the managed cloud database. Developers use Prisma Studio (`npx prisma studio`) for local record inspection, while Supabase Dashboard / Studio provides cloud database administration.
 * **Chaos Engineering & Failure Injection Engine:** Dedicated sub-system for injecting controlled environment breakages (DNS failures, connection timeouts, schema mismatches, OOM conditions).
 * **Observability Suite:** Structured JSON logger (Winston), health probes (`/health/liveness`, `/health/readiness`), and WebSocket log streaming.
 
