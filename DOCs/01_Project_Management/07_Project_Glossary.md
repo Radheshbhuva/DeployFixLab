@@ -25,9 +25,20 @@
 
   ORM                     Object Relational Mapper
 
-  Prisma                  ORM used with PostgreSQL
+  Prisma                  Object-Relational Mapper used by DeployFix Lab to access PostgreSQL
 
-  PostgreSQL              Relational database system
+  Prisma Migrate          Migration system used to manage database schema changes
+
+  Prisma Studio           Developer GUI used to inspect and manage database records through the Prisma data model
+
+  PostgreSQL              Relational database management system used by DeployFix Lab
+
+  Supabase                Cloud platform used to host the managed PostgreSQL database for DeployFix Lab cloud environments
+
+  Supabase PostgreSQL     Managed PostgreSQL database instance used by DeployFix Lab in cloud environments
+
+  Supabase Dashboard /    Cloud administration interface used to inspect and manage the hosted Supabase PostgreSQL database
+  Studio
 
   React                   Frontend JavaScript library
 
