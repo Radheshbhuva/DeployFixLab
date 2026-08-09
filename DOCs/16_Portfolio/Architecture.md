@@ -42,3 +42,32 @@ graph TD
 2. **Stateless API & JWT Authentication:** API nodes maintain zero in-memory session state; authentication uses short-lived JWT access tokens accompanied by HttpOnly, SameSite refresh cookies stored in PostgreSQL.
 3. **Bridge Network Isolation:** All backend components communicate exclusively over `dfix-net`, an internal Docker bridge network. Only Nginx exposes host ports (80/443), protecting database and API ports from external exposure.
 4. **Chaos Injection via Docker API:** Chaos engine triggers targeted container disruptions by interacting directly with the Docker daemon API socket in an isolated lab context.
+
+---
+
+# 3. Dual Database Environment Architecture
+
+```
+                               DeployFix Lab API
+                                       │
+                                       ▼
+                                 Prisma Client
+                                       │
+                                       ▼
+                              PostgreSQL Database
+                                       │
+                      ┌────────────────┴────────────────┐
+                      │                                 │
+               Local Environment                 Cloud Environment
+                      │                                 │
+               Docker PostgreSQL                 Supabase PostgreSQL
+                      │                                 │
+                      ▼                                 ▼
+               Prisma Studio                     Supabase Dashboard
+```
+
+* **Relational Database Engine:** PostgreSQL
+* **Data Access & ORM:** Prisma ORM (`schema.prisma`, Prisma Client, Prisma Migrate)
+* **Local Development Database:** Dockerized PostgreSQL container
+* **Cloud Database Provider:** Supabase PostgreSQL
+* **Database Inspection & Administration:** Prisma Studio (`npx prisma studio`) for local developer record debugging; Supabase Dashboard / Supabase Studio for cloud database management.
