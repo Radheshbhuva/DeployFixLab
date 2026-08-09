@@ -55,7 +55,13 @@ The application intentionally injects infrastructure anomalies—such as databas
                  │
                  └──► [ Express API + TypeScript (Backend Server) ]
                                  │
-                                 ├──► [ PostgreSQL 16 DB (Prisma ORM) ]
+                                 ├──► [ Prisma Client ]
+                                 │          │
+                                 │          ▼
+                                 │     [ PostgreSQL Database ]
+                                 │          │
+                                 │          ├──► Local: Docker PostgreSQL
+                                 │          └──► Cloud: Supabase PostgreSQL
                                  │
                                  └──► [ Chaos Failure Engine Driver ]
 ```
