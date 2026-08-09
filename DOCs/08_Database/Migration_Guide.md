@@ -55,3 +55,10 @@ If a migration fails during deployment:
 1. Identify failing migration step: `npx prisma migrate status`.
 2. Mark migration as resolved or rolled back: `npx prisma migrate resolve --rolled-back <migration_name>`.
 3. Restore database snapshot from automated PostgreSQL volume backup if data corruption occurred.
+
+---
+
+# 5. Database Inspection & Administration Tools
+
+* **Developer Local Inspection:** Developers launch Prisma Studio (`npx prisma studio`) to visually inspect records and verify CRUD migrations against local Docker PostgreSQL.
+* **Cloud Database Administration:** Production schema migrations run against **Supabase PostgreSQL** via `DATABASE_URL`. Remote table monitoring and cloud SQL execution are performed via **Supabase Dashboard / Supabase Studio**.
