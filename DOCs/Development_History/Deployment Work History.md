@@ -41,7 +41,7 @@ Record changes involving
 
 - Vercel
 - Render
-- Neon PostgreSQL
+- Supabase PostgreSQL
 - Docker Deployments
 - GitHub Actions
 - Nginx
@@ -112,7 +112,7 @@ Initial backend deployment.
 
 ### Database
 
-Neon PostgreSQL
+Supabase PostgreSQL
 
 ### Frontend
 
