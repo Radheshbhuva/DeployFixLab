@@ -30,6 +30,17 @@ The persistence tier of **DeployFix Lab** is built on **PostgreSQL 16** and orch
 3. **Optimized B-tree Indexing:** Indexes are placed on high-frequency lookup columns (`users.email`, `tasks.user_id`, `user_lab_progress.status`).
 4. **Audit Timestamps:** Every table contains `created_at` and `updated_at` timestamps with automatic trigger updates.
 
+### Database Engine & Administration Specification:
+* **Database Engine:** PostgreSQL
+* **ORM & Data Access:** Prisma ORM (Prisma Client)
+* **Schema Management:** Prisma Schema (`schema.prisma`)
+* **Migration Mechanism:** Prisma Migrate
+* **Local Development Database:** Dockerized PostgreSQL (`postgres:16-alpine`)
+* **Cloud Database Provider:** Supabase PostgreSQL
+* **Developer Database GUI:** Prisma Studio (`npx prisma studio`)
+* **Cloud Database GUI & Administration:** Supabase Dashboard / Supabase Studio
+* **Connection Interface:** Parameterized `DATABASE_URL` environment variable connection string.
+
 ---
 
 # 2. Database Entities & Core Modules
