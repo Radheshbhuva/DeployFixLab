@@ -40,7 +40,7 @@ The backend strictly adheres to a 4-tier separation pattern:
 [ Service Layer ]                --> Encapsulates core business logic, chaos triggers & state machines
         │
         ▼
-[ Repository / Data Layer ]     --> Prisma ORM executing parameterized SQL against PostgreSQL
+[ Repository / Data Layer ]     --> Prisma ORM executing queries via Prisma Client against PostgreSQL (Docker PostgreSQL locally / Supabase PostgreSQL in cloud)
 ```
 
 ---
