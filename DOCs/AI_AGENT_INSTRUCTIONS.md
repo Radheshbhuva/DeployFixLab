@@ -53,6 +53,7 @@ The `DOCs/` directory is organized into 17 specialized modules. Agents MUST insp
 | 📂 **`15_Troubleshooting`** | Failure catalogs for Docker, DB, Nginx, CI/CD, security violations, 5-Whys RCA framework. | `Deployment_Failures.md`, `Database_Failures.md`, `Incident_Playbooks.md`, `Root_Cause_Analysis.md` |
 | 📂 **`16_Portfolio`** | Showcase README, screenshot specifications, slide deck outline, resume story framework. | `README.md`, `Screenshots.md`, `Architecture.md`, `Presentation.md` |
 | 📂 **`17_Templates`** | Standardized markdown templates for ADRs, features, bug reports, post-mortems, meeting notes. | `ADR_Template.md`, `Feature_Template.md`, `Bug_Report_Template.md`, `Incident_Report_Template.md` |
+| 📂 **`18_AI_Engineering`** | Formal DeployFix AI architecture, context builder, evidence collection, diagnosis engine, output schemas, providers, security, benchmarks, and V1 MVP scope specifications. | `AI_System_Architecture.md`, `AI_Context_Architecture.md`, `Diagnosis_Engine_Specification.md`, `AI_V1_MVP_Scope.md` |
 
 ---
 
