@@ -88,7 +88,7 @@ All internal services communicate over an isolated Docker bridge network (`dfix-
 |---|---|---|
 | **Frontend** | React 18, Vite, TypeScript 5.4, Tailwind CSS, Zustand | Responsive SPA with real-time log stream rendering and dark mode. |
 | **Backend** | Node.js 20 LTS, Express.js 4.19, TypeScript 5.4 | Layered 4-Tier RESTful API with Zod payload validation. |
-| **Database** | PostgreSQL 16, Prisma ORM 5.11 | Relational database with automated migrations and seed datasets. |
+| **Database** | PostgreSQL, Prisma ORM, Supabase PostgreSQL | PostgreSQL relational engine accessed via Prisma Client; Dockerized PostgreSQL locally, Supabase PostgreSQL in cloud environments. Developer inspection via Prisma Studio (`npx prisma studio`), cloud administration via Supabase Dashboard. |
 | **Containers** | Docker Compose v2, Alpine Linux, Nginx Ingress | Multi-stage, non-root hardened container stack. |
 | **Observability** | Winston Logger, Morgan, WebSockets | Single-line JSON logging with correlation ID tracking. |
 | **Quality & CI** | Jest, Supertest, Vitest, Playwright, GitHub Actions | Automated unit, API integration, E2E, and linting pipelines. |
