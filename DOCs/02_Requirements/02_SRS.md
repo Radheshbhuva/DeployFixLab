@@ -42,7 +42,7 @@ This document bridges high-level product objectives (PRD) with granular technica
 This SRS covers all containerized components of DeployFix Lab:
 * **Frontend Web Application:** Single Page Application built with React.js and Vite.
 * **Backend Application Service:** RESTful API server built with Node.js / Express.js.
-* **Database Management System:** PostgreSQL Relational Database Engine.
+* **Database Management System:** PostgreSQL Relational Database Engine (accessed via Prisma ORM; hosted via Docker PostgreSQL for local environments and Supabase PostgreSQL for cloud environments).
 * **Reverse Proxy & Ingress:** Nginx Web Server for routing, SSL termination, and rate limiting.
 * **Troubleshooting & Failure Injection Engine:** Controlled chaos engineering module for simulating real-world deployment breakages (DNS failures, network dropouts, schema drift, container crashes, memory leaks).
 * **Observability Suite:** Health check endpoints, structured logging mechanisms, and telemetry collection.
@@ -97,7 +97,7 @@ DeployFix Lab does not interface directly with proprietary hardware devices. It 
 |---|---|---|---|
 | **Frontend ↔ Backend** | REST / JSON | HTTP/HTTPS | Standard CRUD API endpoints for state management and user interactions. |
 | **Log Streaming** | WebSocket / SSE | WSS/HTTP | Real-time log event streaming from Docker stdout to client interface. |
-| **Backend ↔ Database** | PostgreSQL Protocol | TCP/IP (Port 5432) | SQL queries executed via connection pool (e.g., `pg` driver). |
+| **Backend ↔ Database** | PostgreSQL Protocol | TCP/IP (Port 5432 / SSL) | Database queries executed via Prisma Client over `DATABASE_URL` (Docker PostgreSQL locally / Supabase PostgreSQL in cloud). |
 | **Reverse Proxy ↔ App** | FastCGI / HTTP | Internal Bridge | Nginx proxying requests to frontend static files and backend REST endpoints. |
 
 ---
