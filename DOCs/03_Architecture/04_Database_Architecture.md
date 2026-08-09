@@ -20,9 +20,15 @@
 
 ---
 
-# 1. Database Architecture Overview
+The persistence tier of **DeployFix Lab** utilizes **PostgreSQL** as its relational database engine, managed through **Prisma ORM** (`prisma/schema.prisma`, Prisma Migrate, Prisma Client).
 
-The persistence tier of **DeployFix Lab** utilizes **PostgreSQL 16**, managed through **Prisma ORM**. The schema is normalized (3NF), indexed for high-concurrency read operations, and configured with foreign key constraints to enforce relational integrity across users, labs, chaos injection scenarios, audit logs, and telemetry data.
+### Dual-Environment Architecture:
+* **Local Development Environment:** Uses a **Dockerized PostgreSQL** container (`postgres:16-alpine`) within the Docker Compose network to support hands-on local container debugging and chaos failure simulation.
+* **Cloud / Staging / Production Environments:** Uses **Supabase PostgreSQL** as the managed cloud database provider, accessed securely via the `DATABASE_URL` environment variable.
+
+### Database Administration & Developer Tooling:
+* **Developer Database GUI:** **Prisma Studio** (`npx prisma studio`) is used by developers for local database inspection and data debugging.
+* **Cloud Database GUI & Administration:** **Supabase Dashboard / Supabase Studio** serves as the primary visual interface for cloud database administration, table inspection, and remote monitoring.
 
 ---
 
