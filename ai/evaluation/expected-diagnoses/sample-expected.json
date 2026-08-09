@@ -1,0 +1,6 @@
+{
+  "scenarioId": "scenario_db_001",
+  "expectedProblem": "Backend cannot connect to PostgreSQL",
+  "expectedRootCause": "DATABASE_URL points to localhost instead of postgres service name",
+  "minConfidence": 0.90
+}
