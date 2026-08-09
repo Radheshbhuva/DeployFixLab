@@ -35,6 +35,8 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
+| `0949ad2` | 2026-08-09 17:42:06 | Radheshbhuva | `main` | `18_AI_Engineering` | `refactor(docs): consolidate AI Engineering documentation into 18_AI_Engineering and remove redundant 12_AI_Engineering folder` | Pushed | Local CLI |
+| `aedc771` | 2026-08-09 17:29:11 | Radheshbhuva | `main` | `Development_History` | `docs(history): sync Commit_History.md with 12_AI_Engineering v2.0 rewrite commits` | Pushed | Local CLI |
 | `3324976` | 2026-08-09 17:28:14 | Radheshbhuva | `main` | `12_AI_Engineering` | `docs(ai): rewrite AI_V1_MVP_Scope.md v2.0 with complete in-scope deliverables, API endpoints, explicit V1 prohibitions, acceptance criteria and feature freeze rules` | Pushed | Local CLI |
 | `432784a` | 2026-08-09 17:27:09 | Radheshbhuva | `main` | `12_AI_Engineering` | `docs(ai): rewrite AI_Evaluation_Strategy.md v2.0 with full evaluation suite schema, 10 benchmark metrics, 20 chaos scenarios, hallucination detection and CI/CD integration` | Pushed | Local CLI |
 | `e7d75fd` | 2026-08-09 17:26:10 | Radheshbhuva | `main` | `12_AI_Engineering` | `docs(ai): rewrite AI_Security_Guide.md v2.0 with data classification, secret redaction patterns, zero shell exec policy, filesystem access controls and incident response` | Pushed | Local CLI |
