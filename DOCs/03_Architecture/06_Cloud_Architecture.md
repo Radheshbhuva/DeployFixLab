@@ -20,31 +20,25 @@
 
 ---
 
-# 1. Cloud Hosting Topology Overview
-
 DeployFix Lab supports single-node VPS deployment (AWS EC2 / DigitalOcean Droplet / Hetzner) or container platform deployment (Railway / Render / AWS Lightsail) using Docker Compose.
 
 ```
-[ Internet Client ]
-        │ (Port 80 / 443)
-        ▼
-┌─────────────────────────────────────────────────────────────┐
-│ Cloud Virtual Private Cloud (VPC / Security Group)         │
-│                                                             │
-│  [ AWS Security Group / UFW Firewall (80, 443, 22) ]        │
-│                         │                                   │
-│                         ▼                                   │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │ Host Instance (Ubuntu 22.04 LTS LTS)                  │  │
-│  │                                                       │  │
-│  │  [ Docker Engine Runtime ]                            │  │
-│  │                                                       │  │
-│  │  ┌─────────────────────────────────────────────────┐  │  │
-│  │  │ Docker Compose Stack (Nginx ➔ App ➔ Postgres)   │  │  │
-│  │  └─────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+                     Cloud Application Infrastructure
+                                    │
+                                    ▼
+                         Express Backend Service
+                                    │
+                                    ▼
+                              Prisma Client
+                                    │
+                                    ▼
+                          Supabase PostgreSQL
 ```
+
+* **Cloud Database Provider:** **Supabase PostgreSQL** is the official managed cloud database provider for production and staging environments.
+* **Database Connection Abstraction:** The backend application connects to Supabase PostgreSQL over TLS via the standard `DATABASE_URL` environment variable.
+* **Cloud Administration:** Visual inspection, schema monitoring, and administrative tasks in cloud environments are performed via **Supabase Dashboard / Supabase Studio**.
+* **Local vs Cloud Isolation:** Local development utilizes Dockerized PostgreSQL to preserve container failure troubleshooting labs, while cloud environments target Supabase PostgreSQL for managed availability.
 
 ---
 
