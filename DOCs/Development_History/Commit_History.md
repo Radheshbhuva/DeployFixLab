@@ -35,6 +35,25 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
+| `d8d6703` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `Root` | `docs(root): update tech stack table with Supabase PostgreSQL & Prisma Studio details` | Pushed | Local CLI |
+| `87277be` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `Development_History` | `docs(history): reconcile historical deployment entries to Supabase PostgreSQL` | Pushed | Local CLI |
+| `111faa5` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `16_Portfolio` | `docs(portfolio): update architecture diagram with Docker local & Supabase cloud DB nodes` | Pushed | Local CLI |
+| `b3365cf` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `16_Portfolio` | `docs(portfolio): add dual database environment architecture diagram` | Pushed | Local CLI |
+| `39f0af5` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `15_Troubleshooting` | `docs(troubleshooting): add FAIL-DB-04 Supabase PostgreSQL connection troubleshooting` | Pushed | Local CLI |
+| `08a32f3` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `14_Deployment` | `docs(deployment): detail DATABASE_URL resolution for Docker local & Supabase cloud` | Pushed | Local CLI |
+| `13e2875` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `08_Database` | `docs(database): add Prisma Studio & Supabase Dashboard administration guide` | Pushed | Local CLI |
+| `5df0c40` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `08_Database` | `docs(database): add Database Engine & Administration Tools specification` | Pushed | Local CLI |
+| `6469249` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `03_Architecture` | `docs(adr): add ADR-007 Supabase PostgreSQL as Managed Cloud Database` | Pushed | Local CLI |
+| `63d591a` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `03_Architecture` | `docs(architecture): add Supabase PostgreSQL cloud database topology` | Pushed | Local CLI |
+| `95f5cd4` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `03_Architecture` | `docs(architecture): specify dual-environment DB architecture (Docker local / Supabase cloud)` | Pushed | Local CLI |
+| `529e5bb` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `03_Architecture` | `docs(architecture): clarify backend data layer execution via Prisma Client` | Pushed | Local CLI |
+| `f440637` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `03_Architecture` | `docs(architecture): update system architecture data layer with Supabase PostgreSQL and Prisma Studio` | Pushed | Local CLI |
+| `8428971` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `02_Requirements` | `docs(prd): reconcile cloud database scope to Supabase PostgreSQL` | Pushed | Local CLI |
+| `724ad1b` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `02_Requirements` | `docs(requirements): update FR-096 to Supabase PostgreSQL` | Pushed | Local CLI |
+| `e435d0e` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `02_Requirements` | `docs(srs): clarify PostgreSQL engine, Prisma ORM, Docker DB local, and Supabase DB cloud` | Pushed | Local CLI |
+| `4ed2596` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `01_Project_Management` | `docs(glossary): add terms for Supabase, Supabase PostgreSQL, Prisma Studio & Dashboard` | Pushed | Local CLI |
+| `b8bea1d` | 2026-08-09 14:51:47 | Radheshbhuva | `main` | `01_Project_Management` | `docs(roadmap): reconcile cloud database provider to Supabase PostgreSQL` | Pushed | Local CLI |
+| `f7341b2` | 2026-08-09 14:24:11 | Radheshbhuva | `main` | `Development_History` | `docs(history): final sync Commit_History.md log` | Pushed | Local CLI |
 | `d92588a` | 2026-08-09 14:23:55 | Radheshbhuva | `main` | `Development_History` | `docs(history): sync Commit_History.md with root README commit` | Pushed | Local CLI |
 | `0e38ece` | 2026-08-09 14:23:20 | Radheshbhuva | `main` | `Root` | `docs(root): add comprehensive README.md for DeployFix Lab` | Pushed | Local CLI |
 | `7a83ddb` | 2026-08-09 14:00:51 | Radheshbhuva | `main` | `Development_History` | `docs(history): sync Commit_History.md with Portfolio and Templates commits` | Pushed | Local CLI |
