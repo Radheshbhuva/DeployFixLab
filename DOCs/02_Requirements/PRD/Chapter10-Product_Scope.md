@@ -43,7 +43,7 @@ DeployFix Lab Version 1.0 delivers a complete production-oriented engineering pl
 
 - Render
 - Vercel
-- Neon PostgreSQL
+- Supabase PostgreSQL
 - Nginx
 - GitHub Actions
 
