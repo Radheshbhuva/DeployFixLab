@@ -41,6 +41,7 @@ DeployFix Lab combines **deterministic failure rule evaluators** with **LLM reas
 ## 💡 Why DeployFix Lab?
 
 In production environments, engineering outages rarely happen due to simple syntax typos. They occur because of:
+
 - **Database Host & Port Mismatches** (e.g., `DATABASE_URL` pointing to `localhost` instead of internal Docker service host)
 - **Database Connection Leaks** under high concurrent load (`ECONNREFUSED` / Prisma `P1001`)
 - **Nginx Proxy Routing Mismatches** and port configuration errors (`502 Bad Gateway`)
@@ -93,6 +94,7 @@ $$\text{READ} \longrightarrow \text{ANALYZE} \longrightarrow \text{EXPLAIN} \lon
 ```
 
 ### Key AI Design Invariants
+
 1. **Deterministic Rules First (Layer 1):** ~70% of known deployment failures are caught by regex and status rules with 100% reproducibility.
 2. **Evidence Grounding:** All LLM prompts are injected with real, secret-redacted telemetry signals to prevent hallucination.
 3. **No Autonomous Execution in V1:** `autoRemediationAllowed` is hardcoded to `false`. AI generates step-by-step recovery playbooks for human approval and manual execution.
@@ -151,52 +153,57 @@ DeployFixLab/
 
 ## 🛠️ Tech Stack
 
-| Component | Technologies & Frameworks | Description |
-|---|---|---|
-| **Frontend** | React 18, Vite, TypeScript 5.4, Tailwind CSS, Zustand | SPA dashboard with real-time log streaming, diagnostic visualization, and recovery step progress tracking. |
-| **Backend** | Node.js 20 LTS, Express.js 4.19, TypeScript 5.4 | Layered 4-Tier RESTful API server with Zod payload validation and OpenAPI 3.0 documentation. |
-| **Database** | PostgreSQL 16, Prisma ORM, Supabase PostgreSQL | PostgreSQL relational database accessed via Prisma ORM; Dockerized PostgreSQL for local development, Supabase PostgreSQL for cloud production. Visual inspection via Prisma Studio (`npx prisma studio`) and Supabase Dashboard. |
-| **AI Engine** | TypeScript, Zod, OpenAI GPT-4o, Custom Mock Provider | Hybrid diagnostic pipeline with 8-stage processing, deterministic failure rules, and structured JSON output. |
-| **Containers** | Docker Compose v2, Alpine Linux, Nginx Ingress | Multi-stage, non-root hardened container stack with internal network isolation (`dfix-net`). |
-| **Observability** | Winston Logger, Morgan, WebSockets | JSON telemetry logging with correlation IDs and live stdout/stderr socket streams. |
-| **Quality & CI** | Jest, Supertest, Vitest, Playwright, GitHub Actions | End-to-end automated testing, linting, AI evaluation benchmarks, and CI/CD pipelines. |
+| Component         | Technologies & Frameworks                             | Description                                                                                                                                                                                                                      |
+| ----------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend**      | React 18, Vite, TypeScript 5.4, Tailwind CSS, Zustand | SPA dashboard with real-time log streaming, diagnostic visualization, and recovery step progress tracking.                                                                                                                       |
+| **Backend**       | Node.js 20 LTS, Express.js 4.19, TypeScript 5.4       | Layered 4-Tier RESTful API server with Zod payload validation and OpenAPI 3.0 documentation.                                                                                                                                     |
+| **Database**      | PostgreSQL 16, Prisma ORM, Supabase PostgreSQL        | PostgreSQL relational database accessed via Prisma ORM; Dockerized PostgreSQL for local development, Supabase PostgreSQL for cloud production. Visual inspection via Prisma Studio (`npx prisma studio`) and Supabase Dashboard. |
+| **AI Engine**     | TypeScript, Zod, OpenAI GPT-4o, Custom Mock Provider  | Hybrid diagnostic pipeline with 8-stage processing, deterministic failure rules, and structured JSON output.                                                                                                                     |
+| **Containers**    | Docker Compose v2, Alpine Linux, Nginx Ingress        | Multi-stage, non-root hardened container stack with internal network isolation (`dfix-net`).                                                                                                                                     |
+| **Observability** | Winston Logger, Morgan, WebSockets                    | JSON telemetry logging with correlation IDs and live stdout/stderr socket streams.                                                                                                                                               |
+| **Quality & CI**  | Jest, Supertest, Vitest, Playwright, GitHub Actions   | End-to-end automated testing, linting, AI evaluation benchmarks, and CI/CD pipelines.                                                                                                                                            |
 
 ---
 
 ## 🧪 Built-In Chaos Lab Scenarios
 
-| Scenario ID | Name | Category | Difficulty | Failure Mode |
-|---|---|---|---|---|
-| **`LAB-001`** | DB Host Mismatch | Database | Beginner | `DATABASE_URL` set to `localhost` instead of `postgres` container; causes `ECONNREFUSED`. |
-| **`LAB-002`** | Nginx Proxy Mismatch | Networking | Beginner | Misconfigures upstream proxy port; results in `502 Bad Gateway`. |
-| **`LAB-003`** | Missing Env Variable | Configuration | Beginner | Strips required environment variables; causes container startup crashes. |
-| **`LAB-004`** | Container Memory Leak | Reliability | Advanced | Unbounded heap expansion leading to Linux OOM Kill (`Exit Code 137`). |
+| Scenario ID   | Name                  | Category      | Difficulty | Failure Mode                                                                              |
+| ------------- | --------------------- | ------------- | ---------- | ----------------------------------------------------------------------------------------- |
+| **`LAB-001`** | DB Host Mismatch      | Database      | Beginner   | `DATABASE_URL` set to `localhost` instead of `postgres` container; causes `ECONNREFUSED`. |
+| **`LAB-002`** | Nginx Proxy Mismatch  | Networking    | Beginner   | Misconfigures upstream proxy port; results in `502 Bad Gateway`.                          |
+| **`LAB-003`** | Missing Env Variable  | Configuration | Beginner   | Strips required environment variables; causes container startup crashes.                  |
+| **`LAB-004`** | Container Memory Leak | Reliability   | Advanced   | Unbounded heap expansion leading to Linux OOM Kill (`Exit Code 137`).                     |
 
 ---
 
 ## 🚀 Quickstart Guide
 
 ### Prerequisites
+
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or Docker Engine `v24.0+` & Docker Compose `v2+`
 - Node.js `v20+` & Git `v2.40+`
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Radheshbhuva/DeployFixLab.git
 cd DeployFixLab
 ```
 
 ### 2. Configure Environment Variables
+
 ```bash
 cp .env.example .env
 ```
 
 ### 3. Launch the Container Stack
+
 ```bash
 docker-compose up -d --build
 ```
 
 ### 4. Access the Application & Diagnostic Services
+
 - **Frontend Dashboard:** [http://localhost](http://localhost)
 - **Backend API Health Check:** [http://localhost/api/v1/health/liveness](http://localhost/api/v1/health/liveness)
 - **AI Provider Health Check:** [http://localhost/api/v1/health/ai](http://localhost/api/v1/health/ai)

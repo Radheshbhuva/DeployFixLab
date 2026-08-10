@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { evaluateConnectionRefused } from '../rules/database/connection-refused.rule';
 
 describe('RulesEngine', () => {

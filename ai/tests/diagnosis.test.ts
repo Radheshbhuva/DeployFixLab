@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { runDiagnosis } from '../diagnosis/diagnosis-engine';
 
 describe('DiagnosisEngine', () => {

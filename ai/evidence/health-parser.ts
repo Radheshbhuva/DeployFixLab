@@ -5,7 +5,11 @@ export interface HealthProbeEvidence {
   responseTimeMs: number;
 }
 
-export function parseHealthResponse(endpoint: string, statusCode: number, responseTimeMs: number): HealthProbeEvidence {
+export function parseHealthResponse(
+  endpoint: string,
+  statusCode: number,
+  responseTimeMs: number
+): HealthProbeEvidence {
   return {
     endpoint,
     statusCode,

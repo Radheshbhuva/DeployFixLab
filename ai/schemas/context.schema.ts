@@ -9,7 +9,9 @@ export const ContextSchema = z.object({
     deploymentFiles: z.array(z.string()).optional(),
   }),
   topology: z.object({
-    frontend: z.object({ framework: z.string(), buildTool: z.string(), port: z.number() }).optional(),
+    frontend: z
+      .object({ framework: z.string(), buildTool: z.string(), port: z.number() })
+      .optional(),
     backend: z.object({ runtime: z.string(), framework: z.string(), port: z.number() }).optional(),
     database: z.object({ engine: z.string(), provider: z.string(), port: z.number() }).optional(),
     proxy: z.object({ type: z.string(), ssl: z.boolean() }).optional(),

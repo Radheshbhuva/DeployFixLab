@@ -9,7 +9,7 @@ export class OpenAIProvider implements IAIProvider {
       rootCause: 'DATABASE_URL is configured to localhost instead of postgres service name',
       confidence: 0.94,
       severity: 'high',
-      evidence: payload.evidence.map(e => String(e.description || JSON.stringify(e))),
+      evidence: payload.evidence.map((e) => String(e.description || JSON.stringify(e))),
       recommendedActions: [
         'Update DATABASE_URL to postgresql://dfix:secret@postgres:5432/deployfix_db',
         'Restart backend container',

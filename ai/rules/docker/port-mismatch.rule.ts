@@ -12,7 +12,11 @@ export function evaluatePortMismatch(nginxConfigPort: number, backendAppPort: nu
     matched,
     ruleId: 'RULE-DOCKER-001',
     category: 'DOCKER_NETWORKING',
-    description: matched ? `Port mismatch: Nginx proxies to port ${nginxConfigPort} but Backend listens on port ${backendAppPort}` : 'Ports match',
-    evidence: matched ? [`Nginx upstream port: ${nginxConfigPort}`, `Backend app port: ${backendAppPort}`] : [],
+    description: matched
+      ? `Port mismatch: Nginx proxies to port ${nginxConfigPort} but Backend listens on port ${backendAppPort}`
+      : 'Ports match',
+    evidence: matched
+      ? [`Nginx upstream port: ${nginxConfigPort}`, `Backend app port: ${backendAppPort}`]
+      : [],
   };
 }
