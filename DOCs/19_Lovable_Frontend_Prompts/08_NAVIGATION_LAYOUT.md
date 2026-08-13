@@ -1,12 +1,11 @@
-# 08 — Navigation & App Layout Prompt for Lovable
+# 08 — Navigation & App Layout Module Specification for Antigravity
 
-> **Prerequisites:** Files 00–07 must be applied first.
-> This prompt builds the App Shell: sidebar navigation, top header, breadcrumbs, and responsive mobile layout.
-> This is the wrapper used by all authenticated pages.
+> **Prerequisites:** Specifications 00–07 must be reviewed first.
+> This specification details the App Shell: sidebar navigation, top header, breadcrumbs, user profile dropdown, and responsive mobile layout to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the App Layout shell for DeployFix Lab. This is the persistent layout wrapping all authenticated pages: sidebar navigation, top header bar, breadcrumbs, user profile dropdown, and responsive mobile behavior.
@@ -195,8 +194,9 @@ VISUAL POLISH:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/layouts/AppLayout.tsx`
 - `src/layouts/components/Sidebar.tsx`
 - `src/layouts/components/Header.tsx`
