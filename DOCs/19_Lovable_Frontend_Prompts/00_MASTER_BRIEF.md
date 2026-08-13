@@ -1,7 +1,7 @@
-# 00 — DeployFix Lab: Master Brief for Lovable
+# 00 — DeployFix Lab: Master Specification & Development Brief for Antigravity
 
-> **PASTE THIS ENTIRE FILE INTO YOUR LOVABLE PROJECT FIRST.**
-> This establishes the product context. Every subsequent prompt will build on top of this.
+> **THIS FILE ESTABLISHES THE PRODUCT CONTEXT AND ARCHITECTURAL BOUNDARIES FOR GOOGLE ANTIGRAVITY.**
+> Antigravity reads this document to drive direct frontend design, scaffolding, component creation, and runtime validation inside this workspace.
 
 ---
 
@@ -163,7 +163,7 @@ Border radius: rounded-lg (8px) for cards, rounded-md (6px) for inputs, rounded-
 
 ---
 
-## DIRECTORY STRUCTURE (for Lovable to follow)
+## DIRECTORY STRUCTURE (Target for Antigravity Implementation)
 
 ```
 frontend/
@@ -218,7 +218,7 @@ frontend/
 
 ---
 
-## GROUND RULES — ALWAYS FOLLOW THESE
+## GROUND RULES FOR ANTIGRAVITY EXECUTIONS
 
 ```
 1. Tech Stack: React 18, TypeScript strict, Vite, Tailwind CSS v3, React Router DOM v6, Zustand, Axios.
@@ -232,7 +232,3 @@ frontend/
 9. No default exports on components — always named exports.
 10. All API calls go through src/services/ — never raw fetch() in components.
 ```
-
----
-
-*This brief is the foundation. All subsequent prompts in files 01–10 build the actual pages and components on top of this.*
