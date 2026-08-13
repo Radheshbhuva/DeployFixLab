@@ -4,7 +4,7 @@ import { ConfidenceScoreGauge } from '@/components/ui/ConfidenceScoreGauge';
 import { EvidenceItem } from './EvidenceItem';
 import { RecoveryStepCard } from './RecoveryStepCard';
 import { Card } from '@/components/ui/Card';
-import { AlertOctagon, CheckSquare, Layers, ShieldAlert } from 'lucide-react';
+import { AlertOctagon, CheckSquare, Layers, ShieldAlert, Info, Sparkles, FileCode2 } from 'lucide-react';
 
 export interface DiagnosisOutputCardProps {
   diagnosis: DiagnosisOutput;
@@ -13,6 +13,28 @@ export interface DiagnosisOutputCardProps {
 export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagnosis }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
+      {/* Context Qualification Disclaimer Banner */}
+      {diagnosis.contextQualification && (
+        <div className="flex items-start gap-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 rounded-xl p-4 text-xs">
+          <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div className="font-semibold text-slate-100 flex items-center gap-2">
+              <span>Evidence Basis Qualification</span>
+              {diagnosis.sourcesUsed && (
+                <div className="flex gap-1.5 font-mono text-[11px]">
+                  {diagnosis.sourcesUsed.map((src, i) => (
+                    <span key={i} className="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30">
+                      {src}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <p className="text-slate-300">{diagnosis.contextQualification}</p>
+          </div>
+        </div>
+      )}
+
       {/* Top Header Card: Root Cause & Score */}
       <Card className="bg-gradient-to-r from-bg-surface to-bg-raised border border-border-default">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -34,6 +56,9 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
 
           <div className="flex flex-col items-center flex-shrink-0 bg-bg-primary/60 p-4 rounded-xl border border-border-default/60">
             <ConfidenceScoreGauge score={diagnosis.confidenceScore} size="md" />
+            <div className="text-[11px] font-mono text-slate-400 mt-2">
+              Level: <span className="text-indigo-400 font-bold">{diagnosis.confidenceLevel}</span>
+            </div>
           </div>
         </div>
       </Card>
@@ -86,13 +111,35 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
 
       {/* Guided Step-by-Step Recovery Plan */}
       <div className="space-y-4">
-        <h3 className="text-lg font-bold text-text-primary">
-          Step-by-Step Production Recovery Plan
+        <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-indigo-400" />
+          Step-by-Step Guided Recovery Plan
         </h3>
 
         <div className="space-y-4">
           {diagnosis.recoverySteps.map((step) => (
-            <RecoveryStepCard key={step.stepNumber} step={step} />
+            <div key={step.stepNumber} className="space-y-3">
+              <RecoveryStepCard step={step} />
+
+              {/* Code Diff Box if present */}
+              {step.codeDiff && (
+                <div className="ml-4 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono space-y-2">
+                  <div className="flex items-center gap-2 text-indigo-400 font-semibold border-b border-slate-800 pb-1.5">
+                    <FileCode2 className="w-4 h-4" />
+                    <span>Suggested Code Patch — {step.codeDiff.file}</span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="text-red-400 bg-red-500/10 px-2 py-1 rounded">
+                      - {step.codeDiff.oldCode}
+                    </div>
+                    <div className="text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">
+                      + {step.codeDiff.newCode}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
