@@ -33,7 +33,7 @@ junit.xml
 test-results/
 
 # Log Files & Runtime Debugging
-logs/
+/logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
