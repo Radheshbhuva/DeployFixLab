@@ -1,11 +1,11 @@
-# 10 — Pages, Routing & App Root Prompt for Lovable
+# 10 — Pages, Routing & App Root Module Specification for Antigravity
 
-> **Prerequisites:** Files 00–09 must be applied first.
-> This is the FINAL prompt. It wires everything together: React Router, app root, environment config, and Vite setup.
+> **Prerequisites:** Specifications 00–09 must be reviewed first.
+> This specification details the final integration step: React Router, App root, Vite configuration, environment variables, and package dependencies to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Wire together the complete DeployFix Lab React application. This is the final integration step: React Router, App root, Vite configuration, environment variables, and the package.json dependencies.
@@ -328,8 +328,9 @@ Confirm the following are wired correctly:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `package.json`
 - `tsconfig.json`
 - `vite.config.ts`
@@ -346,7 +347,7 @@ Confirm the following are wired correctly:
 
 ## 🎉 COMPLETION CONFIRMATION
 
-After this prompt, the **full DeployFix Lab frontend** should be:
+After executing this specification, the **full DeployFix Lab frontend** will be:
 
 - ✅ Fully wired and bootable with `npm run dev`
 - ✅ All 9 pages implemented and routed
