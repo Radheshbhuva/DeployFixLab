@@ -1,11 +1,11 @@
-# 02 — Authentication Pages Prompt for Lovable
+# 02 — Authentication Module Specification for Antigravity
 
-> **Prerequisites:** Files 00 and 01 must already be applied in Lovable.
-> This prompt builds the complete Authentication module: Login, Register, and token management.
+> **Prerequisites:** Specifications 00 and 01 must be reviewed first.
+> This specification details the complete Authentication module: Login, Register, token management, Zustand store, and route protection guards to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the complete Authentication module for DeployFix Lab. This includes the Login page, Registration page, Zustand auth store, Axios auth service, and route protection guards.
@@ -187,8 +187,9 @@ export type UserRole = 'STUDENT' | 'INSTRUCTOR' | 'ADMIN';
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/store/authStore.ts`
 - `src/services/authService.ts`
 - `src/services/apiClient.ts`
