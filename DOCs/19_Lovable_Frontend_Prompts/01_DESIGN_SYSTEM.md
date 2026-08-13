@@ -1,15 +1,14 @@
-# 01 — Design System Prompt for Lovable
+# 01 — Design System Specification for Antigravity
 
-> **Prerequisite:** Paste `00_MASTER_BRIEF.md` into Lovable first.
-> This prompt establishes the full design system — colors, typography, spacing, and reusable component tokens.
-> Paste this as the FIRST feature prompt in your Lovable session after the master brief.
+> **Prerequisite:** `00_MASTER_BRIEF.md` must be read first.
+> This specification defines the complete design system — colors, typography, spacing, and reusable component tokens to build in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
-I am building the DeployFix Lab frontend — a dark-mode engineering dashboard for production deployment troubleshooting. Set up the complete design system and Tailwind configuration as described below.
+DeployFix Lab frontend — a dark-mode engineering dashboard for production deployment troubleshooting. Set up the complete design system and Tailwind configuration as described below.
 
 ---
 
@@ -145,9 +144,9 @@ All components must:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
-After this prompt, Lovable should produce:
+Antigravity will create and configure:
 - `tailwind.config.js` — with all custom tokens
 - `src/index.css` — with Google Fonts imports and global reset
 - `src/components/ui/Button.tsx`
