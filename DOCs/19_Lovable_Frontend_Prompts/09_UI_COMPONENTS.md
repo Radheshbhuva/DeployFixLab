@@ -1,12 +1,11 @@
-# 09 — Reusable UI Components Prompt for Lovable
+# 09 — Reusable UI Components Module Specification for Antigravity
 
-> **Prerequisites:** Files 00–08 must be applied first.
-> This prompt builds additional reusable UI components not covered in the design system file.
-> These are domain-specific but still reusable across features.
+> **Prerequisites:** Specifications 00–08 must be reviewed first.
+> This specification details additional domain-specific reusable UI components to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the remaining shared reusable UI components for DeployFix Lab. These are used across multiple pages and features.
@@ -254,8 +253,9 @@ All components must:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/components/ui/ConfidenceScoreGauge.tsx`
 - `src/components/ui/ServiceStatusBadge.tsx`
 - `src/components/ui/CopyButton.tsx`
