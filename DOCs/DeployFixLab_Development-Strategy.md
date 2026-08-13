@@ -166,6 +166,7 @@ Branching Strategy
 Pull Requests
 CODEOWNERS
 .gitignore
+
 Step 2 — Development Environment
 
 Standardize:
@@ -184,6 +185,7 @@ Create:
 Never commit:
 
 .env
+
 Step 3 — Code Quality
 
 Set up:
@@ -201,6 +203,7 @@ Lint
 Format Check
    ↓
 Tests
+
 Step 4 — CI Foundation
 
 You should create the first GitHub Actions workflow before the project becomes large.
