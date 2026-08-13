@@ -1,12 +1,12 @@
-# 07 — Admin Chaos Control Panel Prompt for Lovable
+# 07 — Admin Chaos Control Module Specification for Antigravity
 
-> **Prerequisites:** Files 00–06 must be applied first.
-> This prompt builds the Admin/Instructor Chaos Control Panel.
-> Route: /admin/chaos — accessible only to ADMIN and INSTRUCTOR roles.
+> **Prerequisites:** Specifications 00–06 must be reviewed first.
+> This specification details the Admin/Instructor Chaos Control Panel — injecting, monitoring, and resetting failure scenarios across active lab sessions to implement in Antigravity.
+> Route: `/admin/chaos` — accessible only to ADMIN and INSTRUCTOR roles.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the Admin Chaos Control Panel for DeployFix Lab. This page is accessible only to ADMIN and INSTRUCTOR roles. It is the master control center for injecting, monitoring, and resetting failure scenarios across all active lab sessions.
@@ -199,8 +199,9 @@ VISUAL POLISH:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/features/admin/ChaosControlPage.tsx`
 - `src/features/admin/components/SessionsTable.tsx`
 - `src/features/admin/components/ChaosEventLog.tsx`
