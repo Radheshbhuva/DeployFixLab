@@ -1,11 +1,11 @@
-# 04 — Labs Pages Prompt for Lovable
+# 04 — Labs Module Specification for Antigravity
 
-> **Prerequisites:** Files 00, 01, 02, 03 must be applied first.
-> This prompt builds the Lab Catalog and Lab Execution views — the core learning feature of DeployFix Lab.
+> **Prerequisites:** Specifications 00, 01, 02, 03 must be reviewed first.
+> This specification details the Lab Catalog and Lab Execution views — the core learning and container failure scenario features to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the Labs module for DeployFix Lab. This covers two pages:
@@ -189,8 +189,9 @@ VISUAL POLISH:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/features/labs/LabCatalogPage.tsx`
 - `src/features/labs/LabExecutionPage.tsx`
 - `src/features/labs/components/LabCard.tsx`
