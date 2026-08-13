@@ -1,0 +1,43 @@
+name: Track Deploy & CI/CD History
+
+on:
+  push:
+    branches:
+      - radhesh.deploy
+    paths-ignore:
+      - 'DOCs/Development_History/**'
+
+permissions:
+  contents: write
+
+jobs:
+  update-history:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Update CI/CD and Deployment Work History
+        env:
+          TARGET_FILE: 'DOCs/Development_History/CI_CD_Work_History.md'
+          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_AUTHOR: ${{ github.actor }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          node .github/scripts/update_history.js
+          export TARGET_FILE="DOCs/Development_History/Deployment Work History.md"
+          node .github/scripts/update_history.js
+
+      - name: Commit and Push History Updates
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(history): auto-update CI_CD and Deployment Work History [skip ci]"
+          branch: ${{ github.ref_name }}
