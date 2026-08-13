@@ -1,8 +1,7 @@
-# 06 — AI Diagnosis Flow Prompt for Lovable
+# 06 — AI Diagnosis Flow Specification for Antigravity
 
-> **Prerequisites:** Files 00–05 must be applied first.
-> This prompt builds the AI Diagnosis Flow — the flagship product feature.
-> DeployFix Lab's core value: evidence-based AI diagnosis of deployment failures.
+> **Prerequisites:** Specifications 00–05 must be reviewed first.
+> This specification details the flagship AI Diagnosis Flow — evidence collection, root cause diagnosis, recovery steps, and verification checklist to implement in Antigravity.
 
 ---
 
@@ -23,7 +22,7 @@ It is a structured, evidence-based diagnosis system:
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the AI Diagnosis Flow for DeployFix Lab. This is the product's flagship feature — a structured, wizard-based diagnosis interface. It is NOT a chat interface. It is a step-by-step evidence collection → diagnosis → recovery guide flow.
@@ -298,8 +297,9 @@ MOCK DIAGNOSIS OUTPUT (for demo when API not connected):
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/features/diagnosis/DiagnosisPage.tsx`
 - `src/features/diagnosis/components/SourceCard.tsx`
 - `src/features/diagnosis/components/DiagnosisOutputCard.tsx`
