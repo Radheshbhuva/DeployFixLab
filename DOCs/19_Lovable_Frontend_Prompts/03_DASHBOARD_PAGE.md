@@ -1,11 +1,11 @@
-# 03 — Dashboard Page Prompt for Lovable
+# 03 — Dashboard Module Specification for Antigravity
 
-> **Prerequisites:** Files 00, 01, 02 must be applied first.
-> This prompt builds the main Dashboard — the heart of the DeployFix Lab experience.
+> **Prerequisites:** Specifications 00, 01, 02 must be reviewed first.
+> This specification details the main Dashboard page — real-time system health, service container status, telemetry metrics, and action shortcuts to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the main Dashboard page for DeployFix Lab. This is the primary screen users see after login. It shows real-time system health, service container status, telemetry metrics, and quick-action shortcuts.
@@ -60,7 +60,7 @@ Using apiClient from services/apiClient.ts:
 
 DASHBOARD PAGE (src/features/dashboard/DashboardPage.tsx):
 
-Layout: AppLayout wrapper (sidebar + header — defined in file 08).
+Layout: AppLayout wrapper (sidebar + header).
 Page uses a 12-column CSS grid layout.
 
 ---
@@ -148,7 +148,7 @@ Three action cards side by side:
 DATA FETCHING:
 
 Use React's useEffect + useState to fetch all 3 API endpoints on mount:
-  - Show Skeleton components while loading (use the Skeleton atom from file 01)
+  - Show Skeleton components while loading (use the Skeleton atom from specification 01)
   - Show an error state (red banner: "Failed to load dashboard data. Retry.") if any fetch fails
   - Auto-refresh service health every 30 seconds (useInterval custom hook or setInterval inside useEffect)
 
@@ -163,8 +163,9 @@ VISUAL POLISH:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/features/dashboard/DashboardPage.tsx`
 - `src/features/dashboard/components/MetricCard.tsx`
 - `src/features/dashboard/components/ServiceHealthCard.tsx`
