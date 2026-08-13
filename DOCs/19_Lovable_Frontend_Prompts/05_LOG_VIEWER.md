@@ -1,11 +1,11 @@
-# 05 — Log Viewer Prompt for Lovable
+# 05 — Log Viewer Module Specification for Antigravity
 
-> **Prerequisites:** Files 00–04 must be applied first.
-> This prompt builds the live log stream viewer with WebSocket, filtering, and export.
+> **Prerequisites:** Specifications 00–04 must be reviewed first.
+> This specification details the real-time terminal-style log streaming interface with WebSocket, filtering, and export to implement in Antigravity.
 
 ---
 
-## PROMPT TO PASTE INTO LOVABLE:
+## ANTIGRAVITY DIRECT IMPLEMENTATION BLUEPRINT:
 
 ```
 Build the Log Viewer page for DeployFix Lab. This is a real-time terminal-style log streaming interface. It uses WebSocket to stream live container logs and supports filtering, color-coded log levels, pause/resume, and export.
@@ -184,8 +184,9 @@ VISUAL POLISH:
 
 ---
 
-## EXPECTED OUTPUT FROM LOVABLE
+## TARGET FILES TO BUILD IN ANTIGRAVITY
 
+Antigravity will construct:
 - `src/features/logs/LogViewerPage.tsx`
 - `src/features/logs/components/LogRow.tsx`
 - `src/store/logStreamStore.ts`
