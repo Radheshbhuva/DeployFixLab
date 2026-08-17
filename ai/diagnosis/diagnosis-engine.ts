@@ -1,18 +1,18 @@
 import { AIDiagnosisOutput } from './diagnosis-schema';
-import { calculateConfidence } from './confidence-engine';
 
 export async function runDiagnosis(
   problem: string,
   rootCause: string,
   evidence: string[],
-  recommendedActions: string[]
+  recommendedActions: string[],
+  severity: 'low' | 'medium' | 'high' | 'critical' = 'high',
+  confidence = 0.95
 ): Promise<AIDiagnosisOutput> {
-  const confidence = calculateConfidence(evidence.length, 1);
   return {
     problem,
     rootCause,
     confidence,
-    severity: 'high',
+    severity,
     evidence,
     recommendedActions,
     requiresUserAction: true,
