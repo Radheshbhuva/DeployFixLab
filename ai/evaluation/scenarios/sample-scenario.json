@@ -1,0 +1,6 @@
+{
+  "scenarioId": "scenario_db_001",
+  "title": "Backend DATABASE_URL Host Mismatch",
+  "category": "DATABASE",
+  "datasetId": "ds_001"
+}

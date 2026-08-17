@@ -1,0 +1,9 @@
+{
+  "datasetId": "ds_001",
+  "name": "Localhost Database Connection Failure",
+  "logs": ["Prisma Client Error: ECONNREFUSED 127.0.0.1:5432"],
+  "healthCheckStatus": 500,
+  "config": {
+    "DATABASE_URL": "postgresql://dfix:secret@localhost:5432/deployfix_db"
+  }
+}

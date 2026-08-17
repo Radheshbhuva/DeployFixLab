@@ -44,7 +44,7 @@ Containerize: - Frontend - Backend - PostgreSQL - Nginx - Docker Compose
 
 ## Phase 3 -- Deployment
 
-Deploy using: - Vercel - Render - Neon - GitHub Actions
+Deploy using: - Vercel - Render - Supabase PostgreSQL - GitHub Actions
 
 ## Phase 4 -- Troubleshooting
 
