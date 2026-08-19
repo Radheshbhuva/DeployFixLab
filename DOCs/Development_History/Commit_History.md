@@ -35,7 +35,8 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
-| `543d059` | 2026-08-19 16:50:15 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): upgrade LoginPage and RegisterPage with split-screen layout, live strength evaluation, and demo quick-fill` | Pushed | Local CLI |
+| `fdc6d22` | 2026-08-19 16:56:37 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add persist middleware to authStore for session survival across page reloads` | Pushed | Local CLI |
+| `f122c00` | 2026-08-19 16:50:27 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with auth feature implementation commits` | Pushed | Local CLI |
 | `bf97f33` | 2026-08-19 16:50:10 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add auth subcomponents including sidebar showcase, password strength meter, and demo accounts banner` | Pushed | Local CLI |
 | `ede282b` | 2026-08-19 16:45:23 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with Auth prompt pack commit` | Pushed | Local CLI |
 | `a070f42` | 2026-08-19 16:45:11 | Radheshbhuva | `master-trial.Radhesh` | `DOCs/22_Auth_Pages_Prompts` | `docs(auth): add complete Sign In and Sign Up specification, implementation plan, and master prompt suite` | Pushed | Local CLI |
