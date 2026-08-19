@@ -1,9 +1,10 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { AppLayout } from '@/layouts/AppLayout';
 import { ProtectedRoute } from '@/components/guards/ProtectedRoute';
 import { PublicOnlyRoute } from '@/components/guards/PublicOnlyRoute';
 import { RoleGuard } from '@/components/guards/RoleGuard';
 
+import { LandingPage } from '@/features/landing/LandingPage';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { RegisterPage } from '@/features/auth/RegisterPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
@@ -18,7 +19,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/dashboard" replace />,
+    element: <LandingPage />,
   },
   {
     path: '/login',
