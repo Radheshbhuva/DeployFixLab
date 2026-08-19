@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { User } from '@/types/auth.types';
 
 interface AuthState {
@@ -11,24 +12,36 @@ interface AuthState {
   setLoading: (isLoading: boolean) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  accessToken: null,
-  isAuthenticated: false,
-  isLoading: false,
-  setUser: (user, accessToken) =>
-    set({
-      user,
-      accessToken,
-      isAuthenticated: Boolean(user && accessToken),
-      isLoading: false,
-    }),
-  clearAuth: () =>
-    set({
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
       user: null,
       accessToken: null,
       isAuthenticated: false,
       isLoading: false,
+      setUser: (user, accessToken) =>
+        set({
+          user,
+          accessToken,
+          isAuthenticated: Boolean(user && accessToken),
+          isLoading: false,
+        }),
+      clearAuth: () =>
+        set({
+          user: null,
+          accessToken: null,
+          isAuthenticated: false,
+          isLoading: false,
+        }),
+      setLoading: (isLoading) => set({ isLoading }),
     }),
-  setLoading: (isLoading) => set({ isLoading }),
-}));
+    {
+      name: 'deployfix-lab-auth',
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    }
+  )
+);
