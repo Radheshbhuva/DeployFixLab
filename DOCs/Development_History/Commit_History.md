@@ -35,7 +35,10 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
-| `2192d68` | 2026-08-19 15:58:13 | Radheshbhuva | `master-trial.Radhesh` | `backend/auth` | `fix(auth): update auth service and test suite to use bcryptjs` | Pushed | Local CLI |
+| `960c54c` | 2026-08-19 16:35:14 | Radheshbhuva | `master-trial.Radhesh` | `frontend/supabase` | `feat(supabase): add Supabase client helpers for Vite React frontend` | Pushed | Local CLI |
+| `5501612` | 2026-08-19 16:35:08 | Radheshbhuva | `master-trial.Radhesh` | `config` | `docs(env): update frontend and backend .env.example with Supabase configurations` | Pushed | Local CLI |
+| `d990999` | 2026-08-19 16:35:03 | Radheshbhuva | `master-trial.Radhesh` | `frontend` | `feat(deps): add @supabase/supabase-js client library to frontend` | Pushed | Local CLI |
+| `9af2c39` | 2026-08-19 16:05:07 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with bcryptjs migration commits` | Pushed | Local CLI |
 | `18a4b83` | 2026-08-19 15:58:09 | Radheshbhuva | `master-trial.Radhesh` | `backend` | `fix(deps): replace bcrypt with bcryptjs to eliminate DEP0169 url.parse deprecation warning` | Pushed | Local CLI |
 | [`c99596d`](https://github.com/Radheshbhuva/DeployFixLab/commit/c99596d) | 2026-08-19 10:06:17 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with landing page and backend reorganization commits` | Pushed | GitHub Actions |
 | `1621b1a` | 2026-08-19 15:33:20 | Radheshbhuva | `master-trial.Radhesh` | `frontend/landing` | `feat(landing): implement DeployFix Lab landing page with interactive studio, 4-source showcase, chaos catalog, and security sections` | Pushed | Local CLI |
