@@ -35,6 +35,8 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
+| `153be92` | 2026-08-19 17:09:12 | Radheshbhuva | `master-trial.Radhesh` | `frontend/landing` | `feat(landing): add explicit Sign In and Sign Up buttons to header, hero, and footer across all screen viewports` | Pushed | Local CLI |
+| `00aacad` | 2026-08-19 16:56:48 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with authStore persistence commit` | Pushed | Local CLI |
 | `fdc6d22` | 2026-08-19 16:56:37 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add persist middleware to authStore for session survival across page reloads` | Pushed | Local CLI |
 | `f122c00` | 2026-08-19 16:50:27 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with auth feature implementation commits` | Pushed | Local CLI |
 | `bf97f33` | 2026-08-19 16:50:10 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add auth subcomponents including sidebar showcase, password strength meter, and demo accounts banner` | Pushed | Local CLI |
