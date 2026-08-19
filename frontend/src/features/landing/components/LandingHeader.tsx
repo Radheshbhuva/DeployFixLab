@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, Menu, X, ArrowRight, Zap } from 'lucide-react';
+import { Activity, Menu, X, Zap, LogIn, UserPlus } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
 export const LandingHeader: React.FC = () => {
@@ -17,7 +17,7 @@ export const LandingHeader: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-800/90 bg-slate-950/90 backdrop-blur-xl shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
@@ -35,14 +35,14 @@ export const LandingHeader: React.FC = () => {
           </Link>
 
           {/* Live System Operational Indicator */}
-          <div className="hidden lg:flex items-center gap-1.5 ml-4 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono">
+          <div className="hidden xl:flex items-center gap-1.5 ml-4 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>Operational 99.98%</span>
           </div>
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden lg:flex items-center gap-6">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -54,90 +54,101 @@ export const LandingHeader: React.FC = () => {
           ))}
         </nav>
 
-        {/* Auth CTA Actions */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Auth CTA Actions (Prominently Visible) */}
+        <div className="flex items-center gap-2 sm:gap-3">
           {isAuthenticated ? (
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
-            >
-              <Activity className="w-4 h-4" />
-              <span>Dashboard ({user?.fullName ? user.fullName.split(' ')[0] : 'User'})</span>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/dashboard"
+                className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
+              >
+                <Activity className="w-4 h-4" />
+                <span>Dashboard ({user?.fullName ? user.fullName.split(' ')[0] : 'User'})</span>
+              </Link>
+            </div>
           ) : (
             <>
+              {/* Sign In Button */}
               <Link
                 to="/login"
-                className="px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                id="header-signin-btn"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-900/80 hover:bg-slate-800 text-slate-100 font-semibold text-xs sm:text-sm transition-all"
               >
-                Sign In
+                <LogIn className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Sign In</span>
               </Link>
+
+              {/* Sign Up Button */}
               <Link
                 to="/register"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
+                id="header-signup-btn"
+                className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
               >
-                <span>Launch Lab</span>
-                <ArrowRight className="w-4 h-4" />
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>Sign Up</span>
               </Link>
             </>
           )}
-        </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
+          {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
-            aria-label="Toggle menu"
+            className="lg:hidden p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white ml-1"
+            aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950/95 backdrop-blur-2xl px-4 py-5 space-y-4">
+        <div className="lg:hidden border-b border-slate-800 bg-slate-950/98 backdrop-blur-2xl px-4 py-5 space-y-4 shadow-2xl">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono w-fit">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>All Systems Operational</span>
+            <span>All Systems Operational (99.98%)</span>
           </div>
+
           <nav className="flex flex-col space-y-2">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-900 hover:text-cyan-400 transition-colors"
+                className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-900 hover:text-cyan-400 transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </nav>
-          <div className="pt-4 border-t border-slate-800/80 flex flex-col gap-2">
+
+          <div className="pt-4 border-t border-slate-800/80 flex flex-col gap-2.5">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center px-4 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-semibold text-sm shadow-md"
+                className="w-full text-center px-4 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm shadow-md flex items-center justify-center gap-2"
               >
-                Go to Dashboard
+                <Activity className="w-4 h-4" />
+                <span>Go to Dashboard ({user?.fullName || 'User'})</span>
               </Link>
             ) : (
               <>
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-900 text-slate-200 font-medium text-sm"
+                  className="w-full text-center px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 font-semibold text-sm flex items-center justify-center gap-2"
                 >
-                  Sign In
+                  <LogIn className="w-4 h-4 text-cyan-400" />
+                  <span>Sign In</span>
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-semibold text-sm shadow-md"
+                  className="w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-sm shadow-md flex items-center justify-center gap-2"
                 >
-                  Launch Lab Free
+                  <UserPlus className="w-4 h-4" />
+                  <span>Sign Up (Create Free Account)</span>
                 </Link>
               </>
             )}

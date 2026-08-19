@@ -27,30 +27,30 @@ export const LandingFooter: React.FC = () => {
             </div>
           </div>
 
-          {/* Col 1: Platform */}
+          {/* Col 1: Account & Platform */}
           <div className="space-y-3">
             <div className="text-slate-200 font-semibold uppercase tracking-wider text-[11px]">
-              Platform
+              Account & Workspace
             </div>
             <ul className="space-y-2">
               <li>
-                <Link to="/diagnosis" className="hover:text-cyan-400 transition-colors">
-                  Diagnosis Studio
+                <Link to="/login" className="text-cyan-400 font-semibold hover:underline transition-colors">
+                  Sign In to Workspace →
                 </Link>
               </li>
               <li>
-                <Link to="/labs" className="hover:text-cyan-400 transition-colors">
-                  Chaos Sandbox
-                </Link>
-              </li>
-              <li>
-                <Link to="/logs" className="hover:text-cyan-400 transition-colors">
-                  Live Log Viewer
+                <Link to="/register" className="text-emerald-400 font-semibold hover:underline transition-colors">
+                  Create Free Account →
                 </Link>
               </li>
               <li>
                 <Link to="/dashboard" className="hover:text-cyan-400 transition-colors">
-                  Service Health Dashboard
+                  Service Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/labs" className="hover:text-cyan-400 transition-colors">
+                  Chaos Lab Catalog
                 </Link>
               </li>
             </ul>
