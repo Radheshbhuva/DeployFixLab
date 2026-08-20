@@ -415,14 +415,30 @@ Record planned enhancements for future releases.
   - `authStore.ts`: Session persistence with Zustand `persist` middleware.
 - **Status:** Completed & Tested.
 
-## FE-HIST-004: SRE Command Center Dashboard Subsystem
-- **Module:** `frontend/src/features/dashboard/`
+## FE-HIST-005: Chaos Lab Catalog & Split-Screen Execution Studio Upgrade
+- **Module:** `frontend/src/features/labs/`
 - **Features Implemented:**
-  - `DashboardHeader.tsx`: Top command bar with live cluster health summary (`3/4 Nodes Nominal`), real-time UTC clock, and 15s auto-polling.
-  - `ContainerFleetGrid.tsx`: Real-time monitoring cards for *API Gateway*, *PostgreSQL DB*, *Nginx Proxy*, and *Redis Cache* with 10-point SVG latency sparklines, CPU/RAM usage bars, Docker IDs, and port badges.
-  - `ActiveIncidentsWidget.tsx`: Live outage cards with severity badges (`CRITICAL`, `MAJOR`), outage duration timers, AI root cause hypotheses, and 1-click triage links.
-  - `ChaosLabQuickLauncher.tsx`: 1-click sandbox starters for DB, network, and runtime faults.
-  - `TelemetryChartsSection.tsx`: 24-hour throughput curve, 7-day MTTR reduction curve, and circular fix verification gauge (`96.4%`).
-  - `ActivityFeed.tsx`: Filterable live event audit stream (*All*, *Labs*, *Chaos*, *Verified*).
+  - `LabCatalogPage.tsx`: Interactive catalog with category filter tabs (*All*, *Database*, *Networking*, *Auth*, *Runtime*, *Multi-Service*), difficulty selector (*Beginner* $\rightarrow$ *Expert*), live search, and total scenario count counter.
+  - `LabCard.tsx`: Scenario card with code badge (e.g. `DFIX-LAB-01`), category pill, target service node indicator, fault summary, duration, completion count, and launch button.
+  - `LabExecutionPage.tsx`: Split-screen execution studio:
+    - Left panel: Interactive objective checklists, failure characteristics, hints, and 1-click diagnostic command shortcuts.
+    - Right panel: Simulated interactive bash terminal (`$ docker compose ps`, `$ logs`, `$ curl`, `$ fix`) + real-time WebSocket log streaming tab.
+    - Automated test verification suite runner with pass/fail item cards and animated completion score modal with certificate export.
 - **Status:** Completed & Tested.
+
+## FE-HIST-006: AI Diagnosis Studio 4-Source Ingestion & Interactive Diff Patch Generator
+- **Module:** `frontend/src/features/diagnosis/`
+- **Features Implemented:**
+  - `ProjectContextPanel.tsx`: 4-source evidence ingestion panel (Website URL probe, File uploads with zero-secret redaction, GitHub repo context, and Cloud deployment telemetry).
+  - `DiagnosisOutputCard.tsx`: Upgraded diagnosis report with confidence score breakdown ($\le 95\%$), deterministic failure signatures, and an interactive unified code diff patch viewer with 1-click "Copy Diff", "Download .patch File", and "Apply Patch" actions.
+- **Status:** Completed & Tested.
+
+## FE-HIST-007: Live WebSocket High-Throughput Log Streamer Upgrade
+- **Module:** `frontend/src/features/logs/`
+- **Features Implemented:**
+  - `LogViewerPage.tsx`: Full-screen terminal telemetry viewer with WebSocket connectivity indicator, live line counter, error/warn counters, and multi-service filter selector (*All Services*, *API Gateway*, *PostgreSQL*, *Nginx*, *Chaos Engine*).
+  - `LogRow.tsx`: Level-colored log line renderer with regex search substring highlighting and 1-click log line copying.
+  - Controls: Auto-scroll freeze/pause toggle (*PAUSED / RESUME*), export to `.log` file, and clear buffer.
+- **Status:** Completed & Tested.
+
 
