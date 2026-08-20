@@ -1,17 +1,34 @@
+import { createServer } from 'http';
 import app from './app';
 import { disconnectDatabase } from './config/database';
+import { chaosWebSocketManager } from './websocket/websocket.server';
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
-const server = app.listen(PORT, () => {
+// Create standard Node.js HTTP server instance
+const server = createServer(app);
+
+// Attach Chaos Lab WebSocket Server
+chaosWebSocketManager.init(server);
+
+server.listen(PORT, () => {
   console.log(`[Server] DeployFix Backend listening on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  console.log(`[WebSocket] Live WebSocket log stream ready at ws://localhost:${PORT}/logs/stream`);
 });
 
 // Graceful Shutdown Handler
 const gracefulShutdown = (signal: string) => {
   console.log(`[Server] Received ${signal}. Shutting down gracefully...`);
+  
+  // Close WebSocket connections first
+  try {
+    chaosWebSocketManager.shutdown();
+  } catch (err) {
+    console.error('[Server] Error closing WebSocket server:', err);
+  }
+
   server.close(async () => {
-    console.log('[Server] HTTP server closed.');
+    console.log('[Server] HTTP & WebSocket servers closed.');
     await disconnectDatabase();
     console.log('[Server] Database connections closed. Exiting process.');
     process.exit(0);
@@ -40,4 +57,3 @@ process.on('uncaughtException', (err: Error) => {
   console.error(err.name, err.message, err.stack);
   gracefulShutdown('UNCAUGHT_EXCEPTION');
 });
-
