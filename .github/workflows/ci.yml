@@ -8,10 +8,10 @@ on:
 
 jobs:
   # ─────────────────────────────────────────────────────────────────
-  # Job 1: Frontend — TypeScript type-check + production bundle
+  # Job 1: Frontend — Type-check, Unit tests, and Production build
   # ─────────────────────────────────────────────────────────────────
   validate-frontend:
-    name: "Frontend: Type-Check & Build"
+    name: "Frontend: Type-Check, Tests & Build"
     runs-on: ubuntu-latest
 
     defaults:
@@ -33,7 +33,10 @@ jobs:
         run: npm ci
 
       - name: TypeScript Type-Check
-        run: npx tsc --noEmit
+        run: npm run type-check
+
+      - name: Run Frontend Unit Tests
+        run: npm run test
 
       - name: Production Bundle Verification
         run: npm run build
@@ -45,10 +48,10 @@ jobs:
           VITE_ENV: production
 
   # ─────────────────────────────────────────────────────────────────
-  # Job 2: Backend — Prisma generate + type-check + unit tests
+  # Job 2: Backend — Prisma generate, Type-check, and Unit tests
   # ─────────────────────────────────────────────────────────────────
   validate-backend:
-    name: "Backend: Test Suite & Type-Check"
+    name: "Backend: Type-Check & Test Suite"
     runs-on: ubuntu-latest
 
     defaults:
