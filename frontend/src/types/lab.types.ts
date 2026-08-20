@@ -1,5 +1,7 @@
 export type LabDifficulty = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
+export type LabCategory = 'ALL' | 'DATABASE' | 'NETWORKING' | 'AUTH' | 'RUNTIME' | 'FULLSTACK';
 export type LabStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'CHAOS_ACTIVE' | 'RECOVERING' | 'VERIFIED' | 'FAILED';
+
 export type FailureType =
   | 'dns_failure'
   | 'db_connection'
@@ -12,7 +14,9 @@ export type FailureType =
 
 export interface Lab {
   id: string;
+  code: string;
   title: string;
+  category: 'DATABASE' | 'NETWORKING' | 'AUTH' | 'RUNTIME' | 'FULLSTACK';
   description: string;
   difficulty: LabDifficulty;
   failureTypes: FailureType[];
@@ -22,6 +26,9 @@ export interface Lab {
   tags: string[];
   objectives: string[];
   prerequisites: string[];
+  targetService: string;
+  faultSummary: string;
+  hints: string[];
 }
 
 export interface LabSession {
