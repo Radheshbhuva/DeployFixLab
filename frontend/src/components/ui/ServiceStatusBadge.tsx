@@ -1,9 +1,10 @@
 import React from 'react';
 import { StatusDot } from './StatusDot';
 import { cn } from '@/utils/cn';
+import { ServiceStatus } from '@/types/dashboard.types';
 
 export interface ServiceStatusBadgeProps {
-  status: 'healthy' | 'degraded' | 'failed' | 'unknown';
+  status: ServiceStatus;
   showPulse?: boolean;
   size?: 'sm' | 'md';
   className?: string;
@@ -15,17 +16,19 @@ export const ServiceStatusBadge: React.FC<ServiceStatusBadgeProps> = ({
   size = 'sm',
   className,
 }) => {
-  const labels = {
+  const labels: Record<ServiceStatus, string> = {
     healthy: 'Healthy',
     degraded: 'Degraded',
     failed: 'Failed',
+    restarting: 'Restarting',
     unknown: 'Unknown',
   };
 
-  const textColors = {
+  const textColors: Record<ServiceStatus, string> = {
     healthy: 'text-status-success',
     degraded: 'text-status-warning',
     failed: 'text-status-danger',
+    restarting: 'text-amber-400',
     unknown: 'text-text-muted',
   };
 
@@ -38,8 +41,8 @@ export const ServiceStatusBadge: React.FC<ServiceStatusBadgeProps> = ({
       )}
     >
       <StatusDot status={status} pulse={showPulse} />
-      <span className={cn('font-medium capitalize', textColors[status])}>
-        {labels[status]}
+      <span className={cn('font-medium capitalize', textColors[status] || textColors.unknown)}>
+        {labels[status] || labels.unknown}
       </span>
     </div>
   );
