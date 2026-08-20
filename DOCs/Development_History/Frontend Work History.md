@@ -377,10 +377,52 @@ Record planned enhancements for future releases.
 | [`4f11384`](https://github.com/Radheshbhuva/DeployFixLab/commit/4f11384) | 2026-08-09 17:13:05 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `feat(ai): initialize ai/diagnosis/ Core Diagnosis Engine skeleton` |
 | [`73f772f`](https://github.com/Radheshbhuva/DeployFixLab/commit/73f772f) | 2026-08-09 17:13:05 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `feat(ai): initialize ai/rules/ Deterministic Failure Rules Engine skeleton` |
 | [`e609116`](https://github.com/Radheshbhuva/DeployFixLab/commit/e609116) | 2026-08-09 17:13:05 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `feat(ai): initialize ai/evidence/ Evidence Collection Engine skeleton` |
-| [`a1d7714`](https://github.com/Radheshbhuva/DeployFixLab/commit/a1d7714) | 2026-08-09 17:13:04 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `feat(ai): initialize ai/context/ Project Context Builder pipeline skeleton` |
-| [`0581599`](https://github.com/Radheshbhuva/DeployFixLab/commit/0581599) | 2026-08-09 15:31:58 | Henypatel08 | `master-trial(Radhesh)` | `frontend` | `feat(frontend): complete FE Phase 1 Frontend Foundation & Core UI Architecture` |
-| [`70fc073`](https://github.com/Radheshbhuva/DeployFixLab/commit/70fc073) | 2026-08-07 08:15:07 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `docs(frontend): add State_Management.md State Management Specification` |
-| [`a36005b`](https://github.com/Radheshbhuva/DeployFixLab/commit/a36005b) | 2026-08-07 08:15:07 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `docs(frontend): add UI_Standards.md UI/UX & Design Tokens Standard` |
-| [`c76e717`](https://github.com/Radheshbhuva/DeployFixLab/commit/c76e717) | 2026-08-07 08:15:07 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `docs(frontend): add Component_Architecture.md Component Architecture` |
-| [`9cffe4a`](https://github.com/Radheshbhuva/DeployFixLab/commit/9cffe4a) | 2026-08-07 08:15:06 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `docs(frontend): add Routing.md React Router Specification` |
-| [`03ef870`](https://github.com/Radheshbhuva/DeployFixLab/commit/03ef870) | 2026-08-07 08:15:06 | Radheshbhuva | `master-trial(Radhesh)` | `frontend` | `docs(frontend): add Frontend_Guidelines.md Frontend Engineering Guidelines` |
+| [`1621b1a`](https://github.com/Radheshbhuva/DeployFixLab/commit/1621b1a) | 2026-08-19 15:33:20 | Radheshbhuva | `master-trial.Radhesh` | `frontend/landing` | `feat(landing): implement DeployFix Lab landing page with interactive studio, 4-source showcase, chaos catalog, and security sections` |
+| [`960c54c`](https://github.com/Radheshbhuva/DeployFixLab/commit/960c54c) | 2026-08-19 16:35:14 | Radheshbhuva | `master-trial.Radhesh` | `frontend/supabase` | `feat(supabase): add Supabase client helpers for Vite React frontend` |
+| [`bf97f33`](https://github.com/Radheshbhuva/DeployFixLab/commit/bf97f33) | 2026-08-19 16:50:10 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add auth subcomponents including sidebar showcase, password strength meter, and demo accounts banner` |
+| [`543d059`](https://github.com/Radheshbhuva/DeployFixLab/commit/543d059) | 2026-08-19 16:50:15 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): upgrade LoginPage and RegisterPage with split-screen layout, live strength evaluation, and demo quick-fill` |
+| [`fdc6d22`](https://github.com/Radheshbhuva/DeployFixLab/commit/fdc6d22) | 2026-08-19 16:56:37 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add persist middleware to authStore for session survival across page reloads` |
+| [`153be92`](https://github.com/Radheshbhuva/DeployFixLab/commit/153be92) | 2026-08-19 17:09:12 | Radheshbhuva | `master-trial.Radhesh` | `frontend/landing` | `feat(landing): add explicit Sign In and Sign Up buttons to header, hero, and footer across all screen viewports` |
+| [`c9db0db`](https://github.com/Radheshbhuva/DeployFixLab/commit/c9db0db) | 2026-08-20 08:29:06 | Radheshbhuva | `master-trial.Radhesh` | `frontend/dashboard` | `feat(dashboard): add container fleet, active incident, and telemetry types and datasets` |
+| [`fa7b08c`](https://github.com/Radheshbhuva/DeployFixLab/commit/fa7b08c) | 2026-08-20 08:29:13 | Radheshbhuva | `master-trial.Radhesh` | `frontend/dashboard` | `feat(dashboard): build SRE Command Center with container fleet cards, active incident widgets, and telemetry charts` |
+
+---
+
+# 6. Detailed Feature Logs
+
+## FE-HIST-002: Landing Page Subsystem Implementation
+- **Module:** `frontend/src/features/landing/`
+- **Features Implemented:**
+  - `LandingPage.tsx`: Full responsive composition with dark glassmorphism (`#070A11`).
+  - `LandingHeader.tsx`: Sticky glassmorphic navbar with operational status dot (`99.98%`), anchor navigation links, and explicit Sign In / Sign Up buttons.
+  - `HeroSection.tsx`: H1 display headline, ambient radial glows, dual CTAs, and interactive studio preview.
+  - `InteractiveStudioPreview.tsx`: Live incident diagnosis studio widget with scenario switcher, evidence cards, 94%+ capped confidence rating, and copyable remediation commands.
+  - `4-Source Ingestion Showcase`: Interactive cards for URL Probes, Project Configs, Git VCS Diff Correlation, and Platform Logs.
+  - `Chaos Scenario Catalog`: Filterable chaos lab cards with difficulty tags and failure drivers.
+  - `PricingSection.tsx`: Monthly / Annual billing switcher and transparent developer tiers.
+  - `TestimonialsSection.tsx`, `FaqSection.tsx`, `CtaBanner.tsx`, `LandingFooter.tsx`.
+- **Status:** Completed & Tested (0 TypeScript errors, 100% build pass).
+
+## FE-HIST-003: Auth Pages & Modular Subcomponents
+- **Module:** `frontend/src/features/auth/`, `frontend/src/layouts/AuthLayout.tsx`
+- **Features Implemented:**
+  - `AuthLayout.tsx`: Split-screen 12-column desktop grid ($\ge 1024\text{px}$) with telemetry sidebar and centered form card.
+  - `AuthSidebarShowcase.tsx`: Live telemetry simulation, zero-secret regex redaction terminal demo, and SRE quote.
+  - `DemoCredentialsBanner.tsx`: 1-click quick-fill toolbar for *Lead SRE*, *DevOps Student*, and *Lab Instructor*.
+  - `PasswordStrengthMeter.tsx`: 4-segment animated color bar with interactive requirement checklist.
+  - `RoleSelectorPills.tsx`: Custom toggle pills for `Student`, `SRE / DevOps`, and `Instructor`.
+  - `LoginPage.tsx` & `RegisterPage.tsx`: Form controllers using React Hook Form + Zod validation with deep-link redirection preservation (`?redirect=...`).
+  - `authStore.ts`: Session persistence with Zustand `persist` middleware.
+- **Status:** Completed & Tested.
+
+## FE-HIST-004: SRE Command Center Dashboard Subsystem
+- **Module:** `frontend/src/features/dashboard/`
+- **Features Implemented:**
+  - `DashboardHeader.tsx`: Top command bar with live cluster health summary (`3/4 Nodes Nominal`), real-time UTC clock, and 15s auto-polling.
+  - `ContainerFleetGrid.tsx`: Real-time monitoring cards for *API Gateway*, *PostgreSQL DB*, *Nginx Proxy*, and *Redis Cache* with 10-point SVG latency sparklines, CPU/RAM usage bars, Docker IDs, and port badges.
+  - `ActiveIncidentsWidget.tsx`: Live outage cards with severity badges (`CRITICAL`, `MAJOR`), outage duration timers, AI root cause hypotheses, and 1-click triage links.
+  - `ChaosLabQuickLauncher.tsx`: 1-click sandbox starters for DB, network, and runtime faults.
+  - `TelemetryChartsSection.tsx`: 24-hour throughput curve, 7-day MTTR reduction curve, and circular fix verification gauge (`96.4%`).
+  - `ActivityFeed.tsx`: Filterable live event audit stream (*All*, *Labs*, *Chaos*, *Verified*).
+- **Status:** Completed & Tested.
+
