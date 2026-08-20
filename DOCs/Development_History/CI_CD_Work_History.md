@@ -140,6 +140,40 @@ Completed
 
 ---
 
+## CICD-HIST-003
+
+### Sprint
+Sprint 2.5
+
+### Date & Time (ISO)
+2026-08-20 11:35:00
+
+### Requirement
+FR-091, FR-093, FR-104
+
+### Engineer
+DevOps Engineer
+
+### Workflow Files
+- `.github/workflows/ci.yml`
+- `.github/workflows/deploy.yml`
+
+### Description
+Production CI/CD automation suite implementation for DeployFix Lab:
+1. `.github/workflows/ci.yml`: Automated PR/Push validation pipeline executing TypeScript type checks (`npx tsc --noEmit`), Vitest unit test suites, Prisma client generation, and Vite production bundle builds across frontend and backend in parallel jobs.
+2. `.github/workflows/deploy.yml`: Automated deployment workflow executing sequential Vercel Edge SPA deployment, Render backend deploy hook triggering, and post-deployment smoke verification (healthcheck HTTP 200 probes).
+
+### Key Changes
+- Integrated `actions/checkout@v4` and `actions/setup-node@v4` with Node.js 20.
+- Implemented environment variable injections for deterministic CI builds (`DATABASE_URL`, `JWT_SECRET`, `VITE_API_URL`).
+- Added automated post-deployment health verification probe on `https://deployfix-api.onrender.com/health`.
+
+### Status
+Completed & Verified (Local Vitest 56/56 backend & 3/3 frontend passed).
+
+
+---
+
 # 7. Pipeline Performance Metrics
 
 | Metric | Target Baseline | Current Performance | Status |

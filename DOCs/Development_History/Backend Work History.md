@@ -42,6 +42,9 @@ This document serves as the official backend engineering journal for **DeployFix
 | `BE-HIST-020` | 2026-08-20 11:04:39 | Radheshbhuva | `server` | `e5dfa70` | Upgraded `server.ts` graceful shutdown handler to cleanly disconnect Prisma before exit. | Completed |
 | `BE-HIST-021` | 2026-08-20 11:04:46 | Radheshbhuva | `modules/health` | `cff62fc` | Upgraded `health.controller.ts` with database connectivity probe, memory heap/RSS metrics, and system stats. | Completed |
 | `BE-HIST-022` | 2026-08-20 11:04:53 | Radheshbhuva | `config` | `e3d8224` | Updated `backend/.env.example` with `DIRECT_URL`, `JWT_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN`, and `GEMINI_API_KEY`. | Completed |
+| `BE-HIST-023` | 2026-08-20 11:35:32 | Radheshbhuva | `deps/websocket` | `5184305` | Added `ws` and `@types/ws` WebSocket client/server package to backend dependencies. | Completed |
+| `BE-HIST-024` | 2026-08-20 11:35:38 | Radheshbhuva | `testing/health` | `1919b4b` | Added database mock to health integration tests for deterministic CI pipeline execution. | Completed |
+| `BE-HIST-025` | 2026-08-20 11:35:44 | Radheshbhuva | `websocket/chaos` | `a1d9d77` | Implemented `ChaosWebSocketManager` in `backend/src/websocket/websocket.server.ts` with `/logs/stream` and interactive terminal runner. | Completed |
 
 ---
 
@@ -93,4 +96,17 @@ This document serves as the official backend engineering journal for **DeployFix
   - Implemented `disconnectDatabase()` during graceful process termination (`SIGTERM` and `SIGINT`).
   - Added real memory usage metrics (heapUsed, heapTotal, rss) and OS platform data to `GET /health` response.
 - **Testing:** Passed `npm run type-check` (0 errors) and Prisma client generation.
+- **Status:** Completed & Verified.
+
+## BE-HIST-023 — BE-HIST-025: Chaos Lab WebSocket Runner & Streaming Pipeline
+- **Sprint:** Sprint 2.5
+- **Date & Time:** 2026-08-20 11:35:44
+- **Modules:** `backend/src/websocket/websocket.server.ts`, `backend/src/server.ts`, `backend/src/modules/health/health.test.ts`
+- **Commits:** `5184305`, `1919b4b`, `a1d9d77`
+- **Description:**
+  - Implemented `ChaosWebSocketManager` running over native `ws` attached directly to the Express HTTP server instance.
+  - Handled `/logs/stream` endpoint emitting live structured `LogEntry` telemetry objects to frontend log viewer.
+  - Handled interactive chaos container commands (e.g. `docker compose ps`, `logs`, `curl`, `netstat`, `fix`) with simulated realistic stdout/stderr and automatic log broadcasting.
+  - Upgraded `health.test.ts` with Vitest mocks for deterministic CI execution without requiring a live database connection.
+- **Testing:** Verified 100% pass across all 13 test suites (56/56 unit tests in 8.68s) and 0 TypeScript compilation errors.
 - **Status:** Completed & Verified.
