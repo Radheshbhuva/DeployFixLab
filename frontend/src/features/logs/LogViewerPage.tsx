@@ -2,10 +2,20 @@ import React, { useRef, useEffect } from 'react';
 import { useLogStream } from '@/hooks/useLogStream';
 import { useLogStreamStore } from '@/store/logStreamStore';
 import { LogRow } from './LogRow';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { LogLevel, LogSource } from '@/types/log.types';
-import { Terminal, Pause, Play, Trash2, Search } from 'lucide-react';
+import {
+  Terminal,
+  Pause,
+  Play,
+  Trash2,
+  Search,
+  Download,
+  Copy,
+  AlertTriangle,
+  Activity,
+  Layers,
+} from 'lucide-react';
+import { useToast } from '@/hooks/useToast';
 
 export const LogViewerPage: React.FC = () => {
   const { isConnected } = useLogStream();
@@ -22,6 +32,7 @@ export const LogViewerPage: React.FC = () => {
   const clearLogs = useLogStreamStore((s) => s.clearLogs);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
 
   // Auto-scroll to bottom unless paused
   useEffect(() => {
@@ -41,66 +52,105 @@ export const LogViewerPage: React.FC = () => {
     return matchesLevel && matchesSource && matchesSearch;
   });
 
+  const errorCount = logs.filter((l) => l.level === 'ERROR' || l.level === 'FATAL').length;
+  const warnCount = logs.filter((l) => l.level === 'WARN').length;
+
+  const handleExportLogs = () => {
+    const logData = filteredLogs
+      .map((l) => `[${l.timestamp}] [${l.level}] [${l.source}] ${l.message}`)
+      .join('\n');
+    const blob = new Blob([logData], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `deployfix-telemetry-${new Date().toISOString().replace(/[:.]/g, '-')}.log`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${filteredLogs.length} log lines`);
+  };
+
+  const handleCopyLogs = () => {
+    const logData = filteredLogs
+      .map((l) => `[${l.timestamp}] [${l.level}] [${l.source}] ${l.message}`)
+      .join('\n');
+    navigator.clipboard.writeText(logData);
+    toast.success(`Copied ${filteredLogs.length} log lines to clipboard`);
+  };
+
   return (
-    <div className="space-y-4 pb-8 flex flex-col h-[calc(100vh-100px)]">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 flex-shrink-0">
-        <div>
-          <div className="flex items-center gap-2">
-            <Terminal className="w-6 h-6 text-brand-primary" />
-            <h1 className="text-2xl font-bold text-text-primary">
-              Live System Log Viewer
-            </h1>
-            <span
-              className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-semibold ${
-                isConnected
-                  ? 'bg-status-success-dim text-status-success border border-green-800'
-                  : 'bg-status-danger-dim text-status-danger border border-red-800'
-              }`}
-            >
-              {isConnected ? '● LIVE' : '○ DISCONNECTED'}
-            </span>
+    <div className="space-y-4 pb-8 flex flex-col h-[calc(100vh-100px)] text-left">
+      {/* Top Header & Telemetry Summary */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 flex-shrink-0 bg-slate-900/80 p-4 rounded-2xl border border-slate-800 shadow-xl backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+            <Terminal className="w-6 h-6" />
           </div>
-          <p className="text-xs text-text-secondary mt-1">
-            Real-time WebSocket telemetry stream across containers and services.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-100">
+                Live SRE Telemetry Stream
+              </h1>
+              <span
+                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+                  isConnected
+                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                    : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                }`}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                  }`}
+                />
+                {isConnected ? 'LIVE WS' : 'OFFLINE'}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mt-0.5">
+              High-throughput asynchronous event buffer for cluster microservices.
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant={isPaused ? 'primary' : 'ghost'}
-            size="sm"
-            onClick={() => setPaused(!isPaused)}
-          >
-            {isPaused ? <Play className="w-4 h-4 mr-1.5" /> : <Pause className="w-4 h-4 mr-1.5" />}
-            {isPaused ? 'Resume Stream' : 'Pause Stream'}
-          </Button>
+        {/* Quick KPI stats */}
+        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300">
+            <Layers className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{logs.length} Lines</span>
+          </div>
 
-          <Button variant="ghost" size="sm" onClick={clearLogs}>
-            <Trash2 className="w-4 h-4 mr-1.5" />
-            Clear
-          </Button>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-rose-400">
+            <AlertTriangle className="w-3.5 h-3.5" />
+            <span>{errorCount} Errors</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-amber-400">
+            <Activity className="w-3.5 h-3.5" />
+            <span>{warnCount} Warns</span>
+          </div>
         </div>
       </div>
 
-      {/* Control Filters Toolbar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 p-3 bg-bg-surface rounded-lg border border-border-default flex-shrink-0">
+      {/* Control Filters & Action Toolbar */}
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-3 p-3 bg-slate-900/60 rounded-2xl border border-slate-800 flex-shrink-0">
+        {/* Search Input */}
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-text-muted" />
-          <Input
-            placeholder="Filter log message text or trace ID..."
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <input
+            type="text"
+            placeholder="Search regex, message pattern, or trace ID (e.g. ECONNREFUSED, trace-)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 py-1.5 text-xs"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-100 placeholder-slate-500 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        {/* Selectors and Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto text-xs font-mono">
           <select
             value={filterLevel}
             aria-label="Filter logs by level"
             onChange={(e) => setFilterLevel(e.target.value as LogLevel | 'ALL')}
-            className="bg-bg-primary border border-border-default rounded-md px-2.5 py-1.5 text-xs text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
           >
             <option value="ALL">All Levels</option>
             <option value="DEBUG">DEBUG</option>
@@ -114,30 +164,72 @@ export const LogViewerPage: React.FC = () => {
             value={filterSource}
             aria-label="Filter logs by service source"
             onChange={(e) => setFilterSource(e.target.value as LogSource | 'ALL')}
-            className="bg-bg-primary border border-border-default rounded-md px-2.5 py-1.5 text-xs text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
           >
-            <option value="ALL">All Sources</option>
+            <option value="ALL">All Services</option>
             <option value="frontend">Frontend</option>
-            <option value="backend">Backend</option>
-            <option value="database">Database</option>
-            <option value="nginx">Nginx</option>
+            <option value="backend">Backend Gateway</option>
+            <option value="database">PostgreSQL DB</option>
+            <option value="nginx">Nginx Proxy</option>
             <option value="chaos-engine">Chaos Engine</option>
           </select>
+
+          {/* Pause / Resume Button */}
+          <button
+            type="button"
+            onClick={() => setPaused(!isPaused)}
+            className={`px-3 py-2 rounded-xl border font-bold flex items-center gap-1.5 transition-all ${
+              isPaused
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-md shadow-amber-500/10'
+                : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+            }`}
+          >
+            {isPaused ? <Play className="w-3.5 h-3.5 fill-current" /> : <Pause className="w-3.5 h-3.5 fill-current" />}
+            <span>{isPaused ? 'Resume Auto-Scroll' : 'Pause Stream'}</span>
+          </button>
+
+          {/* Copy and Export Buttons */}
+          <button
+            type="button"
+            onClick={handleCopyLogs}
+            className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+            title="Copy all visible logs"
+          >
+            <Copy className="w-4 h-4" />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportLogs}
+            className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+            title="Export .log file"
+          >
+            <Download className="w-4 h-4" />
+          </button>
+
+          <button
+            type="button"
+            onClick={clearLogs}
+            className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-rose-400 hover:bg-slate-900"
+            title="Clear buffer"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
       {/* Log Terminal Window */}
       <div
         ref={scrollRef}
-        className="flex-1 bg-[#0D1117] border border-slate-700 rounded-xl overflow-y-auto font-mono selection:bg-slate-700"
+        className="flex-1 bg-[#06090F] border border-slate-800/90 rounded-2xl overflow-y-auto font-mono selection:bg-cyan-900/50 shadow-2xl p-2"
       >
         {filteredLogs.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-text-muted py-12">
-            <Terminal className="w-8 h-8 mb-2" />
-            <p className="text-xs">No log entries matching filter criteria.</p>
+          <div className="h-full flex flex-col items-center justify-center text-slate-500 py-16">
+            <Terminal className="w-10 h-10 mb-2 text-slate-700" />
+            <p className="text-xs font-mono">No telemetry matching current filter query.</p>
           </div>
         ) : (
-          filteredLogs.map((log) => <LogRow key={log.id} log={log} />)
+          filteredLogs.map((log) => <LogRow key={log.id} log={log} searchQuery={searchQuery} />)
         )}
       </div>
     </div>
