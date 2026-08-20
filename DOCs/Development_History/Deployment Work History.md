@@ -2,7 +2,7 @@
 
 **Document Name:** Deployment Work History  
 **Document ID:** HIST-DEP-001  
-**Version:** 1.2.0  
+**Version:** 1.3.0  
 **Category:** Development History  
 **Status:** Active  
 **Owner:** DevOps Engineer  
@@ -18,20 +18,29 @@ The **Deployment Work History** serves as the official engineering log for every
 
 # 2. Master Deployment Changelog Table
 
-| Entry ID | Date (ISO) | Developer | Environment | Platform | Summary Description | Status |
+| Entry ID | Date & Time (ISO) | Developer | Environment | Platform | Summary Description | Status |
 |---|---|---|---|---|---|---|
-| `DEP-HIST-001` | 2026-08-09 | DevOps Team | Production | Render / Vercel | Initial cloud deployment baseline and CI/CD workflow scaffolding. | Completed |
-| `DEP-HIST-002` | 2026-08-19 | Radheshbhuva | Development / Staging | Supabase / Vite | Installed `@supabase/supabase-js`, configured `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `frontend/.env` and `frontend/.env.example`, and added Supabase pooler strings to `backend/.env.example`. | Completed |
-| `DEP-HIST-003` | 2026-08-20 | Radheshbhuva | Local Development | Vite / Express | Verified zero-error production bundles (`npm run build`) and hot-module reloading across frontend (port 5173) and backend (port 5000). | Completed |
-| `DEP-HIST-004` | 2026-08-20 | Radheshbhuva | Staging / Production | Vercel / Render / Supabase | Created complete 10-document Deployment Specification & AI Prompt Suite in `DOCs/24_Deployment_Prompts/`, added `frontend/vercel.json` SPA rewrite rules, and configured `backend/render.yaml` & `backend/Dockerfile`. | Completed |
-| `DEP-HIST-005` | 2026-08-20 | Radheshbhuva | Staging / Production | Vercel / Render / Supabase / GitHub Actions | Full Phase 1–5 deployment implementation: DB config module, Prisma directUrl, CORS upgrade, graceful shutdown with Prisma disconnect, upgraded /health endpoint, production vite build config, CI + deploy GitHub Actions workflows. | Completed |
+| `DEP-HIST-001` | 2026-08-09 17:00:00 | DevOps Team | Production | Render / Vercel | Initial cloud deployment baseline and CI/CD workflow scaffolding. | Completed |
+| `DEP-HIST-002` | 2026-08-19 16:35:00 | Radheshbhuva | Development / Staging | Supabase / Vite | Installed `@supabase/supabase-js`, configured `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `frontend/.env` and `frontend/.env.example`, and added Supabase pooler strings to `backend/.env.example`. | Completed |
+| `DEP-HIST-003` | 2026-08-20 08:35:00 | Radheshbhuva | Local Development | Vite / Express | Verified zero-error production bundles (`npm run build`) and hot-module reloading across frontend (port 5173) and backend (port 5000). | Completed |
+| `DEP-HIST-004` | 2026-08-20 10:49:00 | Radheshbhuva | Staging / Production | Vercel / Render / Supabase | Created complete 10-document Deployment Specification & AI Prompt Suite in `DOCs/24_Deployment_Prompts/`, added `frontend/vercel.json` SPA rewrite rules, and configured `backend/render.yaml` & `backend/Dockerfile`. | Completed |
+| `DEP-HIST-005` | 2026-08-20 11:06:00 | Radheshbhuva | Staging / Production | Vercel / Render / Supabase / GitHub Actions | Full Phase 1–5 deployment implementation: DB config module, Prisma directUrl, CORS upgrade, graceful shutdown with Prisma disconnect, upgraded /health endpoint, production vite build config, CI + deploy GitHub Actions workflows. | Completed |
 
 ---
 
 # 3. Detailed Deployment Entries
 
+## DEP-HIST-001: Cloud Baseline & CI/CD Initial Scaffolding
+- **Date & Time:** 2026-08-09 17:00:00
+- **Environment:** Production Baseline
+- **Platform:** Render (Backend) + Vercel (Frontend)
+- **Description:**
+  - Established initial cloud deployment baseline.
+  - Set up CI/CD workflow tracking and baseline repository environments.
+- **Status:** Completed & Verified.
+
 ## DEP-HIST-002: Supabase Multi-Environment Client Configuration
-- **Date:** 2026-08-19
+- **Date & Time:** 2026-08-19 16:35:00
 - **Environment:** Local Development / Cloud Staging
 - **Platform:** Supabase Cloud + Vite React Frontend + Express Backend
 - **Description:**
@@ -46,7 +55,7 @@ The **Deployment Work History** serves as the official engineering log for every
 - **Status:** Completed & Verified.
 
 ## DEP-HIST-003: Production Bundle Verification
-- **Date:** 2026-08-20
+- **Date & Time:** 2026-08-20 08:35:00
 - **Environment:** Production Build Verification
 - **Platform:** Vite v5.4
 - **Description:**
@@ -54,7 +63,7 @@ The **Deployment Work History** serves as the official engineering log for every
 - **Status:** Verified Pass (0 errors).
 
 ## DEP-HIST-004: Deployment Specification Suite & Infrastructure Configurations
-- **Date:** 2026-08-20
+- **Date & Time:** 2026-08-20 10:49:00
 - **Environment:** Staging & Production Blueprint
 - **Platform:** Vercel (Edge SPA) + Render (Node.js 20 Express) + Supabase (PostgreSQL 16)
 - **Description:**
@@ -66,7 +75,7 @@ The **Deployment Work History** serves as the official engineering log for every
 - **Status:** Completed & Verified.
 
 ## DEP-HIST-005: Phase 1–5 Full Deployment Infrastructure Implementation
-- **Date:** 2026-08-20
+- **Date & Time:** 2026-08-20 11:06:00
 - **Environment:** Staging & Production
 - **Platform:** Vercel + Render + Supabase + GitHub Actions
 - **Description:**
