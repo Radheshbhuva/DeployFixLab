@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { labService } from '@/services/labService';
 import { Lab, LabSession, VerificationResult } from '@/types/lab.types';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { LabStatusBadge } from './LabStatusBadge';
 import { VerificationResultCard } from './VerificationResultCard';
-import { ProgressStepper } from '@/components/ui/ProgressStepper';
-import { DifficultyBadge } from '@/components/ui/DifficultyBadge';
-import { CodeBlock } from '@/components/ui/CodeBlock';
 import { useToast } from '@/hooks/useToast';
-import { ShieldCheck, ArrowLeft, Terminal as TerminalIcon, CheckCircle2, RotateCcw } from 'lucide-react';
+import {
+  ShieldCheck,
+  ArrowLeft,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  Server,
+  Send,
+  Download,
+  CheckSquare,
+  Square,
+  HelpCircle,
+  Copy,
+  Check,
+} from 'lucide-react';
 
 export const LabExecutionPage: React.FC = () => {
   const { labId } = useParams<{ labId: string }>();
@@ -20,7 +28,21 @@ export const LabExecutionPage: React.FC = () => {
   const [verificationResults, setVerificationResults] = useState<VerificationResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [activeTab, setActiveTab] = useState<'terminal' | 'logs' | 'hints'>('terminal');
+  const [terminalInput, setTerminalInput] = useState('');
+  const [terminalHistory, setTerminalHistory] = useState<
+    Array<{ type: 'input' | 'output' | 'error' | 'success'; text: string }>
+  >([
+    { type: 'output', text: 'Initializing DeployFix SRE Sandbox Environment...' },
+    { type: 'output', text: 'Target cluster booted in isolated bridge network: deployfix-chaos-net' },
+    { type: 'error', text: 'ALERT: Healthcheck probe failed for target container service.' },
+    { type: 'output', text: 'Type a command or click quick diagnostic shortcuts below to begin triage.' },
+  ]);
+  const [checkedObjectives, setCheckedObjectives] = useState<Record<number, boolean>>({});
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
 
+  const terminalEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -43,6 +65,71 @@ export const LabExecutionPage: React.FC = () => {
     initLabSession();
   }, [labId, toast]);
 
+  useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [terminalHistory]);
+
+  const handleRunCommand = (cmd: string) => {
+    if (!cmd.trim()) return;
+
+    const newHistory = [...terminalHistory, { type: 'input' as const, text: `$ ${cmd}` }];
+
+    const lower = cmd.toLowerCase().trim();
+
+    if (lower.includes('docker compose ps') || lower.includes('docker ps')) {
+      newHistory.push({
+        type: 'output',
+        text: `NAME                  IMAGE               COMMAND                  SERVICE             STATUS
+deployfix-gateway     node:20-alpine      "npm run start"          gateway             Up 2 minutes (unhealthy)
+deployfix-postgres    postgres:16-alpine  "docker-entrypoint.s…"   postgres            Up 2 minutes (healthy)
+deployfix-redis       redis:7-alpine      "docker-entrypoint.s…"   redis               Up 2 minutes (healthy)`,
+      });
+    } else if (lower.includes('docker compose logs') || lower.includes('logs')) {
+      newHistory.push({
+        type: 'error',
+        text: `[deployfix-gateway] ERROR 2026-08-20T08:30:12Z: Failed to connect to database at 127.0.0.1:5432
+[deployfix-gateway] Error: connect ECONNREFUSED 127.0.0.1:5432
+[deployfix-gateway] at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1605:16)
+[deployfix-gateway] Retrying in 5000ms... (attempt 4/10)`,
+      });
+    } else if (lower.includes('curl') || lower.includes('health')) {
+      newHistory.push({
+        type: 'error',
+        text: `HTTP/1.1 503 Service Unavailable
+Content-Type: application/json
+Date: Thu, 20 Aug 2026 08:30:20 GMT
+
+{"status":"degraded","error":"Database connection refused on 127.0.0.1:5432"}`,
+      });
+    } else if (
+      lower.includes('fix') ||
+      lower.includes('sed') ||
+      lower.includes('postgres') ||
+      lower.includes('apply')
+    ) {
+      newHistory.push({
+        type: 'success',
+        text: `✓ Applied configuration patch to DATABASE_URL:
+- DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/deployfix"
++ DATABASE_URL="postgresql://user:pass@postgres:5432/deployfix"
+Restarting deployfix-gateway container...
+✓ Container deployfix-gateway restarted successfully. Handshake nominal.`,
+      });
+    } else if (lower === 'clear') {
+      setTerminalHistory([]);
+      setTerminalInput('');
+      return;
+    } else {
+      newHistory.push({
+        type: 'output',
+        text: `Executed: ${cmd}\nExit Code: 0`,
+      });
+    }
+
+    setTerminalHistory(newHistory);
+    setTerminalInput('');
+  };
+
   const handleRunVerification = async () => {
     if (!session) return;
     setIsVerifying(true);
@@ -54,9 +141,10 @@ export const LabExecutionPage: React.FC = () => {
       if (allPassed) {
         const updatedSess = await labService.completeSession(session.sessionId);
         setSession(updatedSess);
-        toast.success('Congratulations! All verification tests passed successfully.');
+        setShowCertificate(true);
+        toast.success('Congratulations! 100% verification tests passed.');
       } else {
-        toast.error('Verification failed. Check the test results below.');
+        toast.error('Verification failed. Check test results.');
       }
     } catch {
       toast.error('Error running verification suite.');
@@ -65,127 +153,403 @@ export const LabExecutionPage: React.FC = () => {
     }
   };
 
+  const toggleObjective = (idx: number) => {
+    setCheckedObjectives((prev) => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }));
+  };
+
+  const handleCopyCmd = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopiedCmd(cmd);
+    setTimeout(() => setCopiedCmd(null), 2000);
+  };
+
   if (loading || !lab) {
-    return <LoadingSpinner label="Provisioning lab environment container..." />;
+    return <LoadingSpinner label="Provisioning isolated chaos container sandbox..." />;
   }
 
-  const steps = [
-    { label: 'Environment Setup', description: 'Container booted' },
-    { label: 'Chaos Injection', description: 'Failure triggered' },
-    { label: 'Troubleshooting', description: 'Investigate logs' },
-    { label: 'Verification', description: 'Pass tests' },
-  ];
-
-  const currentStep = session?.status === 'VERIFIED' ? 3 : 2;
+  const getDifficultyColor = (diff: string) => {
+    switch (diff) {
+      case 'BEGINNER':
+        return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
+      case 'INTERMEDIATE':
+        return 'text-amber-400 border-amber-500/30 bg-amber-500/10';
+      case 'ADVANCED':
+        return 'text-rose-400 border-rose-500/30 bg-rose-500/10';
+      case 'EXPERT':
+        return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+      default:
+        return 'text-slate-300 border-slate-700 bg-slate-800';
+    }
+  };
 
   return (
-    <div className="space-y-6 pb-8">
-      {/* Back button */}
-      <button
-        onClick={() => navigate('/labs')}
-        className="inline-flex items-center gap-2 text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Catalog
-      </button>
+    <div className="space-y-5 pb-12 text-left">
+      {/* Top Breadcrumb & Action Bar */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => navigate('/labs')}
+          className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Chaos Catalog</span>
+        </button>
 
-      {/* Main Header Banner */}
-      <div className="bg-bg-surface p-6 rounded-xl border border-border-default space-y-4">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <DifficultyBadge difficulty={lab.difficulty} />
-              {session && <LabStatusBadge status={session.status} />}
-            </div>
-            <h1 className="text-2xl font-bold text-text-primary">{lab.title}</h1>
-            <p className="text-sm text-text-secondary mt-1">{lab.description}</p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button
-              variant="primary"
-              size="lg"
-              isLoading={isVerifying}
-              onClick={handleRunVerification}
-            >
-              <ShieldCheck className="w-5 h-5 mr-2" />
-              Run Verification Tests
-            </Button>
-          </div>
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
+            Session: <span className="text-cyan-400">{session?.sessionId}</span>
+          </span>
+          <button
+            type="button"
+            onClick={handleRunVerification}
+            disabled={isVerifying}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>{isVerifying ? 'Running Test Suite...' : 'Verify Solution'}</span>
+          </button>
         </div>
-
-        {/* Progress Stepper */}
-        <ProgressStepper steps={steps} currentStep={currentStep} />
       </div>
 
-      {/* Grid: Instructions & Interactive Terminal */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Objectives & Setup Instructions */}
-        <div className="space-y-6">
-          <Card title="Lab Scenario Objectives">
-            <ul className="space-y-2 mt-3">
-              {lab.objectives.map((obj, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-text-secondary">
-                  <CheckCircle2 className="w-4 h-4 text-brand-primary mt-0.5 flex-shrink-0" />
-                  <span>{obj}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
+      {/* Scenario Header Info Banner */}
+      <div className="rounded-2xl border border-slate-800/90 bg-slate-900/80 p-5 backdrop-blur-xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-300">
+              {lab.code}
+            </span>
+            <span
+              className={`text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${getDifficultyColor(
+                lab.difficulty
+              )}`}
+            >
+              {lab.difficulty}
+            </span>
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+              {lab.category}
+            </span>
+          </div>
 
-          <Card title="Suggested Troubleshooting Commands">
-            <p className="text-xs text-text-muted mb-3">
-              Use these terminal commands to inspect logs and diagnose root cause:
-            </p>
-            <CodeBlock
-              language="bash"
-              title="Docker Container Inspection"
-              code={`# Check container health and environment
-docker compose ps
-docker compose logs -f --tail=50 backend
-
-# Test internal connection
-docker exec -it deployfix-backend nc -zv postgres 5432`}
-            />
-          </Card>
+          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-100">{lab.title}</h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+            {lab.description}
+          </p>
         </div>
 
-        {/* Interactive Verification Results Panel */}
-        <div className="space-y-6">
-          <Card title="Automated Test Suite Results">
-            {verificationResults.length === 0 ? (
-              <div className="text-center py-12 border border-dashed border-border-default rounded-lg">
-                <TerminalIcon className="w-8 h-8 text-text-muted mx-auto mb-2" />
-                <p className="text-sm text-text-secondary font-medium">
-                  No verification run executed yet.
-                </p>
-                <p className="text-xs text-text-muted mt-1 max-w-xs mx-auto">
-                  Execute your recovery fixes in the terminal, then click &quot;Run Verification Tests&quot;.
-                </p>
+        <div className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-xl border border-slate-800 flex-shrink-0 text-xs font-mono">
+          <Server className="w-4 h-4 text-cyan-400" />
+          <div>
+            <div className="text-slate-400 text-[10px]">TARGET NODE</div>
+            <div className="font-bold text-slate-200">{lab.targetService}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Split Screen Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Left Column: Playbook & Objectives (5 cols) */}
+        <div className="lg:col-span-5 space-y-4">
+          {/* Objectives Card */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-xl">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                Incident Objectives
+              </h2>
+              <span className="text-[10px] font-mono text-cyan-400">
+                {Object.values(checkedObjectives).filter(Boolean).length} / {lab.objectives.length}
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {lab.objectives.map((obj, idx) => {
+                const isChecked = !!checkedObjectives[idx];
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => toggleObjective(idx)}
+                    className={`w-full flex items-start gap-2.5 p-2.5 rounded-xl border text-left transition-all ${
+                      isChecked
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                        : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
+                    }`}
+                  >
+                    {isChecked ? (
+                      <CheckSquare className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                    ) : (
+                      <Square className="w-4 h-4 text-slate-500 mt-0.5 flex-shrink-0" />
+                    )}
+                    <span className="text-xs leading-relaxed font-sans">{obj}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Fault Summary & Playbook */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-xl space-y-3">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-400" />
+              Failure Characteristics
+            </h2>
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-mono leading-relaxed">
+              {lab.faultSummary}
+            </div>
+
+            <div className="space-y-2 pt-2">
+              <div className="text-[11px] font-mono text-slate-400 font-bold uppercase">
+                Troubleshooting Hints:
               </div>
-            ) : (
-              <div className="space-y-3">
+              {lab.hints.map((hint, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-start gap-2 text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 font-sans"
+                >
+                  <HelpCircle className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <span>{hint}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Diagnostic Command Shortcuts */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-xl">
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2.5">
+              Quick Diagnostic Scripts
+            </div>
+            <div className="space-y-1.5 font-mono text-xs">
+              {[
+                'docker compose ps',
+                'docker compose logs -f --tail=50 gateway',
+                'curl -I http://localhost:5000/health',
+                'apply-network-fix',
+              ].map((cmd) => (
+                <div
+                  key={cmd}
+                  className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-300 hover:border-slate-700"
+                >
+                  <span className="text-cyan-400 truncate">$ {cmd}</span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCmd(cmd)}
+                      className="p-1 text-slate-500 hover:text-slate-200"
+                      title="Copy command"
+                    >
+                      {copiedCmd === cmd ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRunCommand(cmd)}
+                      className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold hover:bg-cyan-500/30"
+                    >
+                      Run
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Interactive Terminal & Verification (7 cols) */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Terminal Tabs */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl overflow-hidden flex flex-col h-[520px]">
+            {/* Terminal Header */}
+            <div className="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <span className="ml-2 text-xs font-mono text-slate-400">
+                  sandbox@deployfix-lab:~ ({lab.code})
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px] font-mono">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('terminal')}
+                  className={`px-2.5 py-1 rounded-md transition-all ${
+                    activeTab === 'terminal'
+                      ? 'bg-cyan-500/20 text-cyan-400 font-bold'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  Bash Terminal
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('logs')}
+                  className={`px-2.5 py-1 rounded-md transition-all ${
+                    activeTab === 'logs'
+                      ? 'bg-cyan-500/20 text-cyan-400 font-bold'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  Live Log Tail
+                </button>
+              </div>
+            </div>
+
+            {/* Terminal Screen Area */}
+            <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-left space-y-2 scrollbar-thin scrollbar-thumb-slate-800">
+              {activeTab === 'terminal' ? (
+                <>
+                  {terminalHistory.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className={`leading-relaxed whitespace-pre-wrap ${
+                        item.type === 'input'
+                          ? 'text-cyan-400 font-bold'
+                          : item.type === 'error'
+                          ? 'text-rose-400 bg-rose-500/10 p-2 rounded border border-rose-500/20'
+                          : item.type === 'success'
+                          ? 'text-emerald-400 bg-emerald-500/10 p-2 rounded border border-emerald-500/20'
+                          : 'text-slate-300'
+                      }`}
+                    >
+                      {item.text}
+                    </div>
+                  ))}
+                  <div ref={terminalEndRef} />
+                </>
+              ) : (
+                <div className="space-y-1 text-slate-400">
+                  <div className="text-cyan-400">[stream] Connected to live WebSocket /ws/logs/containers</div>
+                  <div>2026-08-20T08:30:01Z [postgres] LOG: database system is ready to accept connections</div>
+                  <div className="text-rose-400">
+                    2026-08-20T08:30:05Z [gateway] ERROR: ECONNREFUSED 127.0.0.1:5432
+                  </div>
+                  <div>2026-08-20T08:30:10Z [redis] 1:M 20 Aug 2026 08:30:10.123 * Ready to accept connections</div>
+                  <div className="text-amber-400">
+                    2026-08-20T08:30:15Z [nginx] 502 Bad Gateway while connecting to upstream
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Terminal Input Bar */}
+            {activeTab === 'terminal' && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleRunCommand(terminalInput);
+                }}
+                className="bg-slate-900 p-2.5 border-t border-slate-800 flex items-center gap-2 font-mono text-xs"
+              >
+                <span className="text-cyan-400 pl-2">$</span>
+                <input
+                  type="text"
+                  placeholder="Enter command (e.g. docker compose ps, docker logs gateway, fix)..."
+                  value={terminalInput}
+                  onChange={(e) => setTerminalInput(e.target.value)}
+                  className="flex-1 bg-transparent text-slate-100 placeholder-slate-600 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Test Suite Verification Results Panel */}
+          {verificationResults.length > 0 && (
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  Automated Verification Test Suite
+                </h3>
+                <span className="text-xs font-mono text-emerald-400 font-bold">
+                  {verificationResults.filter((r) => r.passed).length} / {verificationResults.length}{' '}
+                  Passed
+                </span>
+              </div>
+
+              <div className="space-y-2">
                 {verificationResults.map((result, idx) => (
                   <VerificationResultCard key={idx} result={result} />
                 ))}
               </div>
-            )}
-          </Card>
-
-          {session?.status === 'VERIFIED' && (
-            <div className="p-6 rounded-xl bg-status-success-dim/50 border border-status-success text-center space-y-3">
-              <h3 className="text-lg font-bold text-status-success">Scenario Completed!</h3>
-              <p className="text-xs text-text-secondary">
-                You successfully diagnosed and recovered the production failure. Your score: 100%.
-              </p>
-              <Button variant="ghost" onClick={() => navigate('/labs')}>
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Return to Catalog
-              </Button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Completion Modal / Certificate Generator */}
+      {showCertificate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="bg-slate-900 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl relative space-y-5">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
+              <Sparkles className="w-8 h-8" />
+            </div>
+
+            <div>
+              <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                SCENARIO RESOLVED 100%
+              </span>
+              <h3 className="text-2xl font-extrabold text-slate-100 mt-2">
+                Incident Triage Certified
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                You successfully diagnosed and resolved {lab.code}: {lab.title}.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-left font-mono text-xs space-y-2">
+              <div className="flex justify-between text-slate-400">
+                <span>Engineer:</span>
+                <span className="text-slate-200">Radhesh Bhuva (Lead SRE)</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>Verification Score:</span>
+                <span className="text-emerald-400 font-bold">100 / 100 PTS</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>Verification Timestamp:</span>
+                <span className="text-slate-300">{new Date().toISOString()}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  toast.success('Certificate exported to clipboard');
+                  setShowCertificate(false);
+                }}
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg"
+              >
+                <Download className="w-4 h-4" />
+                <span>Export Certificate</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCertificate(false);
+                  navigate('/labs');
+                }}
+                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs"
+              >
+                Return to Catalog
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
