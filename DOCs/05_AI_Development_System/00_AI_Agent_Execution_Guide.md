@@ -38,9 +38,16 @@ Before writing implementation code for any subsystem, AI agents MUST read the co
 * **Backend Controllers/Services:** Inspect [`DOCs/11_Backend/Backend_Guidelines.md`](file:///c:/House_of_Growth/DeployFix_Lab/DOCs/11_Backend/Backend_Guidelines.md) and [`DOCs/11_Backend/Middleware_Standard.md`](file:///c:/House_of_Growth/DeployFix_Lab/DOCs/11_Backend/Middleware_Standard.md).
 * **Docker Container Stack:** Inspect [`DOCs/12_Docker/Docker_Architecture.md`](file:///c:/House_of_Growth/DeployFix_Lab/DOCs/12_Docker/Docker_Architecture.md) and [`DOCs/12_Docker/Compose_Guide.md`](file:///c:/House_of_Growth/DeployFix_Lab/DOCs/12_Docker/Compose_Guide.md).
 
-### 2. Mandatory Git Commit & Audit Trail Logging
+### 2. Mandatory Git Commit & Domain History Routing
 All file creations and edits MUST be committed **file-by-file** with atomic commit messages.
-Immediately after committing, agents MUST append the commit record to [`DOCs/Development_History/Commit_History.md`](file:///c:/House_of_Growth/DeployFix_Lab/DOCs/Development_History/Commit_History.md) and push to `origin main`.
+Immediately after committing:
+* **Frontend Commits:** Update [`DOCs/Development_History/Frontend Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Frontend%20Work%20History.md).
+* **Backend Commits:** Update [`DOCs/Development_History/Backend Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Backend%20Work%20History.md).
+* **Deployment Commits:** Update [`DOCs/Development_History/Deployment Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Deployment%20Work%20History.md).
+* **Database Commits:** Update [`DOCs/Development_History/Database Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Database%20Work%20History.md).
+* **Docker Commits:** Update [`DOCs/Development_History/Docker Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Docker%20Work%20History.md).
+* **CI/CD Commits:** Update [`DOCs/Development_History/CI_CD_Work_History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/CI_CD_Work_History.md).
+* **Inter-Branch Merges & PRs:** ONLY inter-branch merges and cross-branch PR integrations are recorded in [`DOCs/Development_History/Commit_History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Commit_History.md).
 
 ### 3. Database System Architecture Enforcement
 * **Engine:** PostgreSQL
