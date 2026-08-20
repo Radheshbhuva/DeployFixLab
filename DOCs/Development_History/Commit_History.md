@@ -35,8 +35,10 @@ This document serves as the official **Git Audit Trail & Commit History Register
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
 |---|---|---|---|---|---|---|---|
-| `153be92` | 2026-08-19 17:09:12 | Radheshbhuva | `master-trial.Radhesh` | `frontend/landing` | `feat(landing): add explicit Sign In and Sign Up buttons to header, hero, and footer across all screen viewports` | Pushed | Local CLI |
-| `00aacad` | 2026-08-19 16:56:48 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with authStore persistence commit` | Pushed | Local CLI |
+| `fa7b08c` | 2026-08-20 08:29:13 | Radheshbhuva | `master-trial.Radhesh` | `frontend/dashboard` | `feat(dashboard): build SRE Command Center with container fleet cards, active incident widgets, and telemetry charts` | Pushed | Local CLI |
+| `c9db0db` | 2026-08-20 08:29:06 | Radheshbhuva | `master-trial.Radhesh` | `frontend/dashboard` | `feat(dashboard): add container fleet, active incident, and telemetry types and datasets` | Pushed | Local CLI |
+| `fe735cf` | 2026-08-20 08:28:58 | Radheshbhuva | `master-trial.Radhesh` | `DOCs/23_Dashboard_Prompts` | `docs(dashboard): add complete SRE Command Center specification and AI prompt suite` | Pushed | Local CLI |
+| `4e36818` | 2026-08-19 17:10:07 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with landing buttons update commit` | Pushed | Local CLI |
 | `fdc6d22` | 2026-08-19 16:56:37 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add persist middleware to authStore for session survival across page reloads` | Pushed | Local CLI |
 | `f122c00` | 2026-08-19 16:50:27 | Radheshbhuva | `master-trial.Radhesh` | `DOCs` | `docs(history): sync Commit_History.md with auth feature implementation commits` | Pushed | Local CLI |
 | `bf97f33` | 2026-08-19 16:50:10 | Radheshbhuva | `master-trial.Radhesh` | `frontend/auth` | `feat(auth): add auth subcomponents including sidebar showcase, password strength meter, and demo accounts banner` | Pushed | Local CLI |
