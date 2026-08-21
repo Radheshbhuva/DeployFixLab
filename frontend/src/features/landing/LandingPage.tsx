@@ -12,6 +12,7 @@ import { TestimonialsSection } from './components/TestimonialsSection';
 import { FaqSection } from './components/FaqSection';
 import { CtaBanner } from './components/CtaBanner';
 import { LandingFooter } from './components/LandingFooter';
+import { LandingScrollNavigator } from './components/LandingScrollNavigator';
 
 export const LandingPage: React.FC = () => {
   return (
@@ -19,11 +20,11 @@ export const LandingPage: React.FC = () => {
       {/* Background Subtle Mesh Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b0f_1px,transparent_1px),linear-gradient(to_bottom,#1e293b0f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
-      {/* Navigation Header */}
+      {/* Navigation Header (Permanently Frozen at Top) */}
       <LandingHeader />
 
-      {/* Main Page Body */}
-      <main className="relative z-10">
+      {/* Main Page Body (Offset for Fixed Header) */}
+      <main className="relative z-10 pt-16">
         {/* 1. Hero Section + Interactive Studio Preview */}
         <HeroSection />
 
@@ -57,6 +58,9 @@ export const LandingPage: React.FC = () => {
         {/* 11. Pre-Footer High-Impact CTA Banner */}
         <CtaBanner />
       </main>
+
+      {/* Floating Centered Scroll Navigator (Top / FAQ) */}
+      <LandingScrollNavigator />
 
       {/* Footer */}
       <LandingFooter />
