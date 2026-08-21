@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, Menu, X, Zap, LogIn, UserPlus } from 'lucide-react';
-import { useAuthStore } from '@/store/authStore';
+import { Menu, X, Zap, LogIn, UserPlus } from 'lucide-react';
 
 export const LandingHeader: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user } = useAuthStore();
 
   const navLinks = [
     { label: 'How It Works', href: '#how-it-works' },
@@ -56,39 +54,25 @@ export const LandingHeader: React.FC = () => {
 
         {/* Auth CTA Actions (Prominently Visible) */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {isAuthenticated ? (
-            <div className="flex items-center gap-2">
-              <Link
-                to="/dashboard"
-                className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
-              >
-                <Activity className="w-4 h-4" />
-                <span>Dashboard ({user?.fullName ? user.fullName.split(' ')[0] : 'User'})</span>
-              </Link>
-            </div>
-          ) : (
-            <>
-              {/* Sign In Button */}
-              <Link
-                to="/login"
-                id="header-signin-btn"
-                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-900/80 hover:bg-slate-800 text-slate-100 font-semibold text-xs sm:text-sm transition-all"
-              >
-                <LogIn className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Sign In</span>
-              </Link>
+          {/* Sign In Button */}
+          <Link
+            to="/login"
+            id="header-signin-btn"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-900/80 hover:bg-slate-800 text-slate-100 font-semibold text-xs sm:text-sm transition-all"
+          >
+            <LogIn className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Sign In</span>
+          </Link>
 
-              {/* Sign Up Button */}
-              <Link
-                to="/register"
-                id="header-signup-btn"
-                className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
-              >
-                <UserPlus className="w-3.5 h-3.5" />
-                <span>Sign Up</span>
-              </Link>
-            </>
-          )}
+          {/* Sign Up Button */}
+          <Link
+            to="/register"
+            id="header-signup-btn"
+            className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02]"
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>Sign Up</span>
+          </Link>
 
           {/* Mobile Hamburger Button */}
           <button
@@ -123,35 +107,22 @@ export const LandingHeader: React.FC = () => {
           </nav>
 
           <div className="pt-4 border-t border-slate-800/80 flex flex-col gap-2.5">
-            {isAuthenticated ? (
-              <Link
-                to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center px-4 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm shadow-md flex items-center justify-center gap-2"
-              >
-                <Activity className="w-4 h-4" />
-                <span>Go to Dashboard ({user?.fullName || 'User'})</span>
-              </Link>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 font-semibold text-sm flex items-center justify-center gap-2"
-                >
-                  <LogIn className="w-4 h-4 text-cyan-400" />
-                  <span>Sign In</span>
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-sm shadow-md flex items-center justify-center gap-2"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  <span>Sign Up (Create Free Account)</span>
-                </Link>
-              </>
-            )}
+            <Link
+              to="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full text-center px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 font-semibold text-sm flex items-center justify-center gap-2"
+            >
+              <LogIn className="w-4 h-4 text-cyan-400" />
+              <span>Sign In</span>
+            </Link>
+            <Link
+              to="/register"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-sm shadow-md flex items-center justify-center gap-2"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>Sign Up (Create Free Account)</span>
+            </Link>
           </div>
         </div>
       )}
