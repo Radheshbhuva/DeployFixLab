@@ -18,7 +18,10 @@
 # 1. Master Frontend Changelog Table
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status |
-|---|---|---|---|---|---|---|
+| `96c80e3` | 2026-08-21 08:20:00 | Radheshbhuva | `main` | `frontend/guards` | `fix(guards): update PublicOnlyRoute to allow direct rendering of login and register screens` | Pushed |
+| `20515ba` | 2026-08-21 08:19:53 | Radheshbhuva | `main` | `frontend/landing` | `fix(landing): route footer service dashboard and lab catalog links to auth pages` | Pushed |
+| `30ca137` | 2026-08-21 08:19:47 | Radheshbhuva | `main` | `frontend/landing` | `fix(landing): remove Sign In to Workspace button and route Live Demo Preview to auth login` | Pushed |
+| `684d41c` | 2026-08-21 08:19:43 | Radheshbhuva | `main` | `frontend/landing` | `fix(landing): replace dashboard user button with sign-in and sign-up actions in landing header` | Pushed |
 | `85fcbdc` | 2026-08-20 11:52:28 | Radheshbhuva | `master-trial.Radhesh` | `frontend/dashboard` | `revert(dashboard): restore clean telemetry and microservice health overview layout` | Pushed |
 | `2d96d1c` | 2026-08-20 11:35:11 | Radheshbhuva | `master-trial.Radhesh` | `frontend/testing` | `test(frontend): add cn utility unit tests for CI test pipeline validation` | Pushed |
 | `bbf8155` | 2026-08-20 11:05:08 | Radheshbhuva | `master-trial.Radhesh` | `frontend/build` | `feat(deployment): add production build config to vite.config.ts with manual chunks and sourcemap disabled` | Pushed |
