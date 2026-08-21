@@ -19,12 +19,22 @@ dotenv.config();
 
 const app = express();
 
+// --- CORS Configuration ---
+// Whitelists only the configured frontend origin; allows cookies/auth headers
+const corsOptions: cors.CorsOptions = {
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Refresh-Token'],
+};
+
 // Global Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // Mounting Health Routes directly under root
 app.use('/', healthRouter);

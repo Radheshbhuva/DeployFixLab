@@ -85,35 +85,40 @@ Agents building or extending DeployFix Lab MUST execute work in structured phase
 
 ## 📜 5. Updating `Development_History` & Git Workflow
 
-### Rule 1: Real-Time Synchronization of `Commit_History.md`
-Whenever an AI agent creates or modifies files (code or documentation), it MUST:
-1. Commit each file **file-by-file** using atomic Git commit messages:
+### Rule 1: Strict Domain-Specific Work History Logging
+Whenever an AI agent or developer creates, modifies, or commits files, the commit log MUST be added to its corresponding **Domain Work History** file inside `DOCs/Development_History/`:
+
+| Module / Scope of Change | Target History Document | Content Recorded |
+|---|---|---|
+| 🎨 **Frontend UI & Client Code** | [`Frontend Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Frontend%20Work%20History.md) | React components, layouts, Vite configs, Zustand stores, pages, UI assets, client env updates. |
+| ⚙️ **Backend API & Server Code** | [`Backend Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Backend%20Work%20History.md) | Express routes, controllers, services, JWT auth, database config, CORS middleware, graceful shutdown. |
+| 🚀 **Deployment & Cloud Infrastructure** | [`Deployment Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Deployment%20Work%20History.md) | Vercel SPA hosting, Render backend configs, Dockerfiles, Supabase poolers, release specifications. |
+| 🗄️ **Database & ORM** | [`Database Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Database%20Work%20History.md) | PostgreSQL schema, Prisma migrations, seed scripts, ER models, database indexes. |
+| 🐳 **Docker & Containers** | [`Docker Work History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Docker%20Work%20History.md) | Dockerfiles, Compose stacks, container networking, healthcheck probes, volume bindings. |
+| 🔄 **CI/CD Pipelines** | [`CI_CD_Work_History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/CI_CD_Work_History.md) | GitHub Actions workflows (`ci.yml`, `deploy.yml`), automated tests, linting runs. |
+| 🐛 **Bug Fixes & RCA** | [`Bug History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Bug%20History.md) | Bug investigations, root cause analyses, deprecation resolutions, regression patches. |
+| 🛠️ **Architecture Refactorings** | [`Refactoring History.md`](file:///c:/House_of_Growth/DeployFix_Lab-Trial/DOCs/Development_History/Refactoring%20History.md) | Workspace structural reorganizations, directory refactors, framework migrations. |
+
+### Rule 2: Strict Policy for `Commit_History.md` (Inter-Branch Merges & PRs Only)
+* **`Commit_History.md` is STRICTLY RESERVED for inter-branch operations:**
+  - Merging one branch into another (e.g. `feat/*` $\rightarrow$ `master(trial)`, `heny.frontend` $\rightarrow$ `main`, `dhruvil.backend` $\rightarrow$ `master-trial.Radhesh`).
+  - Pull Requests (PRs) and Merge Requests (MRs) merged via GitHub CLI or Web UI.
+  - Cross-branch repository baseline synchronizations.
+* **PROHIBITION:** AI agents MUST NEVER record single-file feature commits, routine bug fixes, or individual module changes in `Commit_History.md`. Those MUST go into their respective domain work history files listed above.
+
+### Rule 3: File-by-File Commit & Push Protocol
+1. Stage and commit changes **file-by-file**:
    ```bash
    git add "<file-path>"
    git commit -m "<type>(<scope>): <summary>"
    ```
-2. Extract the resulting commit hash (e.g. `a1b2c3d`).
-3. Update `DOCs/Development_History/Commit_History.md` by prepending a row to the **Master Commit Audit Log** table:
-
-```markdown
-| Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status | Execution Env |
-|---|---|---|---|---|---|---|---|
-| `a1b2c3d` | YYYY-MM-DD HH:MM:SS | <Agent Name / User> | `main` | <Subsystem> | `<commit-message>` | Pushed | Local CLI |
-```
-
-4. Commit `Commit_History.md` and push to remote `main`:
+2. Update the relevant Domain Work History file (e.g. `Frontend Work History.md` or `Backend Work History.md`) with the commit hash, ISO timestamp (`YYYY-MM-DD HH:MM:SS`), author, and summary.
+3. Commit and push the updated history file:
    ```bash
-   git add "DOCs/Development_History/Commit_History.md"
-   git commit -m "docs(history): sync Commit_History.md with <task> commits"
-   git push origin main
+   git add "DOCs/Development_History/<Domain> Work History.md"
+   git commit -m "docs(history): sync <Domain> Work History with <task> commits"
+   git push origin <branch_name>
    ```
-
-### Rule 2: Module Work History Logs
-When completing significant feature implementations, update the specific work log file inside `DOCs/Development_History/`:
-* Database changes $\rightarrow$ `Database Work History.md`
-* Backend API / CI/CD $\rightarrow$ `CI_CD_Work_History.md`
-* Deployment / Infrastructure $\rightarrow$ `Deployment Work History.md`
-* Frontend UI $\rightarrow$ `Frontend Work History.md`
 
 ---
 

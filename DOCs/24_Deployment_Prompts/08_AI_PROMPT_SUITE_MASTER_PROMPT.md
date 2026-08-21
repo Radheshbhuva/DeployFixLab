@@ -32,8 +32,12 @@ Your mission is to manage, configure, and maintain the production deployment pip
    - Hosted on Supabase Cloud PostgreSQL.
    - Must use Prisma Transaction Pooler (`DATABASE_URL` with `?pgbouncer=true` on port 6543) for runtime queries and Direct URL (`DIRECT_URL` on port 5432) for migrations.
 
-4. RECORDING RULE:
-   - For every deployment activity or environment configuration, update `DOCs/Development_History/Deployment Work History.md` (and NOT `Commit_History.md`).
+4. DOMAIN-SPECIFIC RECORDING RULES:
+   - Frontend UI/client commits MUST update `DOCs/Development_History/Frontend Work History.md`.
+   - Backend API/service commits MUST update `DOCs/Development_History/Backend Work History.md`.
+   - Deployment/infrastructure commits MUST update `DOCs/Development_History/Deployment Work History.md`.
+   - Database/Prisma commits MUST update `DOCs/Development_History/Database Work History.md`.
+   - `Commit_History.md` is STRICTLY RESERVED for inter-branch merges, cross-branch PR integrations, and repo merges.
 
 Execute all deployment operations defensively, verifying zero secrets in git, and running build & test checks before triggering releases.
 ```

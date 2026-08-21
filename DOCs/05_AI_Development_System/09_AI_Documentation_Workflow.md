@@ -44,7 +44,7 @@ Feature / Architecture Modification Planned
 [ Step 4: Validate Mermaid Diagrams & Markdown Formatting ]
                      │
                      ▼
-[ Step 5: Update History Logs (Commit_History.md & Work History) ]
+[ Step 5: Update Domain History Logs (Frontend / Backend / Deployment Work History) ]
 ```
 
 ---
@@ -54,4 +54,5 @@ Feature / Architecture Modification Planned
 1. **Header Metadata:** Every generated document MUST begin with an official metadata block and approval table matching `Engineering Documentation Standard.md`.
 2. **File Linking Protocol:** Every file reference in documentation MUST use GitHub-style markdown file links with absolute `file:///` URIs.
 3. **Diagram Standard:** Architecture, sequence, component, and data flow diagrams MUST be written in clean, valid **Mermaid** syntax.
-4. **Git Sync Protocol:** Every generated document must be committed file-by-file and logged in `DOCs/Development_History/Commit_History.md`.
+4. **Git Sync & Domain Routing Protocol:** Every generated document must be committed file-by-file. Commit logs MUST be recorded in the corresponding Domain Work History document (e.g. `Frontend Work History.md`, `Backend Work History.md`, `Deployment Work History.md`). `Commit_History.md` is strictly reserved for inter-branch merges and PR integrations.
+

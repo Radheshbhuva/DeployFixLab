@@ -70,5 +70,7 @@ DeployFix Lab maintains 3 isolated runtime environments:
 * Pull Request opened using `09_Pull_Request_Template.md` and approved by at least 1 peer reviewer.
 
 ## Phase 4: Release & Documentation Sync
-* Code merged into `main`.
-* `Commit_History.md` updated and pushed to remote GitHub repository.
+* Code merged into `main` or `master-trial.Radhesh`.
+* Feature commits recorded in their corresponding Domain Work History file (`Frontend Work History.md`, `Backend Work History.md`, `Deployment Work History.md`, etc.).
+* Inter-branch merges and PR integrations recorded in `DOCs/Development_History/Commit_History.md`.
+

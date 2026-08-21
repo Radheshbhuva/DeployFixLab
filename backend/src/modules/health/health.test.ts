@@ -1,5 +1,16 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { Server } from 'http';
+
+// Mock checkDatabaseHealth to return true during integration tests
+vi.mock('../../config/database', () => ({
+  prisma: {
+    $queryRaw: vi.fn().mockResolvedValue([{ 1: 1 }]),
+    $disconnect: vi.fn().mockResolvedValue(undefined),
+  },
+  checkDatabaseHealth: vi.fn().mockResolvedValue(true),
+  disconnectDatabase: vi.fn().mockResolvedValue(undefined),
+}));
+
 import app from '../../app';
 
 let server: Server;
@@ -35,11 +46,13 @@ describe('Health Module Integration Tests', () => {
       service: string;
       uptime: number;
       timestamp: string;
+      database: { connected: boolean };
     };
     expect(data.status).toBe('ok');
     expect(data.service).toBe('deployfix-backend');
     expect(data.uptime).toBeTypeOf('number');
     expect(data.timestamp).toBeTypeOf('string');
+    expect(data.database.connected).toBe(true);
   });
 
   it('should return 200 OK on GET /live', async () => {
@@ -52,7 +65,8 @@ describe('Health Module Integration Tests', () => {
   it('should return 200 OK on GET /ready', async () => {
     const res = await fetch(`${address}/ready`);
     expect(res.status).toBe(200);
-    const data = (await res.json()) as { status: string };
+    const data = (await res.json()) as { status: string; database: string };
     expect(data.status).toBe('ok');
+    expect(data.database).toBe('connected');
   });
 });

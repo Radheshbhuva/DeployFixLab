@@ -1,39 +1,59 @@
+import { createServer } from 'http';
 import app from './app';
+import { disconnectDatabase } from './config/database';
+import { chaosWebSocketManager } from './websocket/websocket.server';
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+// Create standard Node.js HTTP server instance
+const server = createServer(app);
+
+// Attach Chaos Lab WebSocket Server
+chaosWebSocketManager.init(server);
+
+server.listen(PORT, () => {
+  console.log(`[Server] DeployFix Backend listening on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  console.log(`[WebSocket] Live WebSocket log stream ready at ws://localhost:${PORT}/logs/stream`);
 });
 
 // Graceful Shutdown Handler
-const shutdown = (signal: string) => {
-  console.log(`Received ${signal}. Shutting down gracefully...`);
-  server.close(() => {
-    console.log('HTTP server closed.');
+const gracefulShutdown = (signal: string) => {
+  console.log(`[Server] Received ${signal}. Shutting down gracefully...`);
+  
+  // Close WebSocket connections first
+  try {
+    chaosWebSocketManager.shutdown();
+  } catch (err) {
+    console.error('[Server] Error closing WebSocket server:', err);
+  }
+
+  server.close(async () => {
+    console.log('[Server] HTTP & WebSocket servers closed.');
+    await disconnectDatabase();
+    console.log('[Server] Database connections closed. Exiting process.');
     process.exit(0);
   });
 
-  // Force exit if server close takes too long
+  // Force exit if graceful shutdown takes longer than 10s
   setTimeout(() => {
-    console.error('Forcefully shutting down because graceful shutdown timed out.');
+    console.error('[Server] Could not close connections in time, forcefully shutting down.');
     process.exit(1);
   }, 10000);
 };
 
-// Listen for termination signals
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+// Listen for OS termination signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Unhandled Rejections and Exceptions
 process.on('unhandledRejection', (reason: Error) => {
-  console.error('UNHANDLED REJECTION! Shutting down...');
-  console.error(reason.name, reason.message, reason.stack);
-  shutdown('UNHANDLED_REJECTION');
+  console.error('[Server] UNHANDLED REJECTION! Shutting down...');
+  console.error(reason?.name, reason?.message, reason?.stack);
+  gracefulShutdown('UNHANDLED_REJECTION');
 });
 
 process.on('uncaughtException', (err: Error) => {
-  console.error('UNCAUGHT EXCEPTION! Shutting down...');
+  console.error('[Server] UNCAUGHT EXCEPTION! Shutting down...');
   console.error(err.name, err.message, err.stack);
-  shutdown('UNCAUGHT_EXCEPTION');
+  gracefulShutdown('UNCAUGHT_EXCEPTION');
 });
