@@ -18,7 +18,13 @@
 # 1. Master Frontend Changelog Table
 
 | Commit Hash | Date & Time (ISO) | Author | Target Branch | Module / Subsystem | Commit Message | Push Status |
-|---|---|---|---|---|---|---|
+| `e6a131b` | 2026-08-21 08:40:51 | Radheshbhuva | `main` | `frontend/landing` | `feat(landing): integrate LandingScrollNavigator and add pt-16 offset for frozen header` | Pushed |
+| `8da7b20` | 2026-08-21 08:40:44 | Radheshbhuva | `main` | `frontend/landing` | `feat(landing): add floating centered Scroll Navigator with smooth Go to FAQ and Back to Top transitions` | Pushed |
+| `36996e2` | 2026-08-21 08:40:37 | Radheshbhuva | `main` | `frontend/landing` | `fix(landing): freeze navigation bar permanently at top with fixed positioning and high z-index` | Pushed |
+| `123b467` | 2026-08-21 08:40:31 | Radheshbhuva | `main` | `frontend/auth` | `fix(auth): compact AuthSidebarShowcase typography and metrics for viewport containment` | Pushed |
+| `454c1c1` | 2026-08-21 08:40:23 | Radheshbhuva | `main` | `frontend/auth` | `fix(auth): optimize RegisterPage 2-column grid and input density for single-screen view` | Pushed |
+| `544a44b` | 2026-08-21 08:40:18 | Radheshbhuva | `main` | `frontend/auth` | `fix(auth): optimize LoginPage form padding and spacing for single-screen view` | Pushed |
+| `dd134b6` | 2026-08-21 08:40:13 | Radheshbhuva | `main` | `frontend/auth` | `fix(auth): refine AuthLayout viewport height containment to prevent vertical page scrolling` | Pushed |
 | `b273d1b` | 2026-08-21 08:26:56 | Radheshbhuva | `main` | `frontend/landing` | `feat(landing): combine header sign-in and sign-up buttons into single Get Started CTA button` | Pushed |
 | `96c80e3` | 2026-08-21 08:20:00 | Radheshbhuva | `main` | `frontend/guards` | `fix(guards): update PublicOnlyRoute to allow direct rendering of login and register screens` | Pushed |
 | `20515ba` | 2026-08-21 08:19:53 | Radheshbhuva | `main` | `frontend/landing` | `fix(landing): route footer service dashboard and lab catalog links to auth pages` | Pushed |
