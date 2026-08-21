@@ -44,19 +44,12 @@ export const HeroSection: React.FC = () => {
 
         <Link
           to="/login"
-          id="hero-signin-btn"
+          id="hero-demo-btn"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-semibold text-sm backdrop-blur-md transition-all hover:border-slate-500"
-        >
-          <span>Sign In to Workspace</span>
-        </Link>
-
-        <a
-          href="#interactive-demo"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-950/60 hover:bg-slate-900 text-slate-400 hover:text-slate-200 font-medium text-sm transition-all"
         >
           <PlayCircle className="w-4 h-4 text-cyan-400" />
           <span>Live Demo Preview</span>
-        </a>
+        </Link>
       </div>
 
       {/* Hero Interactive Studio Widget */}
