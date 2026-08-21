@@ -44,12 +44,12 @@ export const LandingFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="hover:text-cyan-400 transition-colors">
+                <Link to="/login" className="hover:text-cyan-400 transition-colors">
                   Service Dashboard
                 </Link>
               </li>
               <li>
-                <Link to="/labs" className="hover:text-cyan-400 transition-colors">
+                <Link to="/register" className="hover:text-cyan-400 transition-colors">
                   Chaos Lab Catalog
                 </Link>
               </li>
