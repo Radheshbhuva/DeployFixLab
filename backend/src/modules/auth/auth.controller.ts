@@ -27,17 +27,34 @@ export class AuthController {
         return;
       }
 
-      const user = await AuthService.registerUser(result.data);
+      const authData = await AuthService.registerAndLoginUser(result.data);
+
+      await AuditService.log(authData.user.id, 'REGISTER', 'USER', {
+        email: authData.user.email,
+        role: authData.user.role,
+      });
+
+      // Set long-lived refresh token in HTTP-only cookie
+      res.cookie('refreshToken', authData.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/api/v1/auth/refresh',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
 
       res.status(201).json({
         success: true,
         statusCode: 201,
         data: {
+          accessToken: authData.accessToken,
+          expiresIn: authData.expiresIn,
           user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
+            id: authData.user.id,
+            name: authData.user.name,
+            fullName: authData.user.name,
+            email: authData.user.email,
+            role: authData.user.role,
           },
         },
         timestamp: new Date().toISOString(),
@@ -101,6 +118,13 @@ export class AuthController {
         data: {
           accessToken: authData.accessToken,
           expiresIn: authData.expiresIn,
+          user: {
+            id: authData.user.id,
+            name: authData.user.name,
+            fullName: authData.user.name,
+            email: authData.user.email,
+            role: authData.user.role,
+          },
         },
         timestamp: new Date().toISOString(),
       });
@@ -139,12 +163,16 @@ export class AuthController {
         return;
       }
 
+      const name = (req.user as any).name || req.user.email.split('@')[0];
+
       res.status(200).json({
         success: true,
         statusCode: 200,
         data: {
           user: {
             id: req.user.id,
+            name,
+            fullName: name,
             email: req.user.email,
             role: req.user.role,
           },
@@ -193,6 +221,13 @@ export class AuthController {
         data: {
           accessToken: authData.accessToken,
           expiresIn: authData.expiresIn,
+          user: {
+            id: authData.user.id,
+            name: authData.user.name,
+            fullName: authData.user.name,
+            email: authData.user.email,
+            role: authData.user.role,
+          },
         },
         timestamp: new Date().toISOString(),
       });
