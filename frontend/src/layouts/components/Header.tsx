@@ -3,6 +3,7 @@ import { Menu, Bell, LogOut, Shield, ChevronDown } from 'lucide-react';
 import { BreadcrumbNav } from './BreadcrumbNav';
 import { Badge } from '@/components/ui/Badge';
 import { RoleBadge } from '@/components/ui/RoleBadge';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '@/types/rbac.types';
@@ -41,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-bg-surface/90 backdrop-blur-md border-b border-border-default px-4 lg:px-8 flex items-center justify-between">
+    <header className="sticky top-0 z-30 h-14 bg-bg-surface/90 backdrop-blur-md border-b border-border-default px-4 lg:px-8 flex items-center justify-between transition-colors">
       <div className="flex items-center gap-3">
         <button
           onClick={onOpenMobileSidebar}
@@ -56,11 +57,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* Role Badge in Header */}
         <div className="hidden sm:block">
           <RoleBadge role={role} size="sm" />
         </div>
+
+        {/* Theme Toggle Component */}
+        <ThemeToggle />
 
         {/* Environment Badge */}
         <Badge
