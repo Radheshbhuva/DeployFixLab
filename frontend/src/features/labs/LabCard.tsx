@@ -39,12 +39,12 @@ export const LabCard: React.FC<LabCardProps> = ({ lab, onStart }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-800/90 bg-slate-900/60 backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-all duration-200 hover:border-slate-700 hover:shadow-2xl hover:shadow-cyan-500/5 group text-left relative overflow-hidden">
+    <div className="rounded-2xl border border-border-default bg-bg-surface backdrop-blur-xl p-5 shadow-sm hover:shadow-xl flex flex-col justify-between transition-all duration-200 hover:border-brand-primary/40 group text-left relative overflow-hidden">
       <div>
         {/* Top Badges */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded bg-slate-950/80 border border-slate-800 text-slate-300">
+            <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded bg-bg-raised border border-border-default text-text-primary">
               {lab.code}
             </span>
             <span
@@ -73,18 +73,18 @@ export const LabCard: React.FC<LabCardProps> = ({ lab, onStart }) => {
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-base text-slate-100 group-hover:text-cyan-400 transition-colors leading-snug mb-1.5">
+        <h3 className="font-bold text-base text-text-primary group-hover:text-brand-primary transition-colors leading-snug mb-1.5">
           {lab.title}
         </h3>
 
         {/* Target Service Node */}
-        <div className="flex items-center gap-1.5 text-xs font-mono text-cyan-400/90 mb-2.5">
+        <div className="flex items-center gap-1.5 text-xs font-mono text-brand-primary mb-2.5">
           <Server className="w-3.5 h-3.5" />
           <span>Target: {lab.targetService}</span>
         </div>
 
         {/* Description */}
-        <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4 font-sans">
+        <p className="text-xs text-text-secondary line-clamp-2 leading-relaxed mb-4 font-sans">
           {lab.description}
         </p>
 
@@ -93,7 +93,7 @@ export const LabCard: React.FC<LabCardProps> = ({ lab, onStart }) => {
           {lab.tags.slice(0, 3).map((tag, idx) => (
             <span
               key={idx}
-              className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/60 border border-slate-800 text-slate-400"
+              className="text-[10px] font-mono px-2 py-0.5 rounded bg-bg-raised border border-border-default text-text-muted"
             >
               #{tag}
             </span>
@@ -102,10 +102,10 @@ export const LabCard: React.FC<LabCardProps> = ({ lab, onStart }) => {
       </div>
 
       {/* Footer Meta & Start Button */}
-      <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
-        <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+      <div className="pt-3 border-t border-border-default flex items-center justify-between text-xs font-mono">
+        <div className="flex items-center gap-3 text-text-secondary text-[11px]">
           <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
+            <Clock className="w-3.5 h-3.5 text-text-muted" />
             {lab.estimatedMinutes}m
           </span>
           <span className="flex items-center gap-1">
@@ -117,7 +117,7 @@ export const LabCard: React.FC<LabCardProps> = ({ lab, onStart }) => {
         <button
           type="button"
           onClick={() => onStart(lab.id)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 transition-all group-hover:scale-[1.02]"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-brand-primary hover:bg-brand-hover text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all group-hover:scale-[1.02]"
         >
           <Play className="w-3.5 h-3.5 fill-current" />
           <span>Launch Lab</span>
