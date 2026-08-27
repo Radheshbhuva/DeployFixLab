@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Eye, EyeOff, AlertTriangle, ArrowRight, Loader2, Zap } from 'lucide-react';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { authService } from '@/services/authService';
@@ -23,7 +23,7 @@ const registerSchema = z
       .min(1, 'Email address is required')
       .email('Please enter a valid email address'),
     role: z
-      .enum(['STUDENT', 'SRE', 'INSTRUCTOR'])
+      .enum(['STUDENT', 'INSTRUCTOR', 'ADMIN'])
       .default('STUDENT'),
     password: z
       .string()
@@ -48,7 +48,14 @@ export const RegisterPage: React.FC = () => {
 
   const setUser = useAuthStore((s) => s.setUser);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const toast = useToast();
+
+  const from =
+    (location.state as { from?: { pathname: string } })?.from?.pathname ||
+    searchParams.get('redirect') ||
+    '/dashboard';
 
   const {
     register,
@@ -79,10 +86,10 @@ export const RegisterPage: React.FC = () => {
     setLoading(true);
     setApiError(null);
     try {
-      const res = await authService.register(data.email, data.password, data.fullName);
+      const res = await authService.register(data.email, data.password, data.fullName, data.role);
       setUser(res.user, res.accessToken);
-      toast.success('Account created successfully! Welcome to DeployFix Lab.');
-      navigate('/dashboard', { replace: true });
+      toast.success(`Account created successfully as ${res.user.role}! Welcome to DeployFix Lab.`);
+      navigate(from, { replace: true });
     } catch (err: unknown) {
       const errorMsg =
         err instanceof Error
