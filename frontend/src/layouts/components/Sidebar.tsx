@@ -8,10 +8,12 @@ import {
   BookOpen,
   Settings,
   LogOut,
+  Users,
 } from 'lucide-react';
 import { NavItem } from './NavItem';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigate } from 'react-router-dom';
+import { RoleBadge } from '@/components/ui/RoleBadge';
 
 export interface SidebarProps {
   onCloseMobile?: () => void;
@@ -26,7 +28,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
     navigate('/login');
   };
 
-  const isAdminOrInstructor = user?.role === 'ADMIN' || user?.role === 'INSTRUCTOR';
+  const role = user?.role || 'STUDENT';
+  const isAdmin = role === 'ADMIN';
+  const isInstructorOrAdmin = role === 'INSTRUCTOR' || role === 'ADMIN';
 
   return (
     <aside className="w-60 h-full bg-bg-surface border-r border-border-default flex flex-col justify-between select-none">
@@ -82,7 +86,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             </div>
           </div>
 
-          {isAdminOrInstructor && (
+          {/* Elevated Workspace (Instructors & Admins) */}
+          {isInstructorOrAdmin && (
             <div>
               <span className="text-[10px] font-semibold text-text-muted uppercase tracking-widest px-3 block mb-2">
                 Workspace
@@ -93,6 +98,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
                   label="Chaos Control"
                   path="/admin/chaos"
                   badge={{ text: 'ACTIVE', variant: 'danger' }}
+                  onClick={onCloseMobile}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Administration Section (Admins Only) */}
+          {isAdmin && (
+            <div>
+              <span className="text-[10px] font-semibold text-text-muted uppercase tracking-widest px-3 block mb-2">
+                Administration
+              </span>
+              <div className="space-y-1">
+                <NavItem
+                  icon={<Users className="w-4 h-4 text-cyan-400" />}
+                  label="User Management"
+                  path="/admin/users"
                   onClick={onCloseMobile}
                 />
               </div>
@@ -126,13 +148,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
 
       {/* User Footer Profile */}
       <div className="p-3 border-t border-border-default flex items-center justify-between bg-bg-primary/50">
-        <div className="flex items-center gap-3 overflow-hidden">
+        <div className="flex items-center gap-2.5 overflow-hidden">
           <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
             {user?.fullName?.substring(0, 2).toUpperCase() || 'DF'}
           </div>
-          <div className="truncate">
+          <div className="truncate flex flex-col gap-0.5">
             <p className="text-xs font-semibold text-text-primary truncate">{user?.fullName || 'User'}</p>
-            <span className="text-[10px] font-mono uppercase text-text-muted">{user?.role || 'STUDENT'}</span>
+            <RoleBadge role={role} size="sm" showIcon={false} />
           </div>
         </div>
         <button
