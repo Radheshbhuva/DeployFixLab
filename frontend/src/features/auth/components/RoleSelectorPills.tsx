@@ -12,9 +12,9 @@ export const RoleSelectorPills: React.FC<RoleSelectorPillsProps> = ({
   onSelectRole,
 }) => {
   const roles: Array<{ id: UserAuthRole; label: string; icon: React.FC<{ className?: string }> }> = [
-    { id: 'STUDENT', label: 'Student / Junior', icon: Terminal },
-    { id: 'SRE', label: 'SRE / DevOps', icon: Shield },
-    { id: 'INSTRUCTOR', label: 'Instructor', icon: GraduationCap },
+    { id: 'STUDENT', label: 'Student Engineer', icon: Terminal },
+    { id: 'INSTRUCTOR', label: 'Instructor SRE', icon: GraduationCap },
+    { id: 'ADMIN', label: 'Platform Commander', icon: Shield },
   ];
 
   return (
