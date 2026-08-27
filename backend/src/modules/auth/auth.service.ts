@@ -33,13 +33,15 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(input.password, 10);
+    const resolvedName = input.fullName || input.name || input.email.split('@')[0];
+    const resolvedRole = (input.role as 'STUDENT' | 'INSTRUCTOR' | 'ADMIN') || 'STUDENT';
 
     const user = await prisma.user.create({
       data: {
-        name: input.name,
+        name: resolvedName,
         email: input.email.toLowerCase(),
         passwordHash,
-        role: 'STUDENT', // Default role
+        role: resolvedRole,
       },
       select: {
         id: true,
@@ -51,6 +53,51 @@ export class AuthService {
     });
 
     return user;
+  }
+
+  /**
+   * Registers a new user and immediately logs them in with access and refresh tokens.
+   */
+  public static async registerAndLoginUser(input: RegisterInput): Promise<AuthSuccessPayload> {
+    const user = await this.registerUser(input);
+
+    // Generate short-lived Access Token
+    const accessToken = jwt.sign(
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: `${ACCESS_TOKEN_EXPIRY}s` }
+    );
+
+    // Generate long-lived Refresh Token
+    const refreshTokenString = crypto.randomUUID();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days from now
+
+    // Persist refresh token in database
+    await prisma.refreshToken.create({
+      data: {
+        userId: user.id,
+        token: refreshTokenString,
+        expiresAt,
+      },
+    });
+
+    return {
+      accessToken,
+      expiresIn: ACCESS_TOKEN_EXPIRY,
+      refreshToken: refreshTokenString,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    };
   }
 
   /**
@@ -74,6 +121,7 @@ export class AuthService {
     const accessToken = jwt.sign(
       {
         id: user.id,
+        name: user.name,
         email: user.email,
         role: user.role,
       },
@@ -131,6 +179,7 @@ export class AuthService {
     const accessToken = jwt.sign(
       {
         id: record.user.id,
+        name: record.user.name,
         email: record.user.email,
         role: record.user.role,
       },
