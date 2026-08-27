@@ -1,7 +1,27 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { User } from '@/types/auth.types';
 import { UserRole, Permission, hasPermission as checkPermission, hasAnyPermission } from '@/types/rbac.types';
+
+const getSafeStorage = () => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      return window.localStorage;
+    }
+    if (typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function') {
+      return localStorage;
+    }
+  } catch (e) {}
+
+  return {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {},
+    length: 0,
+    key: () => null,
+  };
+};
 
 interface AuthState {
   user: User | null;
@@ -14,7 +34,6 @@ interface AuthState {
   hasRole: (allowedRoles: UserRole[]) => boolean;
   hasPermission: (permission: Permission) => boolean;
   canAccess: (options: { roles?: UserRole[]; permissions?: Permission[] }) => boolean;
-  switchDemoRole: (role: UserRole) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -24,13 +43,19 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       isAuthenticated: false,
       isLoading: false,
-      setUser: (user, accessToken) =>
+      setUser: (user, accessToken) => {
+        if (user) {
+          const resolvedFullName =
+            user.fullName || (user as any).name || user.email?.split('@')[0] || 'User';
+          user.fullName = resolvedFullName;
+        }
         set({
           user,
           accessToken,
           isAuthenticated: Boolean(user && accessToken),
           isLoading: false,
-        }),
+        });
+      },
       clearAuth: () =>
         set({
           user: null,
@@ -57,19 +82,10 @@ export const useAuthStore = create<AuthState>()(
           !permissions || permissions.length === 0 || hasAnyPermission(user.role, permissions);
         return rolePassed && permissionsPassed;
       },
-      switchDemoRole: (role: UserRole) => {
-        const { user } = get();
-        if (!user) return;
-        set({
-          user: {
-            ...user,
-            role,
-          },
-        });
-      },
     }),
     {
       name: 'deployfix-lab-auth',
+      storage: createJSONStorage(getSafeStorage),
       partialize: (state) => ({
         user: state.user,
         accessToken: state.accessToken,
