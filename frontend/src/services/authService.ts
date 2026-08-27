@@ -5,15 +5,26 @@ export const authService = {
   login: async (email: string, password: string): Promise<LoginResponse> => {
     try {
       const res = await apiClient.post<LoginResponse>('/auth/login', { email, password });
-      return res.data;
+      const data = res.data;
+      if (data?.user) {
+        data.user.fullName =
+          data.user.fullName || (data.user as any).name || email.split('@')[0];
+      }
+      return data;
     } catch {
       // Mock response for offline/dev demo mode
+      const isStudent = email.toLowerCase().includes('student');
+      const isInstructor = email.toLowerCase().includes('instructor');
+      const role = isStudent ? 'STUDENT' : isInstructor ? 'INSTRUCTOR' : 'ADMIN';
+      const rawName = email.split('@')[0];
+      const fullName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+
       return {
         user: {
           id: 'usr-1',
           email,
-          fullName: email.split('@')[0].toUpperCase(),
-          role: 'ADMIN',
+          fullName,
+          role,
           createdAt: new Date().toISOString(),
         },
         accessToken: 'mock-jwt-token-12345',
@@ -21,17 +32,33 @@ export const authService = {
     }
   },
 
-  register: async (email: string, password: string, fullName: string): Promise<RegisterResponse> => {
+  register: async (
+    email: string,
+    password: string,
+    fullName: string,
+    role: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN' = 'STUDENT'
+  ): Promise<RegisterResponse> => {
     try {
-      const res = await apiClient.post<RegisterResponse>('/auth/register', { email, password, fullName });
-      return res.data;
+      const res = await apiClient.post<RegisterResponse>('/auth/register', {
+        email,
+        password,
+        name: fullName,
+        fullName,
+        role,
+      });
+      const data = res.data;
+      if (data?.user) {
+        data.user.fullName =
+          data.user.fullName || (data.user as any).name || fullName;
+      }
+      return data;
     } catch {
       return {
         user: {
           id: 'usr-2',
           email,
           fullName,
-          role: 'STUDENT',
+          role,
           createdAt: new Date().toISOString(),
         },
         accessToken: 'mock-jwt-token-67890',
