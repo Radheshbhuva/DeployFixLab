@@ -1,5 +1,6 @@
 import React from 'react';
 import { AuthSidebarShowcase } from '@/features/auth/components/AuthSidebarShowcase';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface AuthLayoutProps {
   children: React.ReactNode;
@@ -8,8 +9,14 @@ export interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="h-screen w-screen max-h-screen overflow-hidden bg-bg-primary text-text-primary flex items-center justify-center p-2 sm:p-4 lg:p-6 relative font-sans select-none transition-colors">
+      {/* Top Right Floating Toolbar: Theme Toggle */}
+      <div className="absolute top-3 right-3 sm:top-5 sm:right-6 z-30 flex items-center gap-2">
+        <ThemeToggle />
+      </div>
+
       {/* Background Subtle Mesh Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#64748b0f_1px,transparent_1px),linear-gradient(to_bottom,#64748b0f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+
 
       {/* Radial Glow Spotlights */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none" />
