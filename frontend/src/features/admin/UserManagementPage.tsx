@@ -143,10 +143,10 @@ export const UserManagementPage: React.FC = () => {
             <Shield className="w-3.5 h-3.5" />
             <span>Admin Governance Console</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary flex items-center gap-3">
             Identity & Access Management
           </h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-text-secondary text-sm mt-1">
             Assign security roles, govern access clearances, and monitor user progress across DeployFix Lab.
           </p>
         </div>
@@ -167,57 +167,57 @@ export const UserManagementPage: React.FC = () => {
 
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 bg-slate-900/60 border-slate-800">
+        <Card className="p-4 bg-bg-surface border-border-default shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400 font-medium">Total Users</p>
-              <p className="text-2xl font-bold text-white mt-1">
+              <p className="text-xs text-text-secondary font-medium">Total Users</p>
+              <p className="text-2xl font-bold text-text-primary mt-1">
                 {stats?.totalUsers ?? '...'}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-brand-primary">
               <Users className="w-5 h-5" />
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 bg-slate-900/60 border-slate-800">
+        <Card className="p-4 bg-bg-surface border-border-default shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-cyan-400 font-medium">Students</p>
-              <p className="text-2xl font-bold text-white mt-1">
+              <p className="text-xs text-cyan-500 font-medium">Students</p>
+              <p className="text-2xl font-bold text-text-primary mt-1">
                 {stats?.studentCount ?? '...'}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500">
               <GraduationCap className="w-5 h-5" />
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 bg-slate-900/60 border-slate-800">
+        <Card className="p-4 bg-bg-surface border-border-default shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-amber-400 font-medium">Instructors</p>
-              <p className="text-2xl font-bold text-white mt-1">
+              <p className="text-xs text-amber-500 font-medium">Instructors</p>
+              <p className="text-2xl font-bold text-text-primary mt-1">
                 {stats?.instructorCount ?? '...'}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
               <Award className="w-5 h-5" />
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 bg-slate-900/60 border-slate-800">
+        <Card className="p-4 bg-bg-surface border-border-default shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-rose-400 font-medium">Administrators</p>
-              <p className="text-2xl font-bold text-white mt-1">
+              <p className="text-xs text-rose-500 font-medium">Administrators</p>
+              <p className="text-2xl font-bold text-text-primary mt-1">
                 {stats?.adminCount ?? '...'}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
               <Zap className="w-5 h-5" />
             </div>
           </div>
@@ -225,10 +225,10 @@ export const UserManagementPage: React.FC = () => {
       </div>
 
       {/* Filter & Search Bar */}
-      <Card className="p-4 bg-slate-900/60 border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+      <Card className="p-4 bg-bg-surface border-border-default shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Search Input */}
         <div className="relative w-full md:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             value={search}
@@ -237,7 +237,7 @@ export const UserManagementPage: React.FC = () => {
               setPage(1);
             }}
             placeholder="Search by name or email..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
+            className="w-full pl-9 pr-4 py-2 rounded-xl bg-bg-primary border border-border-default text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary transition-colors"
           />
         </div>
 
@@ -252,8 +252,8 @@ export const UserManagementPage: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 selectedRoleFilter === r
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                  : 'bg-slate-800/60 text-slate-400 border border-transparent hover:bg-slate-800 hover:text-slate-200'
+                  ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 shadow-sm'
+                  : 'bg-bg-raised text-text-secondary border border-transparent hover:bg-bg-raised/80 hover:text-text-primary'
               }`}
             >
               {r === 'ALL' ? 'All Roles' : r}
@@ -263,10 +263,10 @@ export const UserManagementPage: React.FC = () => {
       </Card>
 
       {/* Users Data Table */}
-      <Card className="overflow-hidden bg-slate-900/60 border-slate-800">
+      <Card className="overflow-hidden bg-bg-surface border-border-default shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950/80 text-slate-400 font-mono uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-bg-raised/70 text-text-muted font-mono uppercase tracking-wider border-b border-border-default">
               <tr>
                 <th className="py-3.5 px-4 font-semibold">User Details</th>
                 <th className="py-3.5 px-4 font-semibold">Role Clearance</th>
@@ -275,20 +275,20 @@ export const UserManagementPage: React.FC = () => {
                 <th className="py-3.5 px-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-border-default/60">
               {loading && users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-slate-500">
-                    <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-cyan-400" />
+                  <td colSpan={5} className="py-12 text-center text-text-muted">
+                    <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-cyan-500" />
                     <span>Loading identity records...</span>
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-slate-500">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-slate-600" />
-                    <p className="text-sm text-slate-400 font-medium">No users found</p>
-                    <p className="text-xs text-slate-600 mt-1">Try adjusting your search criteria or role filters.</p>
+                  <td colSpan={5} className="py-12 text-center text-text-muted">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-text-muted" />
+                    <p className="text-sm text-text-secondary font-medium">No users found</p>
+                    <p className="text-xs text-text-muted mt-1">Try adjusting your search criteria or role filters.</p>
                   </td>
                 </tr>
               ) : (
@@ -304,26 +304,26 @@ export const UserManagementPage: React.FC = () => {
                   return (
                     <tr
                       key={user.id}
-                      className="hover:bg-slate-800/30 transition-colors group"
+                      className="hover:bg-bg-raised/50 transition-colors group"
                     >
                       {/* User Info */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-300 text-xs">
+                          <div className="w-8 h-8 rounded-full bg-bg-raised border border-border-default flex items-center justify-center font-bold text-text-secondary text-xs">
                             {initials}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-slate-200">
+                              <span className="font-semibold text-text-primary">
                                 {user.name}
                               </span>
                               {isCurrent && (
-                                <span className="px-1.5 py-0.2 text-[10px] rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-mono">
+                                <span className="px-1.5 py-0.2 text-[10px] rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 font-mono">
                                   YOU
                                 </span>
                               )}
                             </div>
-                            <span className="text-slate-400 text-[11px] block">{user.email}</span>
+                            <span className="text-text-muted text-[11px] block">{user.email}</span>
                           </div>
                         </div>
                       </td>
@@ -335,22 +335,22 @@ export const UserManagementPage: React.FC = () => {
 
                       {/* Activity metrics */}
                       <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-3 text-slate-400">
+                        <div className="flex items-center gap-3 text-text-secondary">
                           <span className="flex items-center gap-1" title="Enrolled Labs">
-                            <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+                            <BookOpen className="w-3.5 h-3.5 text-blue-500" />
                             <span>{user._count?.labProgress || 0}</span>
                           </span>
                           <span className="flex items-center gap-1" title="Managed Tasks">
-                            <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
+                            <CheckSquare className="w-3.5 h-3.5 text-emerald-500" />
                             <span>{user._count?.tasks || 0}</span>
                           </span>
                         </div>
                       </td>
 
                       {/* Joined Date */}
-                      <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                      <td className="py-3.5 px-4 text-text-muted font-mono text-[11px]">
                         <div className="flex items-center gap-1.5">
-                          <Clock className="w-3 h-3 text-slate-500" />
+                          <Clock className="w-3 h-3 text-text-muted" />
                           <span>{formatDate(user.createdAt)}</span>
                         </div>
                       </td>
@@ -361,7 +361,7 @@ export const UserManagementPage: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleOpenRoleModal(user)}
-                          className="text-xs text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/40"
+                          className="text-xs text-brand-primary hover:text-brand-hover hover:bg-bg-raised"
                         >
                           Modify Role
                         </Button>
@@ -376,7 +376,7 @@ export const UserManagementPage: React.FC = () => {
 
         {/* Pagination Footer */}
         {totalPages > 1 && (
-          <div className="p-4 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <div className="p-4 bg-bg-surface border-t border-border-default flex items-center justify-between text-xs text-text-secondary">
             <span>
               Showing {users.length} of {totalCount} users
             </span>
@@ -389,7 +389,7 @@ export const UserManagementPage: React.FC = () => {
               >
                 Previous
               </Button>
-              <span className="font-mono text-slate-300">
+              <span className="font-mono text-text-primary">
                 Page {page} of {totalPages}
               </span>
               <Button
@@ -407,32 +407,32 @@ export const UserManagementPage: React.FC = () => {
 
       {/* Role Modification Modal */}
       {targetUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5 animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md bg-bg-surface border border-border-default rounded-2xl p-6 shadow-2xl space-y-5 animate-in zoom-in-95">
+            <div className="flex items-center justify-between pb-3 border-b border-border-default">
               <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-white text-base">Assign Security Role</h3>
+                <Shield className="w-5 h-5 text-brand-primary" />
+                <h3 className="font-bold text-text-primary text-base">Assign Security Role</h3>
               </div>
               <button
                 onClick={() => setTargetUser(null)}
-                className="text-slate-400 hover:text-slate-200 text-sm"
+                className="text-text-muted hover:text-text-primary text-sm"
               >
                 ✕
               </button>
             </div>
 
             <div>
-              <p className="text-xs text-slate-400 mb-1">Target Account:</p>
-              <p className="text-sm font-semibold text-slate-200">
+              <p className="text-xs text-text-muted mb-1">Target Account:</p>
+              <p className="text-sm font-semibold text-text-primary">
                 {targetUser.name}{' '}
-                <span className="text-xs text-slate-400 font-mono">({targetUser.email})</span>
+                <span className="text-xs text-text-muted font-mono">({targetUser.email})</span>
               </p>
             </div>
 
             {/* Role Radio Cards */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-300 block">
+              <label className="text-xs font-semibold text-text-secondary block">
                 Select Clearance Level:
               </label>
 
@@ -444,19 +444,19 @@ export const UserManagementPage: React.FC = () => {
                     onClick={() => setNewRoleSelection(r)}
                     className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
                       isSelected
-                        ? 'bg-cyan-950/30 border-cyan-500/50 shadow-md shadow-cyan-950/20'
-                        : 'bg-slate-950/40 border-slate-800 hover:border-slate-700'
+                        ? 'bg-brand-primary/10 border-brand-primary shadow-sm'
+                        : 'bg-bg-raised/40 border-border-default hover:border-brand-primary/40'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                           isSelected
-                            ? 'border-cyan-400 bg-cyan-500'
-                            : 'border-slate-600 bg-transparent'
+                            ? 'border-brand-primary bg-brand-primary'
+                            : 'border-border-default bg-transparent'
                         }`}
                       >
-                        {isSelected && <Check className="w-2.5 h-2.5 text-slate-950 stroke-[3]" />}
+                        {isSelected && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
                       </div>
                       <div>
                         <RoleBadge role={r} size="sm" />
@@ -468,7 +468,7 @@ export const UserManagementPage: React.FC = () => {
             </div>
 
             {targetUser.id === currentUser?.id && newRoleSelection !== 'ADMIN' && (
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-start gap-2">
+              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>
                   Warning: Demoting your own account will immediately revoke your access to this administration console.
@@ -489,7 +489,7 @@ export const UserManagementPage: React.FC = () => {
               <Button
                 onClick={handleConfirmRoleUpdate}
                 disabled={isUpdating || targetUser.role === newRoleSelection}
-                className="text-xs bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold"
+                className="text-xs bg-brand-primary hover:bg-brand-hover text-white font-bold"
               >
                 {isUpdating ? 'Applying...' : 'Confirm Role Change'}
               </Button>
