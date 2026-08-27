@@ -67,20 +67,20 @@ export const LabCatalogPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 text-left">
       {/* Header Banner */}
-      <div className="rounded-2xl border border-slate-800/90 bg-gradient-to-r from-slate-900/90 via-slate-950/90 to-cyan-950/30 p-6 shadow-xl backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="rounded-2xl border border-border-default bg-bg-surface p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <FlaskConical className="w-6 h-6 text-cyan-400" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-50 tracking-tight">
+            <FlaskConical className="w-6 h-6 text-brand-primary" />
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight">
               Chaos Sandbox & Incident Labs
             </h1>
           </div>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-text-secondary mt-1 max-w-2xl leading-relaxed">
             Hands-on containerized failure simulation environments. Diagnose, execute recovery fixes, and verify 100% SLA health in isolated Docker bridge networks.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono w-fit">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-mono w-fit">
           <Layers className="w-4 h-4" />
           <span>{labs.length} Scenarios Available</span>
         </div>
@@ -97,8 +97,8 @@ export const LabCatalogPage: React.FC = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3.5 py-2 rounded-xl border whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300 font-bold shadow-md shadow-cyan-500/10'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                  ? 'bg-brand-primary/15 border-brand-primary text-brand-primary font-bold shadow-sm'
+                  : 'bg-bg-surface border-border-default text-text-secondary hover:bg-bg-raised hover:text-text-primary'
               }`}
             >
               {cat.label}
@@ -107,25 +107,25 @@ export const LabCatalogPage: React.FC = () => {
         </div>
 
         {/* Search & Difficulty Filter Bar */}
-        <div className="flex flex-col md:flex-row items-center gap-3 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+        <div className="flex flex-col md:flex-row items-center gap-3 bg-bg-surface p-3.5 rounded-2xl border border-border-default shadow-sm">
           <div className="relative flex-1 w-full">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             <input
               type="text"
               placeholder="Search scenarios by title, code (DFIX-LAB-01), or #tag..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm font-sans focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500/50"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-bg-primary border border-border-default text-text-primary placeholder:text-text-muted text-sm font-sans focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full md:w-auto">
-            <Filter className="w-4 h-4 text-slate-500 flex-shrink-0" />
+            <Filter className="w-4 h-4 text-text-muted flex-shrink-0" />
             <select
               value={selectedDifficulty}
               aria-label="Filter scenarios by difficulty level"
               onChange={(e) => setSelectedDifficulty(e.target.value as LabDifficulty | 'ALL')}
-              className="bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 w-full md:w-48"
+              className="bg-bg-primary border border-border-default rounded-xl px-3.5 py-2.5 text-xs font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 w-full md:w-48"
             >
               <option value="ALL">All Difficulties</option>
               <option value="BEGINNER">Beginner</option>
@@ -139,8 +139,8 @@ export const LabCatalogPage: React.FC = () => {
 
       {/* Catalog Grid */}
       {filteredLabs.length === 0 ? (
-        <div className="text-center py-16 bg-slate-900/40 rounded-2xl border border-dashed border-slate-800">
-          <p className="text-sm font-mono text-slate-400">
+        <div className="text-center py-16 bg-bg-surface rounded-2xl border border-dashed border-border-default">
+          <p className="text-sm font-mono text-text-muted">
             No chaos scenarios match your search filter criteria.
           </p>
         </div>
