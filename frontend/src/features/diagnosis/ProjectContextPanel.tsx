@@ -59,13 +59,13 @@ export const ProjectContextPanel: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header & Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-default pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-indigo-400" />
-            <h2 className="text-xl font-bold text-slate-100">Project Context Engine</h2>
+            <Layers className="w-5 h-5 text-brand-primary" />
+            <h2 className="text-xl font-bold text-text-primary">Project Context Engine</h2>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             Correlates evidence across Website URL, File Uploads, GitHub, and Deployment Platform.
           </p>
         </div>
@@ -76,7 +76,7 @@ export const ProjectContextPanel: React.FC = () => {
           isLoading={isAnalyzing}
           disabled={!completeness.canRunDiagnosis || isAnalyzing}
           onClick={runFullDiagnosis}
-          className="shadow-lg shadow-indigo-500/20"
+          className="shadow-lg shadow-blue-500/20"
         >
           <div className="flex items-center gap-2">
             <span>🔬 Run Diagnosis Engine</span>
@@ -91,46 +91,46 @@ export const ProjectContextPanel: React.FC = () => {
       {/* 4 Context Sources Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Source 1: Website URL (V1 MVP) */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 flex flex-col justify-between">
+        <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-500">
                   <Globe className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-100 text-sm">Website URL Inspection</h4>
-                  <span className="text-[11px] text-emerald-400 font-medium">Public Observation (V1)</span>
+                  <h4 className="font-semibold text-text-primary text-sm">Website URL Inspection</h4>
+                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Public Observation (V1)</span>
                 </div>
               </div>
 
               {sources.website.connected ? (
-                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
+                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+20%)
                 </span>
               ) : (
-                <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono">+20%</span>
+                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+20%</span>
               )}
             </div>
 
             {sources.website.connected ? (
-              <div className="mt-3 bg-slate-950/60 border border-slate-800 rounded-lg p-3 text-xs space-y-1.5 font-mono">
-                <div className="text-slate-300 truncate font-semibold">{sources.website.url}</div>
-                <div className="flex items-center gap-3 text-slate-400 text-[11px]">
-                  <span className="text-red-400 font-bold">HTTP {sources.website.httpStatus}</span>
+              <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1.5 font-mono">
+                <div className="text-text-primary truncate font-semibold">{sources.website.url}</div>
+                <div className="flex items-center gap-3 text-text-secondary text-[11px]">
+                  <span className="text-red-500 font-bold">HTTP {sources.website.httpStatus}</span>
                   <span>TLS: {sources.website.tlsValid ? '✅ Valid' : '❌ Invalid'}</span>
                   <span>Server: {sources.website.serverHeader}</span>
                   <span>{sources.website.responseTimeMs}ms</span>
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs text-text-secondary mt-2">
                 Inspect public HTTP headers, TLS certificate, and status code (Headless observation).
               </p>
             )}
           </div>
 
-          <div className="pt-2 border-t border-slate-800/60 flex justify-end">
+          <div className="pt-2 border-t border-border-default flex justify-end">
             <Button variant="ghost" size="sm" onClick={() => setShowWebsiteModal(true)}>
               {sources.website.connected ? 'Update URL' : 'Inspect URL'}
             </Button>
@@ -138,25 +138,25 @@ export const ProjectContextPanel: React.FC = () => {
         </div>
 
         {/* Source 2: Manual File Upload (V1 MVP) */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 flex flex-col justify-between">
+        <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+                <div className="p-2 bg-brand-primary/10 rounded-lg text-brand-primary">
                   <FileUp className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-100 text-sm">Deployment File Uploads</h4>
-                  <span className="text-[11px] text-indigo-400 font-medium">Configuration & Logs (V1)</span>
+                  <h4 className="font-semibold text-text-primary text-sm">Deployment File Uploads</h4>
+                  <span className="text-[11px] text-brand-primary font-medium">Configuration & Logs (V1)</span>
                 </div>
               </div>
 
               {sources.uploads.connected ? (
-                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
+                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+35%)
                 </span>
               ) : (
-                <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono">+35%</span>
+                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+35%</span>
               )}
             </div>
 
@@ -172,48 +172,48 @@ export const ProjectContextPanel: React.FC = () => {
         </div>
 
         {/* Source 3: GitHub Repository (V2 Feature) */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 flex flex-col justify-between">
+        <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
+                <div className="p-2 bg-purple-500/10 rounded-lg text-purple-500">
                   <Github className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-100 text-sm">GitHub Repository</h4>
-                  <span className="text-[11px] text-purple-400 font-medium">Code & Architecture (V2)</span>
+                  <h4 className="font-semibold text-text-primary text-sm">GitHub Repository</h4>
+                  <span className="text-[11px] text-purple-600 dark:text-purple-400 font-medium">Code & Architecture (V2)</span>
                 </div>
               </div>
 
               {sources.github.connected ? (
-                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
+                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+25%)
                 </span>
               ) : (
-                <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono">+25%</span>
+                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+25%</span>
               )}
             </div>
 
             {sources.github.connected ? (
-              <div className="mt-3 bg-slate-950/60 border border-slate-800 rounded-lg p-3 text-xs space-y-1">
-                <div className="font-semibold text-slate-200">
+              <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1">
+                <div className="font-semibold text-text-primary">
                   {sources.github.repoOwner}/{sources.github.repoName}
                 </div>
-                <div className="text-slate-400 text-[11px]">
-                  Branch: <span className="text-indigo-400 font-mono">{sources.github.branch}</span> · Synced {sources.github.syncedAt}
+                <div className="text-text-secondary text-[11px]">
+                  Branch: <span className="text-brand-primary font-mono">{sources.github.branch}</span> · Synced {sources.github.syncedAt}
                 </div>
-                <div className="text-emerald-400 text-[11px] pt-1">
+                <div className="text-emerald-600 dark:text-emerald-400 text-[11px] pt-1">
                   ✓ {sources.github.artifactsCount} repository artifacts ingested (Dockerfile, package.json, nginx.conf)
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs text-text-secondary mt-2">
                 Connect GitHub to automatically analyze Dockerfile, docker-compose.yml, package.json, and CI/CD workflows.
               </p>
             )}
           </div>
 
-          <div className="pt-2 border-t border-slate-800/60 flex justify-end gap-2">
+          <div className="pt-2 border-t border-border-default flex justify-end gap-2">
             {sources.github.connected ? (
               <Button variant="ghost" size="sm" onClick={disconnectGitHub}>
                 Disconnect
@@ -227,50 +227,50 @@ export const ProjectContextPanel: React.FC = () => {
         </div>
 
         {/* Source 4: Deployment Platform (V3 Feature) */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 flex flex-col justify-between">
+        <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
                   <Rocket className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-100 text-sm">Deployment Platform</h4>
-                  <span className="text-[11px] text-blue-400 font-medium">Runtime Operations (V3)</span>
+                  <h4 className="font-semibold text-text-primary text-sm">Deployment Platform</h4>
+                  <span className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">Runtime Operations (V3)</span>
                 </div>
               </div>
 
               {sources.deployment.connected ? (
-                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
+                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+20%)
                 </span>
               ) : (
-                <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono">+20%</span>
+                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+20%</span>
               )}
             </div>
 
             {sources.deployment.connected ? (
-              <div className="mt-3 bg-slate-950/60 border border-slate-800 rounded-lg p-3 text-xs space-y-1">
-                <div className="font-semibold text-slate-200 capitalize">
+              <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1">
+                <div className="font-semibold text-text-primary capitalize">
                   {sources.deployment.platform} — {sources.deployment.serviceName}
                 </div>
-                <div className="text-red-400 font-medium text-[11px]">
+                <div className="text-red-500 font-medium text-[11px]">
                   Status: 🔴 {sources.deployment.status?.toUpperCase()} (Deploy {sources.deployment.lastDeployAt})
                 </div>
                 {sources.deployment.runtimeLogsSnippet && (
-                  <div className="bg-slate-900 text-red-300 font-mono text-[10px] p-2 rounded mt-1 overflow-x-auto truncate border border-slate-800">
+                  <div className="bg-terminal-bg text-rose-400 font-mono text-[10px] p-2 rounded mt-1 overflow-x-auto truncate border border-terminal-border">
                     {sources.deployment.runtimeLogsSnippet}
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs text-text-secondary mt-2">
                 Connect Railway, Render, Vercel, or Fly.io to ingest deployment build logs, runtime crash traces, and environment metadata.
               </p>
             )}
           </div>
 
-          <div className="pt-2 border-t border-slate-800/60 flex justify-end gap-2">
+          <div className="pt-2 border-t border-border-default flex justify-end gap-2">
             {sources.deployment.connected ? (
               <Button variant="ghost" size="sm" onClick={() => disconnectDeployment()}>
                 Disconnect
@@ -294,7 +294,7 @@ export const ProjectContextPanel: React.FC = () => {
             placeholder="https://your-app.railway.app"
             required
           />
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-text-muted">
             DeployFix will perform a public HTTP inspection (HTTP status, TLS validity, server headers). No private credentials or internal data are accessed.
           </p>
           <div className="flex justify-end gap-2 pt-2">
@@ -344,11 +344,11 @@ export const ProjectContextPanel: React.FC = () => {
       <Modal isOpen={showDeploymentModal} onClose={() => setShowDeploymentModal(false)} title="Connect Deployment Platform">
         <form onSubmit={handleDeploymentSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Select Platform</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1">Select Platform</label>
             <select
               value={selectedPlatform}
               onChange={(e) => setSelectedPlatform(e.target.value as any)}
-              className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full bg-bg-primary border border-border-default text-text-primary text-sm rounded-lg p-2.5 focus:ring-brand-primary focus:border-brand-primary"
             >
               <option value="railway">Railway</option>
               <option value="render">Render</option>
