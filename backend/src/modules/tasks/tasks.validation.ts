@@ -30,6 +30,7 @@ export const TaskListQuerySchema = z.object({
   search: z.string().optional(),
   sortBy: z.enum(['createdAt', 'dueDate', 'title', 'priority', 'status']).default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
+  userId: z.string().uuid().optional(),
 });
 
 export type CreateTaskInput = z.infer<typeof CreateTaskSchema>;
