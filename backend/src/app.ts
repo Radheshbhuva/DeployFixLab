@@ -13,6 +13,7 @@ import { evidenceRouter } from './modules/evidence/evidence.routes';
 import { diagnosisRouter } from './modules/diagnosis/diagnosis.routes';
 import { recoveryRouter } from './modules/recovery/recovery.routes';
 import { auditRouter } from './modules/audit/audit.routes';
+import { adminRouter } from './modules/admin/admin.routes';
 
 // Load environment variables
 dotenv.config();
@@ -65,6 +66,9 @@ app.use('/api/v1/recovery', recoveryRouter);
 
 // Mounting Audit Routes
 app.use('/api/v1/audit', auditRouter);
+
+// Mounting Admin Routes
+app.use('/api/v1/admin', adminRouter);
 
 // Basic root route for verification
 app.get('/', (_req: Request, res: Response) => {
