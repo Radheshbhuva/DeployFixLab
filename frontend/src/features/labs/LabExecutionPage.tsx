@@ -199,14 +199,14 @@ Restarting deployfix-gateway container...
         </button>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
-            Session: <span className="text-cyan-400">{session?.sessionId}</span>
+          <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-bg-raised border border-border-default text-text-secondary">
+            Session: <span className="text-brand-primary font-bold">{session?.sessionId}</span>
           </span>
           <button
             type="button"
             onClick={handleRunVerification}
             disabled={isVerifying}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
           >
             <ShieldCheck className="w-4 h-4" />
             <span>{isVerifying ? 'Running Test Suite...' : 'Verify Solution'}</span>
@@ -215,10 +215,10 @@ Restarting deployfix-gateway container...
       </div>
 
       {/* Scenario Header Info Banner */}
-      <div className="rounded-2xl border border-slate-800/90 bg-slate-900/80 p-5 backdrop-blur-xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="rounded-2xl border border-border-default bg-bg-surface p-5 backdrop-blur-xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-300">
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-bg-raised border border-border-default text-text-primary">
               {lab.code}
             </span>
             <span
@@ -228,22 +228,22 @@ Restarting deployfix-gateway container...
             >
               {lab.difficulty}
             </span>
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-brand-primary/10 border border-brand-primary/30 text-brand-primary">
               {lab.category}
             </span>
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-100">{lab.title}</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-text-primary">{lab.title}</h1>
+          <p className="text-xs sm:text-sm text-text-secondary mt-1 max-w-3xl leading-relaxed">
             {lab.description}
           </p>
         </div>
 
-        <div className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-xl border border-slate-800 flex-shrink-0 text-xs font-mono">
-          <Server className="w-4 h-4 text-cyan-400" />
+        <div className="flex items-center gap-3 bg-bg-raised p-3 rounded-xl border border-border-default flex-shrink-0 text-xs font-mono">
+          <Server className="w-4 h-4 text-brand-primary" />
           <div>
-            <div className="text-slate-400 text-[10px]">TARGET NODE</div>
-            <div className="font-bold text-slate-200">{lab.targetService}</div>
+            <div className="text-text-muted text-[10px]">TARGET NODE</div>
+            <div className="font-bold text-text-primary">{lab.targetService}</div>
           </div>
         </div>
       </div>
@@ -253,13 +253,13 @@ Restarting deployfix-gateway container...
         {/* Left Column: Playbook & Objectives (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           {/* Objectives Card */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-xl">
+          <div className="rounded-2xl border border-border-default bg-bg-surface p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-text-secondary flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-brand-primary" />
                 Incident Objectives
               </h2>
-              <span className="text-[10px] font-mono text-cyan-400">
+              <span className="text-[10px] font-mono text-brand-primary font-bold">
                 {Object.values(checkedObjectives).filter(Boolean).length} / {lab.objectives.length}
               </span>
             </div>
@@ -274,14 +274,14 @@ Restarting deployfix-gateway container...
                     onClick={() => toggleObjective(idx)}
                     className={`w-full flex items-start gap-2.5 p-2.5 rounded-xl border text-left transition-all ${
                       isChecked
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                        : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-300'
+                        : 'bg-bg-raised border-border-default text-text-secondary hover:border-brand-primary/50'
                     }`}
                   >
                     {isChecked ? (
-                      <CheckSquare className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                      <CheckSquare className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                     ) : (
-                      <Square className="w-4 h-4 text-slate-500 mt-0.5 flex-shrink-0" />
+                      <Square className="w-4 h-4 text-text-muted mt-0.5 flex-shrink-0" />
                     )}
                     <span className="text-xs leading-relaxed font-sans">{obj}</span>
                   </button>
@@ -291,25 +291,25 @@ Restarting deployfix-gateway container...
           </div>
 
           {/* Fault Summary & Playbook */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-xl space-y-3">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-amber-400" />
+          <div className="rounded-2xl border border-border-default bg-bg-surface p-4 shadow-sm space-y-3">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-text-secondary flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-500" />
               Failure Characteristics
             </h2>
-            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-mono leading-relaxed">
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-mono leading-relaxed">
               {lab.faultSummary}
             </div>
 
             <div className="space-y-2 pt-2">
-              <div className="text-[11px] font-mono text-slate-400 font-bold uppercase">
+              <div className="text-[11px] font-mono text-text-muted font-bold uppercase">
                 Troubleshooting Hints:
               </div>
               {lab.hints.map((hint, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-2 text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 font-sans"
+                  className="flex items-start gap-2 text-xs text-text-secondary bg-bg-raised p-2.5 rounded-xl border border-border-default font-sans"
                 >
-                  <HelpCircle className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <HelpCircle className="w-4 h-4 text-brand-primary mt-0.5 flex-shrink-0" />
                   <span>{hint}</span>
                 </div>
               ))}
@@ -317,8 +317,8 @@ Restarting deployfix-gateway container...
           </div>
 
           {/* Diagnostic Command Shortcuts */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-xl">
-            <div className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-2.5">
+          <div className="rounded-2xl border border-border-default bg-bg-surface p-4 shadow-sm">
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-text-secondary mb-2.5">
               Quick Diagnostic Scripts
             </div>
             <div className="space-y-1.5 font-mono text-xs">
@@ -330,18 +330,18 @@ Restarting deployfix-gateway container...
               ].map((cmd) => (
                 <div
                   key={cmd}
-                  className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-300 hover:border-slate-700"
+                  className="flex items-center justify-between p-2 rounded-lg bg-bg-raised border border-border-default text-text-secondary hover:border-brand-primary/50"
                 >
-                  <span className="text-cyan-400 truncate">$ {cmd}</span>
+                  <span className="text-brand-primary truncate">$ {cmd}</span>
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
                       onClick={() => handleCopyCmd(cmd)}
-                      className="p-1 text-slate-500 hover:text-slate-200"
+                      className="p-1 text-text-muted hover:text-text-primary"
                       title="Copy command"
                     >
                       {copiedCmd === cmd ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
                       ) : (
                         <Copy className="w-3.5 h-3.5" />
                       )}
@@ -349,7 +349,7 @@ Restarting deployfix-gateway container...
                     <button
                       type="button"
                       onClick={() => handleRunCommand(cmd)}
-                      className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold hover:bg-cyan-500/30"
+                      className="px-2 py-0.5 rounded bg-brand-primary/10 text-brand-primary text-[10px] font-bold hover:bg-brand-primary/20"
                     >
                       Run
                     </button>
@@ -492,35 +492,35 @@ Restarting deployfix-gateway container...
       {/* Completion Modal / Certificate Generator */}
       {showCertificate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="bg-slate-900 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl relative space-y-5">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
+          <div className="bg-bg-surface border border-emerald-500/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl relative space-y-5">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-500">
               <Sparkles className="w-8 h-8" />
             </div>
 
             <div>
-              <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40">
                 SCENARIO RESOLVED 100%
               </span>
-              <h3 className="text-2xl font-extrabold text-slate-100 mt-2">
+              <h3 className="text-2xl font-extrabold text-text-primary mt-2">
                 Incident Triage Certified
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-text-secondary mt-1">
                 You successfully diagnosed and resolved {lab.code}: {lab.title}.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-left font-mono text-xs space-y-2">
-              <div className="flex justify-between text-slate-400">
+            <div className="p-4 rounded-2xl bg-bg-raised border border-border-default text-left font-mono text-xs space-y-2">
+              <div className="flex justify-between text-text-secondary">
                 <span>Engineer:</span>
-                <span className="text-slate-200">Radhesh Bhuva (Lead SRE)</span>
+                <span className="text-text-primary font-bold">Radhesh Bhuva (Lead SRE)</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-text-secondary">
                 <span>Verification Score:</span>
-                <span className="text-emerald-400 font-bold">100 / 100 PTS</span>
+                <span className="text-emerald-500 font-bold">100 / 100 PTS</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-text-secondary">
                 <span>Verification Timestamp:</span>
-                <span className="text-slate-300">{new Date().toISOString()}</span>
+                <span className="text-text-primary">{new Date().toISOString()}</span>
               </div>
             </div>
 
@@ -531,7 +531,7 @@ Restarting deployfix-gateway container...
                   toast.success('Certificate exported to clipboard');
                   setShowCertificate(false);
                 }}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg"
+                className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg"
               >
                 <Download className="w-4 h-4" />
                 <span>Export Certificate</span>
@@ -542,7 +542,7 @@ Restarting deployfix-gateway container...
                   setShowCertificate(false);
                   navigate('/labs');
                 }}
-                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs"
+                className="w-full py-2.5 rounded-xl bg-bg-raised hover:bg-bg-raised/80 text-text-primary font-bold text-xs border border-border-default"
               >
                 Return to Catalog
               </button>
