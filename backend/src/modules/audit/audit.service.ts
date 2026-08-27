@@ -41,4 +41,15 @@ export class AuditService {
       },
     });
   }
+
+  /**
+   * Retrieves personal audit logs for a specific user.
+   */
+  public static async getPersonalLogs(userId: string) {
+    return prisma.auditLog.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+  }
 }
