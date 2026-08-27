@@ -1,4 +1,5 @@
-export type UserAuthRole = 'STUDENT' | 'SRE' | 'INSTRUCTOR';
+export type UserAuthRole = 'STUDENT' | 'INSTRUCTOR' | 'ADMIN';
+
 
 export interface LoginFormData {
   email: string;
