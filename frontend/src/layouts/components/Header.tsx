@@ -52,13 +52,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Theme Toggle Component - Before the Platform Commander */}
+        <ThemeToggle />
+
         {/* Role Badge in Header */}
         <div className="hidden sm:block">
           <RoleBadge role={role} size="sm" />
         </div>
-
-        {/* Theme Toggle Component */}
-        <ThemeToggle />
 
         {/* Environment Badge */}
         <Badge
