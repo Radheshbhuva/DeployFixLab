@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Bell, LogOut, Shield, ChevronDown } from 'lucide-react';
+import { Menu, Bell, LogOut, ChevronDown } from 'lucide-react';
 import { BreadcrumbNav } from './BreadcrumbNav';
 import { Badge } from '@/components/ui/Badge';
 import { RoleBadge } from '@/components/ui/RoleBadge';
@@ -14,12 +14,12 @@ export interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { user, clearAuth, switchDemoRole } = useAuthStore();
+  const { user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
 
   const environment = import.meta.env.VITE_ENVIRONMENT || 'development';
-  const isDev = import.meta.env.DEV || environment === 'development';
   const role: UserRole = user?.role || 'STUDENT';
+  const displayName = user?.fullName || (user as any)?.name || user?.email || 'User';
 
   const handleSignOut = () => {
     clearAuth();
@@ -28,17 +28,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
 
   const getInitials = (name?: string) => {
     if (!name) return 'DF';
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
-  };
-
-  const handleRoleSwitch = (newRole: UserRole) => {
-    switchDemoRole(newRole);
-    setDropdownOpen(false);
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
   return (
@@ -98,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
             aria-label="User menu"
           >
             <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-xs font-bold text-white shadow-sm ring-2 ring-slate-700">
-              {getInitials(user?.fullName)}
+              {getInitials(displayName)}
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-text-muted" />
           </button>
@@ -106,35 +100,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-64 bg-bg-surface border border-border-default rounded-xl shadow-2xl z-50 py-2 animate-in fade-in zoom-in-95">
               <div className="px-4 py-2 border-b border-border-default">
-                <p className="text-sm font-semibold text-text-primary truncate">{user?.fullName}</p>
+                <p className="text-sm font-semibold text-text-primary truncate">{displayName}</p>
                 <p className="text-xs text-text-muted truncate mb-1">{user?.email}</p>
                 <RoleBadge role={role} size="sm" />
               </div>
-
-              {/* Dev Mode Role Switcher */}
-              {isDev && (
-                <div className="px-4 py-2 border-b border-border-default bg-slate-950/40">
-                  <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-semibold text-cyan-400 mb-1.5">
-                    <Shield className="w-3 h-3" />
-                    <span>Demo Role Switcher</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-1">
-                    {(['STUDENT', 'INSTRUCTOR', 'ADMIN'] as UserRole[]).map((r) => (
-                      <button
-                        key={r}
-                        onClick={() => handleRoleSwitch(r)}
-                        className={`text-[10px] py-1 px-1 rounded text-center transition-colors font-mono font-medium ${
-                          role === r
-                            ? 'bg-brand-primary text-white font-bold'
-                            : 'bg-bg-raised text-text-secondary hover:text-text-primary'
-                        }`}
-                      >
-                        {r.substring(0, 4)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               <div className="py-1">
                 <button
@@ -152,3 +121,4 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
     </header>
   );
 };
+
