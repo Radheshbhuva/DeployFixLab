@@ -4,9 +4,10 @@ export interface User {
   id: string;
   email: string;
   fullName: string;
+  name?: string;
   role: UserRole;
   avatarUrl?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface LoginResponse {
@@ -18,3 +19,4 @@ export interface RegisterResponse {
   user: User;
   accessToken: string;
 }
+
