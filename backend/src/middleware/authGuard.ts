@@ -63,7 +63,7 @@ export const authGuard = (req: Request, res: Response, next: NextFunction): void
     }
 
     // Attach decoded user info to request
-    req.user = decoded as { id: string; email: string; role: string };
+    req.user = decoded as { id: string; name?: string; email: string; role: string };
     next();
   });
 };
