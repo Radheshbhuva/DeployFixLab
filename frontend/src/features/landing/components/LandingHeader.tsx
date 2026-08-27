@@ -58,6 +58,13 @@ export const LandingHeader: React.FC = () => {
           <ThemeToggle />
 
           <Link
+            to="/login"
+            className="hidden sm:inline-flex items-center px-3.5 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors"
+          >
+            Sign In
+          </Link>
+
+          <Link
             to="/register"
             id="header-getstarted-btn"
             className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl bg-brand-primary hover:bg-brand-hover text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02]"
@@ -80,9 +87,12 @@ export const LandingHeader: React.FC = () => {
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="lg:hidden border-b border-border-default bg-bg-surface px-4 py-5 space-y-4 shadow-2xl">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono w-fit">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>All Systems Operational (99.98%)</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono w-fit">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>All Systems Operational</span>
+            </div>
+            <ThemeToggle />
           </div>
 
           <nav className="flex flex-col space-y-2">
@@ -99,6 +109,13 @@ export const LandingHeader: React.FC = () => {
           </nav>
 
           <div className="pt-4 border-t border-border-default flex flex-col gap-2.5">
+            <Link
+              to="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-2.5 text-center rounded-xl bg-bg-raised border border-border-default text-text-primary font-semibold text-sm hover:bg-bg-surface transition-colors"
+            >
+              Sign In
+            </Link>
             <Link
               to="/register"
               onClick={() => setMobileMenuOpen(false)}
