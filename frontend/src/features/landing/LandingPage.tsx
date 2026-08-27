@@ -16,9 +16,9 @@ import { LandingScrollNavigator } from './components/LandingScrollNavigator';
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#070A11] text-slate-100 selection:bg-cyan-500 selection:text-slate-950 relative overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-brand-primary selection:text-white relative overflow-x-hidden font-sans transition-colors">
       {/* Background Subtle Mesh Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b0f_1px,transparent_1px),linear-gradient(to_bottom,#1e293b0f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#64748b0f_1px,transparent_1px),linear-gradient(to_bottom,#64748b0f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Navigation Header (Permanently Frozen at Top) */}
       <LandingHeader />
