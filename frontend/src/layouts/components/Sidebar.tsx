@@ -3,8 +3,9 @@ import {
   Terminal,
   LayoutDashboard,
   FlaskConical,
-  Brain,
-  Zap,
+  Bot,
+  Radio,
+  Flame,
   BookOpen,
   Settings,
   LogOut,
@@ -31,6 +32,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
   const role = user?.role || 'STUDENT';
   const isAdmin = role === 'ADMIN';
   const isInstructorOrAdmin = role === 'INSTRUCTOR' || role === 'ADMIN';
+  const displayName = user?.fullName || (user as any)?.name || user?.email || 'User';
+
+  const getInitials = (name?: string) => {
+    if (!name) return 'DF';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
 
   return (
     <aside className="w-60 h-full bg-bg-surface border-r border-border-default flex flex-col justify-between select-none">
@@ -67,18 +78,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
                 icon={<FlaskConical className="w-4 h-4" />}
                 label="Labs"
                 path="/labs"
-                badge={{ text: '10', variant: 'info' }}
                 onClick={onCloseMobile}
               />
               <NavItem
-                icon={<Brain className="w-4 h-4" />}
+                icon={<Bot className="w-4 h-4" />}
                 label="AI Diagnosis"
                 path="/diagnosis"
-                badge={{ text: 'NEW', variant: 'success' }}
                 onClick={onCloseMobile}
               />
               <NavItem
-                icon={<Terminal className="w-4 h-4" />}
+                icon={<Radio className="w-4 h-4" />}
                 label="Live Logs"
                 path="/logs"
                 onClick={onCloseMobile}
@@ -86,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             </div>
           </div>
 
-          {/* Elevated Workspace (Instructors & Admins) */}
+          {/* Instructor & Admin Section */}
           {isInstructorOrAdmin && (
             <div>
               <span className="text-[10px] font-semibold text-text-muted uppercase tracking-widest px-3 block mb-2">
@@ -94,17 +103,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
               </span>
               <div className="space-y-1">
                 <NavItem
-                  icon={<Zap className="w-4 h-4 text-status-danger" />}
+                  icon={<Flame className="w-4 h-4" />}
                   label="Chaos Control"
                   path="/admin/chaos"
-                  badge={{ text: 'ACTIVE', variant: 'danger' }}
                   onClick={onCloseMobile}
+                  badge={{ text: 'SRE', variant: 'warning' }}
                 />
               </div>
             </div>
           )}
 
-          {/* Administration Section (Admins Only) */}
+          {/* Admin Management Section */}
           {isAdmin && (
             <div>
               <span className="text-[10px] font-semibold text-text-muted uppercase tracking-widest px-3 block mb-2">
@@ -112,10 +121,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
               </span>
               <div className="space-y-1">
                 <NavItem
-                  icon={<Users className="w-4 h-4 text-cyan-400" />}
+                  icon={<Users className="w-4 h-4" />}
                   label="User Management"
                   path="/admin/users"
                   onClick={onCloseMobile}
+                  badge={{ text: 'RBAC', variant: 'info' }}
                 />
               </div>
             </div>
@@ -150,10 +160,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       <div className="p-3 border-t border-border-default flex items-center justify-between bg-bg-primary/50">
         <div className="flex items-center gap-2.5 overflow-hidden">
           <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
-            {user?.fullName?.substring(0, 2).toUpperCase() || 'DF'}
+            {getInitials(displayName)}
           </div>
           <div className="truncate flex flex-col gap-0.5">
-            <p className="text-xs font-semibold text-text-primary truncate">{user?.fullName || 'User'}</p>
+            <p className="text-xs font-semibold text-text-primary truncate">{displayName}</p>
             <RoleBadge role={role} size="sm" showIcon={false} />
           </div>
         </div>
