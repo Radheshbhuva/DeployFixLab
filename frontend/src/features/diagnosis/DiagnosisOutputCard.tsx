@@ -80,33 +80,33 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
       )}
 
       {/* Top Header Card: Root Cause & Score */}
-      <div className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-950 to-indigo-950/40 p-6 shadow-xl backdrop-blur-xl">
+      <div className="rounded-2xl border border-border-default bg-bg-surface p-6 shadow-sm backdrop-blur-xl">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-3 flex-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-mono font-bold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30 text-xs font-mono font-bold">
               <AlertOctagon className="w-4 h-4" />
               <span>Root Cause Identified with High Confidence</span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-100 leading-tight">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-text-primary leading-tight">
               {diagnosis.problem}
             </h2>
 
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-rose-300 leading-relaxed">
-              <span className="text-slate-500 block text-[10px] uppercase mb-1 font-bold">
+            <div className="p-4 rounded-xl bg-bg-raised border border-border-default text-xs font-mono text-rose-600 dark:text-rose-300 leading-relaxed">
+              <span className="text-text-muted block text-[10px] uppercase mb-1 font-bold">
                 Deterministic Failure Signature:
               </span>
               {diagnosis.rootCause}
             </div>
           </div>
 
-          <div className="flex flex-col items-center flex-shrink-0 bg-slate-950/80 p-5 rounded-2xl border border-slate-800 text-center">
+          <div className="flex flex-col items-center flex-shrink-0 bg-bg-raised/70 p-5 rounded-2xl border border-border-default text-center">
             <ConfidenceScoreGauge score={diagnosis.confidenceScore} size="md" />
-            <div className="text-xs font-mono text-slate-400 mt-2">
+            <div className="text-xs font-mono text-text-secondary mt-2">
               Confidence:{' '}
-              <span className="text-indigo-400 font-bold">{diagnosis.confidenceLevel}</span>
+              <span className="text-brand-primary font-bold">{diagnosis.confidenceLevel}</span>
             </div>
-            <div className="text-[10px] font-mono text-slate-500 mt-0.5">
+            <div className="text-[10px] font-mono text-text-muted mt-0.5">
               Multi-Source Correlated (Capped 95%)
             </div>
           </div>
@@ -116,8 +116,8 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
       {/* Grid: Evidence Findings & Affected Services */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-3">
-          <h3 className="text-xs font-mono font-bold text-slate-300 flex items-center gap-2 uppercase tracking-wider">
-            <ShieldAlert className="w-4 h-4 text-amber-400" />
+          <h3 className="text-xs font-mono font-bold text-text-secondary flex items-center gap-2 uppercase tracking-wider">
+            <ShieldAlert className="w-4 h-4 text-amber-500" />
             Evidence & Finding Chain
           </h3>
           <div className="space-y-2.5">
@@ -128,35 +128,35 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono font-bold text-slate-300 flex items-center gap-2 uppercase tracking-wider">
-            <Layers className="w-4 h-4 text-cyan-400" />
+          <h3 className="text-xs font-mono font-bold text-text-secondary flex items-center gap-2 uppercase tracking-wider">
+            <Layers className="w-4 h-4 text-brand-primary" />
             Affected Component Topology
           </h3>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 space-y-2">
+          <div className="rounded-2xl border border-border-default bg-bg-surface p-4 space-y-2">
             {diagnosis.affectedServices.map((svc, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 text-xs font-mono px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-cyan-400"
+                className="flex items-center gap-2 text-xs font-mono px-3 py-2 rounded-xl bg-bg-raised border border-border-default text-brand-primary"
               >
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
                 <span>{svc}</span>
               </div>
             ))}
           </div>
 
-          <h3 className="text-xs font-mono font-bold text-slate-300 flex items-center gap-2 uppercase tracking-wider">
-            <CheckSquare className="w-4 h-4 text-emerald-400" />
+          <h3 className="text-xs font-mono font-bold text-text-secondary flex items-center gap-2 uppercase tracking-wider">
+            <CheckSquare className="w-4 h-4 text-emerald-500" />
             Verification Checklist
           </h3>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 space-y-2">
+          <div className="rounded-2xl border border-border-default bg-bg-surface p-4 space-y-2">
             {diagnosis.verificationChecklist.map((check, idx) => (
               <label
                 key={idx}
-                className="flex items-start gap-2.5 text-xs text-slate-300 cursor-pointer hover:text-slate-100 font-sans"
+                className="flex items-start gap-2.5 text-xs text-text-secondary cursor-pointer hover:text-text-primary font-sans"
               >
                 <input
                   type="checkbox"
-                  className="mt-0.5 rounded bg-slate-950 border-slate-700 text-cyan-500 focus:ring-cyan-500/20"
+                  className="mt-0.5 rounded bg-bg-primary border-border-default text-brand-primary focus:ring-brand-primary/20"
                 />
                 <span className="leading-snug">{check}</span>
               </label>
