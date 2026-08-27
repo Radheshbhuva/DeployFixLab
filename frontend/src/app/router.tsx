@@ -13,7 +13,9 @@ import { LabExecutionPage } from '@/features/labs/LabExecutionPage';
 import { LogViewerPage } from '@/features/logs/LogViewerPage';
 import { DiagnosisPage } from '@/features/diagnosis/DiagnosisPage';
 import { ChaosControlPage } from '@/features/admin/ChaosControlPage';
+import { UserManagementPage } from '@/features/admin/UserManagementPage';
 import { SettingsPage } from '@/pages/SettingsPage';
+import { ForbiddenPage } from '@/pages/ForbiddenPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 export const router = createBrowserRouter([
@@ -36,6 +38,10 @@ export const router = createBrowserRouter([
         <RegisterPage />
       </PublicOnlyRoute>
     ),
+  },
+  {
+    path: '/403',
+    element: <ForbiddenPage />,
   },
   {
     element: (
@@ -69,6 +75,14 @@ export const router = createBrowserRouter([
         element: (
           <RoleGuard allowedRoles={['ADMIN', 'INSTRUCTOR']}>
             <ChaosControlPage />
+          </RoleGuard>
+        ),
+      },
+      {
+        path: '/admin/users',
+        element: (
+          <RoleGuard allowedRoles={['ADMIN']}>
+            <UserManagementPage />
           </RoleGuard>
         ),
       },
