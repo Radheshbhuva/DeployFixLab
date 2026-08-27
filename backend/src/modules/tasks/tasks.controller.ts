@@ -88,7 +88,12 @@ export class TasksController {
         return;
       }
 
-      const { tasks, totalCount } = await TasksService.getTasks(req.user.id, result.data);
+      const targetUserId =
+        (req.user.role === 'ADMIN' || req.user.role === 'INSTRUCTOR') && result.data.userId
+          ? result.data.userId
+          : req.user.id;
+
+      const { tasks, totalCount } = await TasksService.getTasks(targetUserId, result.data);
 
       res.status(200).json({
         success: true,
