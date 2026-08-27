@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
+import { Role } from '../types/rbac.types';
 
 /**
  * Middleware factory to enforce access control based on user roles.
  */
-export const roleGuard = (allowedRoles: string[]) => {
+export const roleGuard = (allowedRoles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({
@@ -25,6 +26,8 @@ export const roleGuard = (allowedRoles: string[]) => {
         error: {
           code: 'FORBIDDEN_INSUFFICIENT_ROLE',
           message: 'Access forbidden: Insufficient role permissions',
+          requiredRoles: allowedRoles,
+          currentRole: req.user.role,
         },
         timestamp: new Date().toISOString(),
       });
