@@ -19,7 +19,7 @@ export const LabCard: React.FC<LabCardProps> = ({ lab, onStart }) => {
       case 'EXPERT':
         return 'border-purple-500/30 text-purple-400 bg-purple-500/10';
       default:
-        return 'border-slate-700 text-slate-300 bg-slate-800';
+        return 'border-border-default text-text-secondary bg-bg-raised';
     }
   };
 
