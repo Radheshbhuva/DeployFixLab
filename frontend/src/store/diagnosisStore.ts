@@ -8,15 +8,20 @@ import {
   CompletenessLevel
 } from '@/types/diagnosis.types';
 
-function computeCompleteness(sources: ProjectContextModel['sources']): ContextCompletenessScore {
+export function computeCompleteness(sources: ProjectContextModel['sources']): ContextCompletenessScore {
   let websiteScore = 0;
   let uploadsScore = 0;
   let githubScore = 0;
   let deploymentScore = 0;
 
-  if (sources.website.connected) websiteScore = 20;
+  const hasWebsite = Boolean(sources.website?.connected && sources.website?.url);
+  const hasUploads = Boolean(sources.uploads?.connected && sources.uploads?.files && sources.uploads.files.length > 0);
+  const hasGithub = Boolean(sources.github?.connected);
+  const hasDeployment = Boolean(sources.deployment?.connected);
 
-  if (sources.uploads.connected && sources.uploads.files.length > 0) {
+  if (hasWebsite) websiteScore = 20;
+
+  if (hasUploads) {
     uploadsScore = 15;
     const fileTypes = new Set(sources.uploads.files.map((f) => f.type));
     if (fileTypes.has('dockerfile')) uploadsScore += 5;
@@ -26,10 +31,12 @@ function computeCompleteness(sources: ProjectContextModel['sources']): ContextCo
     uploadsScore = Math.min(35, uploadsScore);
   }
 
-  if (sources.github.connected) githubScore = 25;
-  if (sources.deployment.connected) deploymentScore = 20;
+  if (hasGithub) githubScore = 25;
+  if (hasDeployment) deploymentScore = 20;
 
   const totalScore = websiteScore + uploadsScore + githubScore + deploymentScore;
+  const activeSourcesCount = [hasWebsite, hasUploads, hasGithub, hasDeployment].filter(Boolean).length;
+  const canRunDiagnosis = activeSourcesCount >= 1;
 
   let level: CompletenessLevel = 'none';
   if (totalScore === 0) level = 'none';
@@ -42,26 +49,32 @@ function computeCompleteness(sources: ProjectContextModel['sources']): ContextCo
   let nextRecommendedSource: 'github' | 'deployment' | 'website' | 'uploads' | undefined;
   let nextSourceGain = 0;
 
-  if (!sources.website.connected) {
+  if (!hasWebsite) {
     nextRecommendedSource = 'website';
     nextSourceGain = 20;
-  } else if (!sources.uploads.connected) {
+  } else if (!hasUploads) {
     nextRecommendedSource = 'uploads';
     nextSourceGain = 35;
-  } else if (!sources.github.connected) {
+  } else if (!hasGithub) {
     nextRecommendedSource = 'github';
     nextSourceGain = 25;
-  } else if (!sources.deployment.connected) {
+  } else if (!hasDeployment) {
     nextRecommendedSource = 'deployment';
     nextSourceGain = 20;
   }
 
   let maxConfidence = 0;
-  if (totalScore < 20) maxConfidence = 0;
-  else if (totalScore < 40) maxConfidence = 50;
-  else if (totalScore < 60) maxConfidence = 70;
-  else if (totalScore < 80) maxConfidence = 85;
-  else maxConfidence = 95;
+  if (!canRunDiagnosis) {
+    maxConfidence = 0;
+  } else if (activeSourcesCount === 1) {
+    maxConfidence = 55;
+  } else if (activeSourcesCount === 2) {
+    maxConfidence = 75;
+  } else if (activeSourcesCount === 3) {
+    maxConfidence = 88;
+  } else {
+    maxConfidence = 96;
+  }
 
   return {
     score: totalScore,
@@ -74,7 +87,7 @@ function computeCompleteness(sources: ProjectContextModel['sources']): ContextCo
     },
     nextRecommendedSource,
     nextSourceGain,
-    canRunDiagnosis: totalScore >= 20,
+    canRunDiagnosis,
     maxConfidence,
   };
 }
@@ -107,7 +120,7 @@ const initialSources: ProjectContextModel['sources'] = {
 
 const initialCompleteness = computeCompleteness(initialSources);
 
-interface DiagnosisState {
+export interface DiagnosisState {
   sources: EvidenceSource[];
   projectContext: ProjectContextModel;
   isAnalyzing: boolean;
@@ -117,12 +130,16 @@ interface DiagnosisState {
 
   // Context Source Operations
   connectWebsite: (url: string) => void;
+  disconnectWebsite: () => void;
   uploadFile: (file: { name: string; type: UploadedFile['type']; sizeBytes: number; content?: string }) => void;
   removeUploadedFile: (id: string) => void;
+  clearAllFiles: () => void;
   connectGitHub: (owner: string, repo: string, branch: string) => void;
   disconnectGitHub: () => void;
   connectDeployment: (platform: 'railway' | 'render' | 'vercel' | 'flyio' | 'other', serviceName: string) => void;
   disconnectDeployment: (platform?: string) => void;
+  clearAllSources: () => void;
+  loadSampleSources: () => void;
 
   // Standard Store Actions
   addSource: (source: EvidenceSource) => void;
@@ -167,6 +184,24 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
       const completeness = computeCompleteness(updatedSources);
 
       return {
+        error: null,
+        projectContext: {
+          ...state.projectContext,
+          sources: updatedSources,
+          completeness,
+        },
+      };
+    });
+  },
+
+  disconnectWebsite: () => {
+    set((state) => {
+      const updatedSources = {
+        ...state.projectContext.sources,
+        website: { connected: false, url: undefined },
+      };
+      const completeness = computeCompleteness(updatedSources);
+      return {
         projectContext: {
           ...state.projectContext,
           sources: updatedSources,
@@ -193,7 +228,7 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
     };
 
     set((state) => {
-      const currentFiles = state.projectContext.sources.uploads.files;
+      const currentFiles = state.projectContext.sources.uploads.files || [];
       const updatedFiles = [...currentFiles, newFile];
       const updatedUploads = {
         connected: true,
@@ -217,13 +252,33 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
 
   removeUploadedFile: (id) => {
     set((state) => {
-      const updatedFiles = state.projectContext.sources.uploads.files.filter((f) => f.id !== id);
+      const updatedFiles = (state.projectContext.sources.uploads.files || []).filter((f) => f.id !== id);
       const updatedUploads = {
         connected: updatedFiles.length > 0,
         files: updatedFiles,
         totalEvidenceCount: updatedFiles.reduce((acc, f) => acc + (f.evidenceCount || 0), 0),
       };
 
+      const updatedSources = { ...state.projectContext.sources, uploads: updatedUploads };
+      const completeness = computeCompleteness(updatedSources);
+
+      return {
+        projectContext: {
+          ...state.projectContext,
+          sources: updatedSources,
+          completeness,
+        },
+      };
+    });
+  },
+
+  clearAllFiles: () => {
+    set((state) => {
+      const updatedUploads = {
+        connected: false,
+        files: [],
+        totalEvidenceCount: 0,
+      };
       const updatedSources = { ...state.projectContext.sources, uploads: updatedUploads };
       const completeness = computeCompleteness(updatedSources);
 
@@ -252,6 +307,7 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
       const completeness = computeCompleteness(updatedSources);
 
       return {
+        error: null,
         projectContext: {
           ...state.projectContext,
           sources: updatedSources,
@@ -291,6 +347,7 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
       const completeness = computeCompleteness(updatedSources);
 
       return {
+        error: null,
         projectContext: {
           ...state.projectContext,
           sources: updatedSources,
@@ -314,6 +371,66 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
     });
   },
 
+  clearAllSources: () => {
+    set((state) => {
+      const clearedSources: ProjectContextModel['sources'] = {
+        website: { connected: false },
+        uploads: { connected: false, files: [], totalEvidenceCount: 0 },
+        github: { connected: false },
+        deployment: { connected: false },
+      };
+      const completeness = computeCompleteness(clearedSources);
+      return {
+        projectContext: {
+          ...state.projectContext,
+          sources: clearedSources,
+          completeness,
+        },
+        currentDiagnosis: null,
+        error: null,
+      };
+    });
+  },
+
+  loadSampleSources: () => {
+    set((state) => {
+      const sampleSources: ProjectContextModel['sources'] = {
+        website: {
+          connected: true,
+          url: 'https://my-shop.railway.app',
+          inspectedAt: '2026-08-13 17:40',
+          httpStatus: 502,
+          httpsEnabled: true,
+          tlsValid: true,
+          serverHeader: 'nginx/1.24.0',
+          responseTimeMs: 1240,
+          errorPageDetected: true,
+        },
+        uploads: {
+          connected: true,
+          files: [
+            { id: 'f-1', name: 'Dockerfile', type: 'dockerfile', sizeBytes: 2450, status: 'complete', evidenceCount: 3 },
+            { id: 'f-2', name: 'docker-compose.yml', type: 'docker_compose', sizeBytes: 3120, status: 'complete', evidenceCount: 5 },
+            { id: 'f-3', name: 'nginx.conf', type: 'nginx_conf', sizeBytes: 1890, status: 'complete', evidenceCount: 2 },
+            { id: 'f-4', name: 'app.log', type: 'log', sizeBytes: 14200, status: 'complete', evidenceCount: 7 },
+          ],
+          totalEvidenceCount: 17,
+        },
+        github: { connected: false },
+        deployment: { connected: false },
+      };
+      const completeness = computeCompleteness(sampleSources);
+      return {
+        projectContext: {
+          ...state.projectContext,
+          sources: sampleSources,
+          completeness,
+        },
+        error: null,
+      };
+    });
+  },
+
   addSource: (source) => set((state) => ({ sources: [...state.sources, source] })),
   removeSource: (id) => set((state) => ({ sources: state.sources.filter((s) => s.id !== id) })),
   updateSource: (id, value) =>
@@ -326,6 +443,14 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
   runFullDiagnosis: () => {
     const { projectContext } = get();
     const { completeness, sources } = projectContext;
+
+    if (!completeness.canRunDiagnosis) {
+      set({
+        error:
+          'Diagnosis cannot run. Please select or connect at least 1 of the 4 context sources (Website URL, File Uploads, GitHub, or Deployment Platform).',
+      });
+      return;
+    }
 
     set({ isAnalyzing: true, error: null });
 

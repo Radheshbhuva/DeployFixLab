@@ -114,10 +114,10 @@ export const ContextCompletenessGauge: React.FC<ContextCompletenessGaugeProps> =
         </div>
       )}
 
-      {score < 20 && (
+      {!completeness.canRunDiagnosis && (
         <div className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 mt-2">
           <AlertTriangle className="w-4 h-4 shrink-0" />
-          <span>Minimum 20% completeness required to trigger Diagnosis Engine.</span>
+          <span>Opt into at least 1 of the 4 context sources to enable the AI Diagnosis Engine.</span>
         </div>
       )}
     </div>

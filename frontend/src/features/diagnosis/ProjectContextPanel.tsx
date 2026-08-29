@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDiagnosisStore } from '@/store/diagnosisStore';
 import { ContextCompletenessGauge } from '@/components/ui/ContextCompletenessGauge';
 import { FileUploadZone } from './FileUploadZone';
-import { Globe, FileUp, Github, Rocket, CheckCircle2, ArrowRight, Layers } from 'lucide-react';
+import { Globe, FileUp, Github, Rocket, CheckCircle2, ArrowRight, Layers, AlertCircle, RotateCcw, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
@@ -11,18 +11,28 @@ export const ProjectContextPanel: React.FC = () => {
   const {
     projectContext,
     connectWebsite,
+    disconnectWebsite,
     uploadFile,
     removeUploadedFile,
     connectGitHub,
     disconnectGitHub,
     connectDeployment,
     disconnectDeployment,
+    clearAllSources,
+    loadSampleSources,
     runFullDiagnosis,
     isAnalyzing,
     error,
   } = useDiagnosisStore();
 
   const { completeness, sources } = projectContext;
+
+  const activeSourcesCount = [
+    Boolean(sources.website?.connected && sources.website?.url),
+    Boolean(sources.uploads?.connected && sources.uploads?.files && sources.uploads.files.length > 0),
+    Boolean(sources.github?.connected),
+    Boolean(sources.deployment?.connected),
+  ].filter(Boolean).length;
 
   // Modals state
   const [showWebsiteModal, setShowWebsiteModal] = useState(false);
@@ -57,40 +67,85 @@ export const ProjectContextPanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-left">
       {/* Header & Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-default pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border-default pb-4">
         <div>
           <div className="flex items-center gap-2">
             <Layers className="w-5 h-5 text-brand-primary" />
             <h2 className="text-xl font-bold text-text-primary">Project Context Engine</h2>
+            <span
+              className={`text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold border ${
+                activeSourcesCount >= 1
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+              }`}
+            >
+              {activeSourcesCount}/4 Sources Connected
+            </span>
           </div>
           <p className="text-xs text-text-secondary mt-1">
-            Correlates evidence across Website URL, File Uploads, GitHub, and Deployment Platform.
+            Correlates evidence across Website URL, File Uploads, GitHub, and Deployment Platform. Select at least <strong>1 of 4</strong> sources to diagnose.
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="md"
-          isLoading={isAnalyzing}
-          disabled={!completeness.canRunDiagnosis || isAnalyzing}
-          onClick={runFullDiagnosis}
-          className="shadow-lg shadow-blue-500/20"
-        >
-          <div className="flex items-center gap-2">
-            <span>🔬 Run Diagnosis Engine</span>
-            <ArrowRight className="w-4 h-4" />
-          </div>
-        </Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          {activeSourcesCount > 0 ? (
+            <Button variant="ghost" size="sm" onClick={clearAllSources} title="Reset all connected sources">
+              <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
+              Clear All
+            </Button>
+          ) : (
+            <Button variant="ghost" size="sm" onClick={loadSampleSources} title="Load sample incident context">
+              <Sparkles className="w-3.5 h-3.5 mr-1.5 text-brand-primary" />
+              Load Sample Context
+            </Button>
+          )}
+
+          <Button
+            variant="primary"
+            size="md"
+            isLoading={isAnalyzing}
+            disabled={!completeness.canRunDiagnosis || isAnalyzing}
+            onClick={runFullDiagnosis}
+            className="shadow-lg shadow-blue-500/20"
+            title={!completeness.canRunDiagnosis ? 'Connect at least 1 context source to run diagnosis' : 'Run AI Diagnosis'}
+          >
+            <div className="flex items-center gap-2">
+              <span>🔬 Run Diagnosis Engine</span>
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </Button>
+        </div>
       </div>
+
+      {/* Error alert if any */}
+      {error && (
+        <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2 font-medium">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* 0 Sources Warning Alert */}
+      {!completeness.canRunDiagnosis && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-xs text-amber-800 dark:text-amber-300">
+          <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div className="font-bold text-sm">Diagnosis Engine Requires at Least 1 Source</div>
+            <p>
+              Please connect at least <strong>1 of the 4 context sources</strong> below (Website URL, File Uploads, GitHub Repository, or Deployment Platform) to synthesize evidence and run the AI Diagnosis.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Context Completeness Gauge */}
       <ContextCompletenessGauge completeness={completeness} />
 
       {/* 4 Context Sources Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Source 1: Website URL (V1 MVP) */}
+        {/* Source 1: Website URL (Optional) */}
         <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
@@ -99,12 +154,17 @@ export const ProjectContextPanel: React.FC = () => {
                   <Globe className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-text-primary text-sm">Website URL Inspection</h4>
-                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Public Observation (V1)</span>
+                  <h4 className="font-semibold text-text-primary text-sm flex items-center gap-1.5">
+                    <span>Website URL Inspection</span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-bg-raised text-text-muted border border-border-default font-normal">
+                      Optional
+                    </span>
+                  </h4>
+                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Public Endpoint Observation</span>
                 </div>
               </div>
 
-              {sources.website.connected ? (
+              {sources.website.connected && sources.website.url ? (
                 <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+20%)
                 </span>
@@ -113,7 +173,7 @@ export const ProjectContextPanel: React.FC = () => {
               )}
             </div>
 
-            {sources.website.connected ? (
+            {sources.website.connected && sources.website.url ? (
               <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1.5 font-mono">
                 <div className="text-text-primary truncate font-semibold">{sources.website.url}</div>
                 <div className="flex items-center gap-3 text-text-secondary text-[11px]">
@@ -125,14 +185,23 @@ export const ProjectContextPanel: React.FC = () => {
               </div>
             ) : (
               <p className="text-xs text-text-secondary mt-2">
-                Inspect public HTTP headers, TLS certificate, and status code (Headless observation).
+                Optional: Inspect public HTTP headers, TLS certificate, and status code (Headless observation).
               </p>
             )}
           </div>
 
-          <div className="pt-2 border-t border-border-default flex justify-end">
-            <Button variant="ghost" size="sm" onClick={() => setShowWebsiteModal(true)}>
-              {sources.website.connected ? 'Update URL' : 'Inspect URL'}
+          <div className="pt-2 border-t border-border-default flex justify-end gap-2">
+            {sources.website.connected && sources.website.url && (
+              <Button variant="ghost" size="sm" onClick={disconnectWebsite} className="text-text-muted hover:text-red-500">
+                Disconnect
+              </Button>
+            )}
+            <Button
+              variant={sources.website.connected && sources.website.url ? 'ghost' : 'primary'}
+              size="sm"
+              onClick={() => setShowWebsiteModal(true)}
+            >
+              {sources.website.connected && sources.website.url ? 'Update URL' : 'Inspect URL (Optional)'}
             </Button>
           </div>
         </div>
