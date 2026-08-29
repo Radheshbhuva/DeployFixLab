@@ -10,10 +10,8 @@ import {
   ArrowLeft,
   CheckCircle2,
   AlertCircle,
-  Sparkles,
   Server,
   Send,
-  Download,
   CheckSquare,
   Square,
   HelpCircle,
@@ -39,7 +37,6 @@ export const LabExecutionPage: React.FC = () => {
     { type: 'output', text: 'Type a command or click quick diagnostic shortcuts below to begin triage.' },
   ]);
   const [checkedObjectives, setCheckedObjectives] = useState<Record<number, boolean>>({});
-  const [showCertificate, setShowCertificate] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -141,7 +138,6 @@ Restarting deployfix-gateway container...
       if (allPassed) {
         const updatedSess = await labService.completeSession(session.sessionId);
         setSession(updatedSess);
-        setShowCertificate(true);
         toast.success('Congratulations! 100% verification tests passed.');
       } else {
         toast.error('Verification failed. Check test results.');
@@ -488,68 +484,6 @@ Restarting deployfix-gateway container...
           )}
         </div>
       </div>
-
-      {/* Completion Modal / Certificate Generator */}
-      {showCertificate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="bg-bg-surface border border-emerald-500/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl relative space-y-5">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-500">
-              <Sparkles className="w-8 h-8" />
-            </div>
-
-            <div>
-              <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40">
-                SCENARIO RESOLVED 100%
-              </span>
-              <h3 className="text-2xl font-extrabold text-text-primary mt-2">
-                Incident Triage Certified
-              </h3>
-              <p className="text-xs text-text-secondary mt-1">
-                You successfully diagnosed and resolved {lab.code}: {lab.title}.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-bg-raised border border-border-default text-left font-mono text-xs space-y-2">
-              <div className="flex justify-between text-text-secondary">
-                <span>Engineer:</span>
-                <span className="text-text-primary font-bold">Radhesh Bhuva (Lead SRE)</span>
-              </div>
-              <div className="flex justify-between text-text-secondary">
-                <span>Verification Score:</span>
-                <span className="text-emerald-500 font-bold">100 / 100 PTS</span>
-              </div>
-              <div className="flex justify-between text-text-secondary">
-                <span>Verification Timestamp:</span>
-                <span className="text-text-primary">{new Date().toISOString()}</span>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  toast.success('Certificate exported to clipboard');
-                  setShowCertificate(false);
-                }}
-                className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg"
-              >
-                <Download className="w-4 h-4" />
-                <span>Export Certificate</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowCertificate(false);
-                  navigate('/labs');
-                }}
-                className="w-full py-2.5 rounded-xl bg-bg-raised hover:bg-bg-raised/80 text-text-primary font-bold text-xs border border-border-default"
-              >
-                Return to Catalog
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
