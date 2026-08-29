@@ -81,7 +81,7 @@ export const LogRow: React.FC<LogRowProps> = ({ log, searchQuery }) => {
       </span>
 
       {log.traceId && (
-        <span className="text-[10px] text-slate-500 font-mono select-none px-1.5 py-0.5 rounded bg-slate-950/80 border border-slate-800">
+        <span className="text-[10px] text-text-muted font-mono select-none px-1.5 py-0.5 rounded bg-bg-raised border border-border-default">
           {log.traceId}
         </span>
       )}
