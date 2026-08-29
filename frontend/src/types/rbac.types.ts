@@ -102,19 +102,19 @@ export const ROLE_METADATA: Record<UserRole, RoleMetadata> = {
   STUDENT: {
     label: 'Student Engineer',
     description: 'Practices failure recovery and runs sandbox verification',
-    badgeClass: 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30',
+    badgeClass: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30',
     accentColor: '#06b6d4',
   },
   INSTRUCTOR: {
     label: 'Instructor SRE',
     description: 'Manages cohorts, creates lab scenarios, and triggers chaos experiments',
-    badgeClass: 'bg-amber-500/10 text-amber-400 border border-amber-500/30',
+    badgeClass: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30',
     accentColor: '#f59e0b',
   },
   ADMIN: {
     label: 'Platform Commander',
     description: 'Full governance over users, chaos containment, audit trails, and infrastructure',
-    badgeClass: 'bg-rose-500/10 text-rose-400 border border-rose-500/30',
+    badgeClass: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30',
     accentColor: '#f43f5e',
   },
 };
