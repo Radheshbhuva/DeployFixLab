@@ -50,16 +50,16 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
     <div className="space-y-2.5 pt-1 text-left">
       {/* 4 Segmented Bars */}
       <div className="flex items-center justify-between text-[11px] font-mono">
-        <span className="text-slate-400">Password Strength:</span>
+        <span className="text-text-secondary">Password Strength:</span>
         <span
           className={`font-semibold ${
             score <= 1
-              ? 'text-rose-400'
+              ? 'text-status-danger'
               : score === 2
-              ? 'text-amber-400'
+              ? 'text-status-warning'
               : score === 3
-              ? 'text-blue-400'
-              : 'text-emerald-400'
+              ? 'text-brand-primary'
+              : 'text-status-success'
           }`}
         >
           {label}
@@ -71,7 +71,7 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
           <div
             key={step}
             className={`rounded-full transition-all duration-300 ${
-              score >= step ? color : 'bg-slate-800'
+              score >= step ? color : 'bg-border-default'
             }`}
           />
         ))}
@@ -83,13 +83,13 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
           <div
             key={c.id}
             className={`flex items-center gap-1.5 transition-colors ${
-              c.met ? 'text-emerald-400' : 'text-slate-500'
+              c.met ? 'text-status-success' : 'text-text-muted'
             }`}
           >
             {c.met ? (
-              <Check className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+              <Check className="w-3 h-3 text-status-success flex-shrink-0" />
             ) : (
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-700 flex-shrink-0 mx-0.5" />
+              <span className="w-1.5 h-1.5 rounded-full bg-border-default flex-shrink-0 mx-0.5" />
             )}
             <span className="truncate">{c.label}</span>
           </div>
