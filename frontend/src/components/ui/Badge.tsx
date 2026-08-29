@@ -17,10 +17,10 @@ export const Badge: React.FC<BadgeProps> = ({
   const baseStyles = 'inline-flex items-center font-medium rounded-full';
 
   const variants = {
-    success: 'bg-status-success-dim text-status-success border border-green-800/50',
-    danger: 'bg-status-danger-dim text-status-danger border border-red-800/50',
-    warning: 'bg-status-warning-dim text-status-warning border border-amber-800/50',
-    info: 'bg-blue-950 text-blue-400 border border-blue-800/50',
+    success: 'bg-status-success-dim text-status-success border border-status-success/30',
+    danger: 'bg-status-danger-dim text-status-danger border border-status-danger/30',
+    warning: 'bg-status-warning-dim text-status-warning border border-status-warning/30',
+    info: 'bg-brand-primary/15 text-brand-primary border border-brand-primary/30',
     default: 'bg-bg-raised text-text-secondary border border-border-default',
   };
 
