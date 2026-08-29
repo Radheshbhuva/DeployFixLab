@@ -11,10 +11,10 @@ export const DifficultyBadge: React.FC<DifficultyBadgeProps> = ({
   className,
 }) => {
   const styles = {
-    BEGINNER: 'bg-green-900/40 text-green-400 border-green-800',
-    INTERMEDIATE: 'bg-amber-900/40 text-amber-400 border-amber-800',
-    ADVANCED: 'bg-red-900/40 text-red-400 border-red-800',
-    EXPERT: 'bg-purple-900/40 text-purple-400 border-purple-800',
+    BEGINNER: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+    INTERMEDIATE: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
+    ADVANCED: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30',
+    EXPERT: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/30',
   };
 
   return (
