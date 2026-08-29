@@ -78,8 +78,8 @@
   }
 
   body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: rgb(var(--bg-primary));
+    color: rgb(var(--text-primary));
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -94,14 +94,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-surface);
+  background: rgb(var(--bg-surface));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-default);
+  background: rgb(var(--border-default));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: rgb(var(--text-muted));
 }
