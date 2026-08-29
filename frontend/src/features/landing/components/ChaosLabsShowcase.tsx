@@ -88,15 +88,15 @@ export const ChaosLabsShowcase: React.FC = () => {
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400">
+            <div className="pt-4 border-t border-border-default flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs font-mono text-text-secondary">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{scenario.durationMinutes} mins</span>
               </div>
 
               <Link
                 to={`/register?redirect=/labs/${scenario.id}`}
-                className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-400 hover:text-cyan-300 group-hover:translate-x-0.5 transition-all"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-brand-primary hover:text-brand-hover group-hover:translate-x-0.5 transition-all"
               >
                 <span>Launch Sandbox</span>
                 <ArrowRight className="w-3.5 h-3.5" />
