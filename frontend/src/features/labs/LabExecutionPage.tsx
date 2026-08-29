@@ -181,7 +181,7 @@ Restarting deployfix-gateway container...
       case 'EXPERT':
         return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
       default:
-        return 'text-slate-300 border-slate-700 bg-slate-800';
+        return 'text-text-secondary border-border-default bg-bg-raised';
     }
   };
 
@@ -192,7 +192,7 @@ Restarting deployfix-gateway container...
         <button
           type="button"
           onClick={() => navigate('/labs')}
-          className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-text-secondary hover:text-brand-primary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Chaos Catalog</span>
@@ -467,13 +467,13 @@ Restarting deployfix-gateway container...
 
           {/* Test Suite Verification Results Panel */}
           {verificationResults.length > 0 && (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl space-y-3">
+            <div className="rounded-2xl border border-border-default bg-bg-surface p-4 shadow-xl space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-xs font-mono font-bold text-text-primary uppercase tracking-wider flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-status-success" />
                   Automated Verification Test Suite
                 </h3>
-                <span className="text-xs font-mono text-emerald-400 font-bold">
+                <span className="text-xs font-mono text-status-success font-bold">
                   {verificationResults.filter((r) => r.passed).length} / {verificationResults.length}{' '}
                   Passed
                 </span>
