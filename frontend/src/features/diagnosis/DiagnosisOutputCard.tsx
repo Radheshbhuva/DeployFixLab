@@ -56,17 +56,17 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
     <div className="space-y-6 animate-in fade-in duration-300 text-left">
       {/* Context Qualification Disclaimer Banner */}
       {diagnosis.contextQualification && (
-        <div className="flex items-start gap-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 rounded-2xl p-4 text-xs">
-          <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 bg-indigo-500/10 border border-indigo-500/20 text-text-primary rounded-2xl p-4 text-xs">
+          <Info className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <div className="font-semibold text-slate-100 flex items-center gap-2">
+            <div className="font-semibold text-text-primary flex items-center gap-2">
               <span>Evidence Basis Qualification</span>
               {diagnosis.sourcesUsed && (
                 <div className="flex gap-1.5 font-mono text-[11px]">
                   {diagnosis.sourcesUsed.map((src, i) => (
                     <span
                       key={i}
-                      className="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30"
+                      className="bg-indigo-500/20 text-brand-primary px-2 py-0.5 rounded-full border border-indigo-500/30"
                     >
                       {src}
                     </span>
@@ -74,7 +74,7 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
                 </div>
               )}
             </div>
-            <p className="text-slate-300 font-sans">{diagnosis.contextQualification}</p>
+            <p className="text-text-secondary font-sans">{diagnosis.contextQualification}</p>
           </div>
         </div>
       )}
@@ -168,8 +168,8 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
       {/* Guided Step-by-Step Recovery Plan & Automated Diff Patch */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-indigo-400" />
+          <h3 className="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-brand-primary" />
             Step-by-Step Guided Recovery & Patch Plan
           </h3>
         </div>
@@ -181,10 +181,10 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
 
               {/* Enhanced Interactive Unified Code Diff Patch */}
               {step.codeDiff && (
-                <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden shadow-xl text-xs font-mono">
+                <div className="rounded-2xl bg-terminal-bg border border-terminal-border overflow-hidden shadow-xl text-xs font-mono">
                   {/* Diff Header */}
-                  <div className="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-indigo-400 font-bold">
+                  <div className="bg-bg-raised/80 px-4 py-2.5 border-b border-terminal-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-brand-primary font-bold">
                       <FileCode2 className="w-4 h-4" />
                       <span>Unified Patch: {step.codeDiff.file}</span>
                     </div>
@@ -193,16 +193,16 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
                       <button
                         type="button"
                         onClick={() => handleCopyDiff(step.codeDiff!)}
-                        className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-mono flex items-center gap-1.5"
+                        className="px-2.5 py-1 rounded-lg bg-bg-surface hover:bg-bg-raised text-text-primary border border-border-default text-[11px] font-mono flex items-center gap-1.5"
                       >
-                        {copiedDiff ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copiedDiff ? <Check className="w-3.5 h-3.5 text-status-success" /> : <Copy className="w-3.5 h-3.5" />}
                         <span>{copiedDiff ? 'Copied' : 'Copy Diff'}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleDownloadPatch(step.codeDiff!)}
-                        className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-mono flex items-center gap-1.5"
+                        className="px-2.5 py-1 rounded-lg bg-bg-surface hover:bg-bg-raised text-text-primary border border-border-default text-[11px] font-mono flex items-center gap-1.5"
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>.patch</span>
@@ -212,7 +212,7 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
                         type="button"
                         onClick={handleApplyPatch}
                         disabled={appliedPatch}
-                        className="px-3 py-1 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-[11px] font-mono flex items-center gap-1.5 disabled:opacity-60"
+                        className="px-3 py-1 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-[11px] font-mono flex items-center gap-1.5 disabled:opacity-60"
                       >
                         <Zap className="w-3.5 h-3.5 fill-current" />
                         <span>{appliedPatch ? 'Patch Applied ✓' : 'Apply Patch'}</span>
