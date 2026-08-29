@@ -143,21 +143,21 @@ export const RegisterPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {/* Full Name Field */}
           <div className="space-y-1">
-            <label className="block text-[11px] font-mono font-medium text-slate-300">
-              Full Name <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-mono font-medium text-text-secondary">
+              Full Name <span className="text-status-danger">*</span>
             </label>
             <input
               type="text"
               placeholder="Alex Johnson"
-              className={`w-full px-3 py-1.5 rounded-xl bg-slate-950/80 border text-slate-100 placeholder-slate-500 font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
+              className={`w-full px-3 py-1.5 rounded-xl bg-bg-surface border text-text-primary placeholder-text-muted font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
                 errors.fullName
-                  ? 'border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20'
-                  : 'border-slate-800 focus:border-cyan-500/60 focus:ring-cyan-500/20'
+                  ? 'border-status-danger/60 focus:border-status-danger focus:ring-status-danger/20'
+                  : 'border-border-default focus:border-brand-primary/60 focus:ring-brand-primary/20'
               }`}
               {...register('fullName')}
             />
             {errors.fullName && (
-              <p className="text-[10px] text-rose-400 flex items-center gap-1 mt-0.5 font-mono">
+              <p className="text-[10px] text-status-danger flex items-center gap-1 mt-0.5 font-mono">
                 <span>● {errors.fullName.message}</span>
               </p>
             )}
@@ -165,21 +165,21 @@ export const RegisterPage: React.FC = () => {
 
           {/* Email Field */}
           <div className="space-y-1">
-            <label className="block text-[11px] font-mono font-medium text-slate-300">
-              Email Address <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-mono font-medium text-text-secondary">
+              Email Address <span className="text-status-danger">*</span>
             </label>
             <input
               type="email"
               placeholder="alex@company.com"
-              className={`w-full px-3 py-1.5 rounded-xl bg-slate-950/80 border text-slate-100 placeholder-slate-500 font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
+              className={`w-full px-3 py-1.5 rounded-xl bg-bg-surface border text-text-primary placeholder-text-muted font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
                 errors.email
-                  ? 'border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20'
-                  : 'border-slate-800 focus:border-cyan-500/60 focus:ring-cyan-500/20'
+                  ? 'border-status-danger/60 focus:border-status-danger focus:ring-status-danger/20'
+                  : 'border-border-default focus:border-brand-primary/60 focus:ring-brand-primary/20'
               }`}
               {...register('email')}
             />
             {errors.email && (
-              <p className="text-[10px] text-rose-400 flex items-center gap-1 mt-0.5 font-mono">
+              <p className="text-[10px] text-status-danger flex items-center gap-1 mt-0.5 font-mono">
                 <span>● {errors.email.message}</span>
               </p>
             )}
@@ -190,31 +190,31 @@ export const RegisterPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {/* Password Field */}
           <div className="space-y-1">
-            <label className="block text-[11px] font-mono font-medium text-slate-300">
-              Password <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-mono font-medium text-text-secondary">
+              Password <span className="text-status-danger">*</span>
             </label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••••••"
-                className={`w-full px-3 py-1.5 pr-8 rounded-xl bg-slate-950/80 border text-slate-100 placeholder-slate-500 font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
+                className={`w-full px-3 py-1.5 pr-8 rounded-xl bg-bg-surface border text-text-primary placeholder-text-muted font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
                   errors.password
-                    ? 'border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20'
-                    : 'border-slate-800 focus:border-cyan-500/60 focus:ring-cyan-500/20'
+                    ? 'border-status-danger/60 focus:border-status-danger focus:ring-status-danger/20'
+                    : 'border-border-default focus:border-brand-primary/60 focus:ring-brand-primary/20'
                 }`}
                 {...register('password')}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-200 focus:outline-none p-0.5"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary focus:outline-none p-0.5"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               </button>
             </div>
             {errors.password && (
-              <p className="text-[10px] text-rose-400 flex items-center gap-1 mt-0.5 font-mono">
+              <p className="text-[10px] text-status-danger flex items-center gap-1 mt-0.5 font-mono">
                 <span>● {errors.password.message}</span>
               </p>
             )}
@@ -222,21 +222,21 @@ export const RegisterPage: React.FC = () => {
 
           {/* Confirm Password Field */}
           <div className="space-y-1">
-            <label className="block text-[11px] font-mono font-medium text-slate-300">
-              Confirm Password <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-mono font-medium text-text-secondary">
+              Confirm Password <span className="text-status-danger">*</span>
             </label>
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••••••"
-              className={`w-full px-3 py-1.5 rounded-xl bg-slate-950/80 border text-slate-100 placeholder-slate-500 font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
+              className={`w-full px-3 py-1.5 rounded-xl bg-bg-surface border text-text-primary placeholder-text-muted font-sans text-xs focus:outline-none focus:ring-2 transition-all ${
                 errors.confirmPassword
-                  ? 'border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20'
-                  : 'border-slate-800 focus:border-cyan-500/60 focus:ring-cyan-500/20'
+                  ? 'border-status-danger/60 focus:border-status-danger focus:ring-status-danger/20'
+                  : 'border-border-default focus:border-brand-primary/60 focus:ring-brand-primary/20'
               }`}
               {...register('confirmPassword')}
             />
             {errors.confirmPassword && (
-              <p className="text-[10px] text-rose-400 flex items-center gap-1 mt-0.5 font-mono">
+              <p className="text-[10px] text-status-danger flex items-center gap-1 mt-0.5 font-mono">
                 <span>● {errors.confirmPassword.message}</span>
               </p>
             )}
@@ -251,28 +251,28 @@ export const RegisterPage: React.FC = () => {
           <input
             id="termsAccepted"
             type="checkbox"
-            className="w-3.5 h-3.5 rounded bg-slate-950 border-slate-800 text-cyan-500 focus:ring-cyan-500/20 mt-0.5"
+            className="w-3.5 h-3.5 rounded bg-bg-surface border-border-default text-brand-primary focus:ring-brand-primary/20 mt-0.5"
             {...register('termsAccepted')}
           />
-          <label htmlFor="termsAccepted" className="text-[11px] font-mono text-slate-400 leading-tight select-none">
+          <label htmlFor="termsAccepted" className="text-[11px] font-mono text-text-secondary leading-tight select-none">
             I accept the{' '}
-            <a href="#terms" className="text-cyan-400 hover:underline">
+            <a href="#terms" className="text-brand-primary hover:underline">
               Security Terms
             </a>{' '}
-            and Zero-Secret Privacy Policy.
+            & Zero-Telemetry Agreement
           </label>
         </div>
         {errors.termsAccepted && (
-          <p className="text-[10px] text-rose-400 font-mono">
-            ● {errors.termsAccepted.message}
+          <p className="text-[10px] text-status-danger flex items-center gap-1 font-mono">
+            <span>● {errors.termsAccepted.message}</span>
           </p>
         )}
 
-        {/* Submit Button */}
+        {/* Create Account Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-1.5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold font-mono text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold font-mono text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
