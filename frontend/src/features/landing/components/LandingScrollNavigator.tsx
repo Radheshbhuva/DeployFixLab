@@ -47,10 +47,10 @@ export const LandingScrollNavigator: React.FC = () => {
         aria-label={isAtOrPastFaq ? 'Scroll directly to top' : 'Scroll directly to FAQ section'}
         className={`group relative flex items-center gap-2 px-4 py-2.5 rounded-full border shadow-2xl backdrop-blur-xl transition-all duration-300 ease-out select-none cursor-pointer hover:scale-105 active:scale-95 ${
           isAtOrPastFaq
-            ? 'bg-slate-900/90 border-emerald-500/50 hover:border-emerald-400 text-emerald-300 shadow-[0_0_25px_-5px_rgba(16,185,129,0.35)]'
+            ? 'bg-bg-surface border-status-success text-status-success shadow-lg'
             : isHovered
-            ? 'bg-slate-900/95 border-cyan-400 text-cyan-300 shadow-[0_0_30px_-5px_rgba(6,182,212,0.45)] ring-1 ring-cyan-400/50'
-            : 'bg-slate-900/85 border-slate-700/80 hover:border-cyan-500/50 text-slate-200 shadow-[0_0_20px_-5px_rgba(0,0,0,0.5)]'
+            ? 'bg-bg-surface border-brand-primary text-brand-primary shadow-xl ring-1 ring-brand-primary/30'
+            : 'bg-bg-surface/90 border-border-default hover:border-brand-primary/50 text-text-primary shadow-lg'
         }`}
       >
         {isAtOrPastFaq ? (
