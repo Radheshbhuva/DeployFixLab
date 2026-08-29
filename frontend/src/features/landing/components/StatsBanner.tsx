@@ -49,13 +49,13 @@ export const StatsBanner: React.FC = () => {
           return (
             <div
               key={idx}
-              className={`p-5 sm:p-6 rounded-2xl border ${stat.border} ${stat.bg} bg-slate-900/60 backdrop-blur-md flex flex-col justify-between`}
+              className={`p-5 sm:p-6 rounded-2xl border ${stat.border} ${stat.bg} bg-bg-surface backdrop-blur-md flex flex-col justify-between`}
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono font-medium text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-medium text-text-secondary uppercase tracking-wider">
                   {stat.label}
                 </span>
-                <div className={`p-1.5 rounded-lg bg-slate-950/80 ${stat.accent}`}>
+                <div className={`p-1.5 rounded-lg bg-bg-raised ${stat.accent}`}>
                   <IconComp className="w-4 h-4" />
                 </div>
               </div>
@@ -63,7 +63,7 @@ export const StatsBanner: React.FC = () => {
                 <div className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold font-mono tracking-tight ${stat.accent}`}>
                   {stat.metric}
                 </div>
-                <div className="text-xs text-slate-400 mt-1">
+                <div className="text-xs text-text-muted mt-1">
                   {stat.subtext}
                 </div>
               </div>
