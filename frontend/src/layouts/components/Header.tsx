@@ -91,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileSidebar }) => {
             className="flex items-center gap-2 p-1 rounded-lg hover:bg-bg-raised focus:outline-none transition-colors"
             aria-label="User menu"
           >
-            <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-xs font-bold text-white shadow-sm ring-2 ring-slate-700">
+            <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-xs font-bold text-white shadow-sm ring-2 ring-border-default">
               {getInitials(displayName)}
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-text-muted" />
