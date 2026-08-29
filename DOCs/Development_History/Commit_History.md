@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`a823356`](https://github.com/Radheshbhuva/DeployFixLab/commit/a823356) | 2026-08-29 07:45:32 | Radheshbhuva | `main` | `features` | `feat(theme): adapt LandingFooter surfaces, typography, and links to theme tokens` | Pushed | GitHub Actions |
 | [`2c55a30`](https://github.com/Radheshbhuva/DeployFixLab/commit/2c55a30) | 2026-08-27 09:25:59 | Radheshbhuva | `main` | `features` | `feat(theme): enhance ThemeToggle in desktop landing navbar and mobile drawer` | Pushed | GitHub Actions |
 | [`450dfa2`](https://github.com/Radheshbhuva/DeployFixLab/commit/450dfa2) | 2026-08-27 09:22:33 | Radheshbhuva | `main` | `bugfix` | `fix(sidebar): update user display name and initials resolution in sidebar footer` | Pushed | GitHub Actions |
 | [`8a8ac36`](https://github.com/Radheshbhuva/DeployFixLab/commit/8a8ac36) | 2026-08-27 06:14:09 | Radheshbhuva | `main` | `features` | `feat(theme): theme UserManagementPage table, modals, and user search toolbar` | Pushed | GitHub Actions |
