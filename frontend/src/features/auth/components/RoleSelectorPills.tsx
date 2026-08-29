@@ -19,8 +19,8 @@ export const RoleSelectorPills: React.FC<RoleSelectorPillsProps> = ({
 
   return (
     <div className="space-y-1.5 text-left">
-      <label className="block text-xs font-mono font-medium text-slate-300">
-        Select Primary Role <span className="text-rose-400">*</span>
+      <label className="block text-xs font-mono font-medium text-text-primary">
+        Select Primary Role <span className="text-status-danger">*</span>
       </label>
       <div className="grid grid-cols-3 gap-2">
         {roles.map((r) => {
@@ -34,11 +34,11 @@ export const RoleSelectorPills: React.FC<RoleSelectorPillsProps> = ({
               onClick={() => onSelectRole(r.id)}
               className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 ${
                 isSelected
-                  ? 'bg-cyan-500/15 border-cyan-500/60 text-cyan-300 font-semibold shadow-md shadow-cyan-500/10'
-                  : 'bg-slate-950/70 border-slate-800 text-slate-400 hover:bg-slate-900 hover:text-slate-200'
+                  ? 'bg-brand-primary/15 border-brand-primary/60 text-brand-primary font-semibold shadow-md shadow-brand-primary/10'
+                  : 'bg-bg-surface border-border-default text-text-secondary hover:bg-bg-raised hover:text-text-primary'
               }`}
             >
-              <IconComp className={`w-4 h-4 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`} />
+              <IconComp className={`w-4 h-4 ${isSelected ? 'text-brand-primary' : 'text-text-muted'}`} />
               <span className="text-[11px] font-mono leading-tight">{r.label}</span>
             </button>
           );
