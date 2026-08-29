@@ -20,7 +20,7 @@ export const Card: React.FC<CardProps> = ({
       onClick={onClick}
       className={cn(
         'bg-bg-surface border border-border-default rounded-lg p-6 transition-all duration-150',
-        onClick && 'cursor-pointer hover:ring-1 hover:ring-slate-600 hover:border-slate-500',
+        onClick && 'cursor-pointer hover:ring-1 hover:ring-brand-primary/40 hover:border-brand-primary/60',
         className
       )}
       {...props}
