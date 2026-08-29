@@ -14,7 +14,7 @@ export const DiagnosisPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-8">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-950/40 via-bg-surface to-bg-raised p-6 rounded-2xl border border-border-default">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-brand-primary/5 via-bg-surface to-bg-raised p-6 rounded-2xl border border-border-default">
         <div>
           <div className="flex items-center gap-2">
             <Brain className="w-6 h-6 text-brand-primary" />
