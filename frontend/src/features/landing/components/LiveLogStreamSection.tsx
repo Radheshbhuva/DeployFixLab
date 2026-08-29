@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, Radio, ShieldCheck } from 'lucide-react';
+import { Terminal, ShieldCheck } from 'lucide-react';
 import { MOCK_LIVE_LOGS } from '../data/landingData';
 
 export const LiveLogStreamSection: React.FC = () => {
@@ -41,41 +41,40 @@ export const LiveLogStreamSection: React.FC = () => {
   };
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800/80">
+    <section id="logs" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border-default">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        {/* Left Column: Log Streaming Overview (5 cols) */}
+        {/* Left Column: Narrative & Value Proposition (5 cols) */}
         <div className="lg:col-span-5">
-          <span className="text-emerald-400 font-mono text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
-            <Radio className="w-3.5 h-3.5 animate-pulse" />
+          <span className="text-brand-primary font-mono text-xs uppercase tracking-widest font-semibold">
             Live WebSocket Telemetry
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-50 mt-2 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-text-primary mt-2 tracking-tight">
             Real-Time Log Stream & Event Correlation
           </h2>
-          <p className="text-slate-400 mt-4 text-base leading-relaxed">
+          <p className="text-text-secondary mt-4 text-base leading-relaxed">
             Direct WebSocket subscription pipeline streams container stdout/stderr into structured, color-coded event lines without latency or log buffer overflows.
           </p>
 
           <div className="mt-8 space-y-4">
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-slate-950 text-cyan-400 border border-slate-800">
+            <div className="p-4 rounded-xl bg-bg-surface border border-border-default flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-bg-raised text-brand-primary border border-border-default">
                 <Terminal className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-200">Zero-Polling WebSocket Engine</h4>
-                <p className="text-xs text-slate-400 mt-1">
+                <h4 className="text-sm font-semibold text-text-primary">Zero-Polling WebSocket Engine</h4>
+                <p className="text-xs text-text-secondary mt-1">
                   Bi-directional event streaming automatically updates terminal state as containers emit logs.
                 </p>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-slate-950 text-emerald-400 border border-slate-800">
+            <div className="p-4 rounded-xl bg-bg-surface border border-border-default flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-bg-raised text-status-success border border-border-default">
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-200">High-Density Multi-Source Filters</h4>
-                <p className="text-xs text-slate-400 mt-1">
+                <h4 className="text-sm font-semibold text-text-primary">High-Density Multi-Source Filters</h4>
+                <p className="text-xs text-text-secondary mt-1">
                   Filter by microservice, log severity level, or error regex patterns on the fly.
                 </p>
               </div>
