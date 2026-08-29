@@ -33,7 +33,7 @@ export const ContextCompletenessGauge: React.FC<ContextCompletenessGaugeProps> =
       case 'comprehensive':
         return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       default:
-        return 'bg-slate-700/50 text-slate-300 border-slate-600';
+        return 'bg-bg-raised text-text-secondary border-border-default';
     }
   };
 
