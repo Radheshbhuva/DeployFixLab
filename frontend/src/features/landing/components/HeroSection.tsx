@@ -18,7 +18,7 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* Main Display Headline */}
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-50 tracking-tight max-w-4xl mx-auto leading-[1.15]">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-text-primary tracking-tight max-w-4xl mx-auto leading-[1.15]">
         Stop Guessing in Production.{' '}
         <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
           Diagnose Broken Deployments
@@ -27,7 +27,7 @@ export const HeroSection: React.FC = () => {
       </h1>
 
       {/* Subheadline */}
-      <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+      <p className="mt-6 text-base sm:text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
         Ingest live health probes, Dockerfiles, GitHub commit diffs, and container logs into a deterministic AI reasoning engine. Get mathematical root-cause diagnosis, capped confidence scoring, and verified code diff remediation.
       </p>
 
@@ -36,7 +36,7 @@ export const HeroSection: React.FC = () => {
         <Link
           to="/register"
           id="hero-signup-btn"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-xl shadow-cyan-500/25 transition-all hover:scale-[1.02]"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-cyan-500/25 transition-all hover:scale-[1.02]"
         >
           <Zap className="w-4 h-4 fill-current" />
           <span>Sign Up Free (Launch Sandbox)</span>
@@ -45,9 +45,9 @@ export const HeroSection: React.FC = () => {
         <Link
           to="/login"
           id="hero-demo-btn"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-semibold text-sm backdrop-blur-md transition-all hover:border-slate-500"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-border-default bg-bg-surface hover:bg-bg-raised text-text-primary font-semibold text-sm backdrop-blur-md transition-all hover:border-brand-primary/50"
         >
-          <PlayCircle className="w-4 h-4 text-cyan-400" />
+          <PlayCircle className="w-4 h-4 text-brand-primary" />
           <span>Live Demo Preview</span>
         </Link>
       </div>
