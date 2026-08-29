@@ -5,72 +5,72 @@
 @layer base {
   :root {
     /* Base Canvases (Light Mode) */
-    --bg-primary: #F8FAFC;
-    --bg-surface: #FFFFFF;
-    --bg-raised: #F1F5F9;
-    --border-default: #E2E8F0;
-    --border-subtle: #F1F5F9;
+    --bg-primary: 248 250 252;       /* #F8FAFC */
+    --bg-surface: 255 255 255;       /* #FFFFFF */
+    --bg-raised: 241 245 249;        /* #F1F5F9 */
+    --border-default: 226 232 240;   /* #E2E8F0 */
+    --border-subtle: 241 245 249;    /* #F1F5F9 */
 
     /* Typography (Light Mode) */
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #94A3B8;
+    --text-primary: 15 23 42;         /* #0F172A */
+    --text-secondary: 71 85 105;     /* #475569 */
+    --text-muted: 148 163 184;       /* #94A3B8 */
 
     /* Brand & Accent (Light Mode) */
-    --brand-primary: #2563EB;
-    --brand-hover: #1D4ED8;
+    --brand-primary: 37 99 235;      /* #2563EB */
+    --brand-hover: 29 78 216;        /* #1D4ED8 */
 
     /* Status Tokens (Light Mode) */
-    --status-success: #16A34A;
-    --status-success-dim: #DCFCE7;
-    --status-danger: #DC2626;
-    --status-danger-dim: #FEE2E2;
-    --status-warning: #D97706;
-    --status-warning-dim: #FEF3C7;
+    --status-success: 22 163 74;      /* #16A34A */
+    --status-success-dim: 220 252 231;/* #DCFCE7 */
+    --status-danger: 220 38 38;       /* #DC2626 */
+    --status-danger-dim: 254 226 226; /* #FEE2E2 */
+    --status-warning: 217 119 6;      /* #D97706 */
+    --status-warning-dim: 254 243 199;/* #FEF3C7 */
 
     /* Terminal Subsystem (Preserved dark incident room) */
-    --terminal-bg: #0F172A;
-    --terminal-border: #334155;
-    --terminal-text: #F8FAFC;
-    --terminal-green: #4ADE80;
-    --terminal-red: #F87171;
-    --terminal-amber: #FCD34D;
-    --terminal-cyan: #67E8F9;
+    --terminal-bg: 15 23 42;
+    --terminal-border: 51 65 85;
+    --terminal-text: 248 250 252;
+    --terminal-green: 74 222 128;
+    --terminal-red: 248 113 113;
+    --terminal-amber: 252 211 77;
+    --terminal-cyan: 103 232 249;
   }
 
   .dark {
     /* Base Canvases (Dark Mode) */
-    --bg-primary: #0F172A;
-    --bg-surface: #1E293B;
-    --bg-raised: #334155;
-    --border-default: #475569;
-    --border-subtle: #334155;
+    --bg-primary: 15 23 42;          /* #0F172A */
+    --bg-surface: 30 41 59;          /* #1E293B */
+    --bg-raised: 51 65 85;           /* #334155 */
+    --border-default: 71 85 105;     /* #475569 */
+    --border-subtle: 51 65 85;       /* #334155 */
 
     /* Typography (Dark Mode) */
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
+    --text-primary: 248 250 252;     /* #F8FAFC */
+    --text-secondary: 148 163 184;   /* #94A3B8 */
+    --text-muted: 100 116 139;       /* #64748B */
 
     /* Brand & Accent (Dark Mode) */
-    --brand-primary: #3B82F6;
-    --brand-hover: #2563EB;
+    --brand-primary: 59 130 246;     /* #3B82F6 */
+    --brand-hover: 37 99 235;        /* #2563EB */
 
     /* Status Tokens (Dark Mode) */
-    --status-success: #22C55E;
-    --status-success-dim: #14532D;
-    --status-danger: #EF4444;
-    --status-danger-dim: #7F1D1D;
-    --status-warning: #F59E0B;
-    --status-warning-dim: #78350F;
+    --status-success: 34 197 94;      /* #22C55E */
+    --status-success-dim: 20 83 45;   /* #14532D */
+    --status-danger: 239 68 68;       /* #EF4444 */
+    --status-danger-dim: 127 29 29;   /* #7F1D1D */
+    --status-warning: 245 158 11;     /* #F59E0B */
+    --status-warning-dim: 120 53 15;  /* #78350F */
 
     /* Terminal Subsystem */
-    --terminal-bg: #090D16;
-    --terminal-border: #1E293B;
-    --terminal-text: #F8FAFC;
-    --terminal-green: #4ADE80;
-    --terminal-red: #F87171;
-    --terminal-amber: #FCD34D;
-    --terminal-cyan: #67E8F9;
+    --terminal-bg: 9 13 22;
+    --terminal-border: 30 41 59;
+    --terminal-text: 248 250 252;
+    --terminal-green: 74 222 128;
+    --terminal-red: 248 113 113;
+    --terminal-amber: 252 211 77;
+    --terminal-cyan: 103 232 249;
   }
 
   html {
