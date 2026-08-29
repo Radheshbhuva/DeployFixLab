@@ -213,9 +213,9 @@ export const LoginPage: React.FC = () => {
       </form>
 
       {/* Switch to Register */}
-      <div className="mt-4 pt-3 border-t border-slate-800/80 text-center text-xs text-slate-400">
+      <div className="mt-4 pt-3 border-t border-border-default text-center text-xs text-text-secondary">
         Don&apos;t have an account?{' '}
-        <Link to="/register" className="text-cyan-400 hover:underline font-mono font-semibold">
+        <Link to="/register" className="text-brand-primary hover:underline font-mono font-semibold">
           Create an Account Free →
         </Link>
       </div>
