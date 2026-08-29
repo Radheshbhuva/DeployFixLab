@@ -114,21 +114,21 @@ export const LoginPage: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 text-left mt-2">
         {/* Email Field */}
         <div className="space-y-1">
-          <label className="block text-xs font-mono font-medium text-slate-300">
-            Email Address <span className="text-rose-400">*</span>
+          <label className="block text-xs font-mono font-medium text-text-secondary">
+            Email Address <span className="text-status-danger">*</span>
           </label>
           <input
             type="email"
             placeholder="engineer@company.com"
-            className={`w-full px-3.5 py-2 rounded-xl bg-slate-950/80 border text-slate-100 placeholder-slate-500 font-sans text-sm focus:outline-none focus:ring-2 transition-all ${
+            className={`w-full px-3.5 py-2 rounded-xl bg-bg-surface border text-text-primary placeholder-text-muted font-sans text-sm focus:outline-none focus:ring-2 transition-all ${
               errors.email
-                ? 'border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20'
-                : 'border-slate-800 focus:border-cyan-500/60 focus:ring-cyan-500/20'
+                ? 'border-status-danger/60 focus:border-status-danger focus:ring-status-danger/20'
+                : 'border-border-default focus:border-brand-primary/60 focus:ring-brand-primary/20'
             }`}
             {...register('email')}
           />
           {errors.email && (
-            <p className="text-[11px] text-rose-400 flex items-center gap-1 mt-0.5 font-mono">
+            <p className="text-[11px] text-status-danger flex items-center gap-1 mt-0.5 font-mono">
               <span>● {errors.email.message}</span>
             </p>
           )}
@@ -137,8 +137,8 @@ export const LoginPage: React.FC = () => {
         {/* Password Field */}
         <div className="space-y-1">
           <div className="flex items-center justify-between">
-            <label className="block text-xs font-mono font-medium text-slate-300">
-              Password <span className="text-rose-400">*</span>
+            <label className="block text-xs font-mono font-medium text-text-secondary">
+              Password <span className="text-status-danger">*</span>
             </label>
             <a
               href="#forgot"
@@ -146,7 +146,7 @@ export const LoginPage: React.FC = () => {
                 e.preventDefault();
                 alert('For local lab accounts, use the demo credentials above.');
               }}
-              className="text-[11px] font-mono text-cyan-400 hover:underline"
+              className="text-[11px] font-mono text-brand-primary hover:underline"
             >
               Forgot?
             </a>
@@ -156,24 +156,24 @@ export const LoginPage: React.FC = () => {
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••••••"
-              className={`w-full px-3.5 py-2 pr-10 rounded-xl bg-slate-950/80 border text-slate-100 placeholder-slate-500 font-sans text-sm focus:outline-none focus:ring-2 transition-all ${
+              className={`w-full px-3.5 py-2 pr-10 rounded-xl bg-bg-surface border text-text-primary placeholder-text-muted font-sans text-sm focus:outline-none focus:ring-2 transition-all ${
                 errors.password
-                  ? 'border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20'
-                  : 'border-slate-800 focus:border-cyan-500/60 focus:ring-cyan-500/20'
+                  ? 'border-status-danger/60 focus:border-status-danger focus:ring-status-danger/20'
+                  : 'border-border-default focus:border-brand-primary/60 focus:ring-brand-primary/20'
               }`}
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-200 focus:outline-none p-1"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary focus:outline-none p-1"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             </button>
           </div>
           {errors.password && (
-            <p className="text-[11px] text-rose-400 flex items-center gap-1 mt-0.5 font-mono">
+            <p className="text-[11px] text-status-danger flex items-center gap-1 mt-0.5 font-mono">
               <span>● {errors.password.message}</span>
             </p>
           )}
@@ -184,10 +184,10 @@ export const LoginPage: React.FC = () => {
           <input
             id="rememberMe"
             type="checkbox"
-            className="w-3.5 h-3.5 rounded bg-slate-950 border-slate-800 text-cyan-500 focus:ring-cyan-500/20"
+            className="w-3.5 h-3.5 rounded bg-bg-surface border-border-default text-brand-primary focus:ring-brand-primary/20"
             {...register('rememberMe')}
           />
-          <label htmlFor="rememberMe" className="text-[11px] font-mono text-slate-400 cursor-pointer select-none">
+          <label htmlFor="rememberMe" className="text-[11px] font-mono text-text-secondary cursor-pointer select-none">
             Keep me signed in for 7 days
           </label>
         </div>
@@ -196,7 +196,7 @@ export const LoginPage: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold font-mono text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold font-mono text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
