@@ -28,7 +28,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
         {activities.map((act) => (
           <div
             key={act.id}
-            className="flex items-start gap-3 p-3 rounded-lg bg-bg-primary/60 border border-border-default/40 hover:border-slate-600 transition-colors"
+            className="flex items-start gap-3 p-3 rounded-lg bg-bg-primary/60 border border-border-default/40 hover:border-border-default transition-colors"
           >
             <div className="mt-0.5 p-1.5 rounded-full bg-bg-raised flex-shrink-0">
               {getIcon(act.type)}
