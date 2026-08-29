@@ -289,9 +289,9 @@ export const RegisterPage: React.FC = () => {
       </form>
 
       {/* Switch to Sign In */}
-      <div className="mt-3 pt-2.5 border-t border-slate-800/80 text-center text-xs text-slate-400">
+      <div className="mt-3 pt-2.5 border-t border-border-default text-center text-xs text-text-secondary">
         Already have an account?{' '}
-        <Link to="/login" className="text-cyan-400 hover:underline font-mono font-semibold">
+        <Link to="/login" className="text-brand-primary hover:underline font-mono font-semibold">
           Sign In to Workspace →
         </Link>
       </div>
