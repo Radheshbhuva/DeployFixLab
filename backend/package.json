@@ -13,11 +13,6 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc --build",
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate deploy",
-    "db:seed": "prisma db seed",
-    "db:studio": "prisma studio",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
@@ -25,9 +20,6 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "validate": "npm run lint && npm run format:check && npm run type-check && npm run test"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.15.0",

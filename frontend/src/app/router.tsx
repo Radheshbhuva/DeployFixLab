@@ -14,7 +14,6 @@ import { LogViewerPage } from '@/features/logs/LogViewerPage';
 import { DiagnosisPage } from '@/features/diagnosis/DiagnosisPage';
 import { ChaosControlPage } from '@/features/admin/ChaosControlPage';
 import { UserManagementPage } from '@/features/admin/UserManagementPage';
-import { DatabaseMonitoringPage } from '@/features/admin/DatabaseMonitoringPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { ForbiddenPage } from '@/pages/ForbiddenPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
@@ -95,14 +94,7 @@ export const router = createBrowserRouter([
           </RoleGuard>
         ),
       },
-      {
-        path: '/admin/database',
-        element: (
-          <RoleGuard allowedRoles={['ADMIN', 'INSTRUCTOR']}>
-            <DatabaseMonitoringPage />
-          </RoleGuard>
-        ),
-      },
+
       {
         path: '/settings',
         element: <SettingsPage />,
