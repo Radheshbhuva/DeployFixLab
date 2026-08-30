@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`733490c`](https://github.com/Radheshbhuva/DeployFixLab/commit/733490c) | 2026-08-30 08:19:08 | Radheshbhuva | `main` | `features` | `feat(auth): provide account type selection (Student, DevOps/SRE Engineer, Platform Admin) on account creation` | Pushed | GitHub Actions |
 | [`dcf052a`](https://github.com/Radheshbhuva/DeployFixLab/commit/dcf052a) | 2026-08-30 07:37:36 | Radheshbhuva | `main` | `features` | `feat(diagnosis): remove Apply Patch feature from unified patch view` | Pushed | GitHub Actions |
 | [`13b5817`](https://github.com/Radheshbhuva/DeployFixLab/commit/13b5817) | 2026-08-30 07:35:08 | Radheshbhuva | `main` | `features` | `feat(router): add /admin route alias and redirect` | Pushed | GitHub Actions |
 | [`48c8ace`](https://github.com/Radheshbhuva/DeployFixLab/commit/48c8ace) | 2026-08-30 07:31:25 | Radheshbhuva | `main` | `features` | `feat(auth): add traditional Google, GitHub, and Gmail social connect options to signin and signup pages` | Pushed | GitHub Actions |
