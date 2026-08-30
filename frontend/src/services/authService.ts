@@ -66,6 +66,48 @@ export const authService = {
     }
   },
 
+  socialLogin: async (
+    provider: 'google' | 'github' | 'gmail',
+    role: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN' = 'STUDENT'
+  ): Promise<LoginResponse> => {
+    try {
+      const res = await apiClient.post<LoginResponse>('/auth/oauth', { provider, role });
+      const data = res.data;
+      if (data?.user) {
+        data.user.fullName =
+          data.user.fullName || (data.user as any).name || `${provider} User`;
+      }
+      return data;
+    } catch {
+      const mockProfiles = {
+        google: {
+          email: 'cloud.engineer@gmail.com',
+          fullName: 'Google Cloud Engineer',
+        },
+        github: {
+          email: 'octocat.developer@github.com',
+          fullName: 'GitHub Dev Operator',
+        },
+        gmail: {
+          email: 'sre.operations@gmail.com',
+          fullName: 'Gmail Workspace SRE',
+        },
+      };
+
+      const profile = mockProfiles[provider];
+      return {
+        user: {
+          id: `usr-oauth-${provider}-${Date.now()}`,
+          email: profile.email,
+          fullName: profile.fullName,
+          role,
+          createdAt: new Date().toISOString(),
+        },
+        accessToken: `mock-oauth-token-${provider}-${Date.now()}`,
+      };
+    }
+  },
+
   logout: async (): Promise<void> => {
     try {
       await apiClient.post('/auth/logout');

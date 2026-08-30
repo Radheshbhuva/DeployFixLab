@@ -33,7 +33,7 @@ export class DiagnosisController {
       const limit = dailyLimits[userRole] ?? 5;
 
       // Check daily diagnosis count for students
-      if (limit !== Infinity) {
+      if (limit !== Infinity && prisma?.auditLog) {
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const countToday = await prisma.auditLog.count({
           where: {

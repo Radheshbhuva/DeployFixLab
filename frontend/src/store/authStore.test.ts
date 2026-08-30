@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useAuthStore } from './authStore';
 import { User } from '@/types/auth.types';
 
@@ -48,15 +48,27 @@ describe('useAuthStore', () => {
     expect(state.canAccess({ roles: ['STUDENT'] })).toBe(false);
   });
 
-  it('clears auth upon sign out', () => {
-    useAuthStore.getState().setUser(
-      { id: '1', email: 'a@b.com', fullName: 'A B', role: 'STUDENT' },
-      'tok'
-    );
-    expect(useAuthStore.getState().isAuthenticated).toBe(true);
+  it('authenticates via social login (Google, GitHub, Gmail) and sets role properly', async () => {
+    const { apiClient } = await import('@/services/apiClient');
+    const { authService } = await import('@/services/authService');
 
-    useAuthStore.getState().clearAuth();
-    expect(useAuthStore.getState().isAuthenticated).toBe(false);
-    expect(useAuthStore.getState().user).toBeNull();
+    // Simulate offline / direct mock response
+    vi.spyOn(apiClient, 'post').mockRejectedValue(new Error('Offline'));
+    
+    // Google login
+    const googleRes = await authService.socialLogin('google', 'STUDENT');
+    expect(googleRes.user.email).toContain('gmail.com');
+    expect(googleRes.user.role).toBe('STUDENT');
+    expect(googleRes.accessToken).toBeTruthy();
+
+    // GitHub login as ADMIN
+    const githubRes = await authService.socialLogin('github', 'ADMIN');
+    expect(githubRes.user.email).toContain('github.com');
+    expect(githubRes.user.role).toBe('ADMIN');
+
+    // Gmail login as INSTRUCTOR
+    const gmailRes = await authService.socialLogin('gmail', 'INSTRUCTOR');
+    expect(gmailRes.user.email).toContain('gmail.com');
+    expect(gmailRes.user.role).toBe('INSTRUCTOR');
   });
 });

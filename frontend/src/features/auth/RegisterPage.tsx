@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useToast } from '@/hooks/useToast';
 import { PasswordStrengthMeter } from './components/PasswordStrengthMeter';
 import { RoleSelectorPills } from './components/RoleSelectorPills';
+import { SocialAuthButtons } from './components/SocialAuthButtons';
 import { RegisterFormData, UserAuthRole } from './types/authForm.types';
 
 const registerSchema = z
@@ -89,7 +90,8 @@ export const RegisterPage: React.FC = () => {
       const res = await authService.register(data.email, data.password, data.fullName, data.role);
       setUser(res.user, res.accessToken);
       toast.success(`Account created successfully as ${res.user.role}! Welcome to DeployFix Lab.`);
-      navigate(from, { replace: true });
+      const destination = res.user.role === 'ADMIN' ? '/admin' : from;
+      navigate(destination, { replace: true });
     } catch (err: unknown) {
       const errorMsg =
         err instanceof Error
@@ -119,7 +121,7 @@ export const RegisterPage: React.FC = () => {
           Create Account
         </h1>
         <p className="text-xs text-slate-400 mt-0.5 leading-tight">
-          Start diagnosing broken deployments in sandboxed containers.
+          Sign up with Google, GitHub, Gmail, or your email credentials.
         </p>
       </div>
 
@@ -131,14 +133,23 @@ export const RegisterPage: React.FC = () => {
         </div>
       )}
 
-      {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5 text-left">
-        {/* Role Selector Pills */}
+      {/* Role Selector Pills */}
+      <div className="mb-2.5">
         <RoleSelectorPills
           selectedRole={selectedRole}
           onSelectRole={handleRoleChange}
         />
+      </div>
 
+      {/* Social / OAuth Authentication Buttons (Google, GitHub, Gmail) */}
+      <SocialAuthButtons
+        mode="register"
+        selectedRole={selectedRole}
+        onError={(err) => setApiError(err)}
+      />
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5 text-left">
         {/* 2-Column: Full Name & Email Field */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {/* Full Name Field */}
@@ -251,15 +262,13 @@ export const RegisterPage: React.FC = () => {
           <input
             id="termsAccepted"
             type="checkbox"
-            className="w-3.5 h-3.5 rounded bg-bg-surface border-border-default text-brand-primary focus:ring-brand-primary/20 mt-0.5"
+            className="w-3.5 h-3.5 mt-0.5 rounded bg-bg-surface border-border-default text-brand-primary focus:ring-brand-primary/20"
             {...register('termsAccepted')}
           />
-          <label htmlFor="termsAccepted" className="text-[11px] font-mono text-text-secondary leading-tight select-none">
-            I accept the{' '}
-            <a href="#terms" className="text-brand-primary hover:underline">
-              Security Terms
-            </a>{' '}
-            & Zero-Telemetry Agreement
+          <label htmlFor="termsAccepted" className="text-[10px] font-mono text-text-secondary cursor-pointer select-none">
+            I agree to the{' '}
+            <span className="text-brand-primary hover:underline">Lab Security Terms</span> and{' '}
+            <span className="text-brand-primary hover:underline">Acceptable Use Policy</span>.
           </label>
         </div>
         {errors.termsAccepted && (
@@ -268,31 +277,31 @@ export const RegisterPage: React.FC = () => {
           </p>
         )}
 
-        {/* Create Account Submit Button */}
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold font-mono text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full mt-1.5 py-2 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold font-mono text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Creating Account...</span>
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <span>Creating Lab Account...</span>
             </>
           ) : (
             <>
-              <span>Create Free Account</span>
+              <span>Create Account</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </>
           )}
         </button>
       </form>
 
-      {/* Switch to Sign In */}
-      <div className="mt-3 pt-2.5 border-t border-border-default text-center text-xs text-text-secondary">
+      {/* Switch to Login */}
+      <div className="mt-2.5 pt-2 border-t border-border-default text-center text-xs text-text-secondary">
         Already have an account?{' '}
         <Link to="/login" className="text-brand-primary hover:underline font-mono font-semibold">
-          Sign In to Workspace →
+          Sign In Here →
         </Link>
       </div>
     </AuthLayout>

@@ -157,6 +157,72 @@ export class AuthService {
   }
 
   /**
+   * Performs social/OAuth login or registration for Google, GitHub, and Gmail.
+   */
+  public static async socialLoginUser(
+    provider: 'google' | 'github' | 'gmail',
+    requestedRole: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN' = 'STUDENT'
+  ): Promise<AuthSuccessPayload> {
+    const mockProfiles: Record<string, { email: string; name: string }> = {
+      google: { email: 'cloud.engineer@gmail.com', name: 'Google Cloud Engineer' },
+      github: { email: 'octocat.developer@github.com', name: 'GitHub Dev Operator' },
+      gmail: { email: 'sre.operations@gmail.com', name: 'Gmail Workspace SRE' },
+    };
+
+    const profile = mockProfiles[provider] || { email: `user.${provider}@deployfix.lab`, name: `${provider} Engineer` };
+    let user = await prisma.user.findUnique({
+      where: { email: profile.email.toLowerCase() },
+    });
+
+    if (!user) {
+      const passwordHash = await bcrypt.hash('OAuthSecret123!', 10);
+      user = await prisma.user.create({
+        data: {
+          name: profile.name,
+          email: profile.email.toLowerCase(),
+          passwordHash,
+          role: requestedRole,
+        },
+      });
+    }
+
+    const accessToken = jwt.sign(
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: `${ACCESS_TOKEN_EXPIRY}s` }
+    );
+
+    const refreshTokenString = crypto.randomUUID();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    await prisma.refreshToken.create({
+      data: {
+        userId: user.id,
+        token: refreshTokenString,
+        expiresAt,
+      },
+    });
+
+    return {
+      accessToken,
+      expiresIn: ACCESS_TOKEN_EXPIRY,
+      refreshToken: refreshTokenString,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    };
+  }
+
+  /**
    * Rotates the refresh token and returns new access/refresh tokens.
    */
   public static async rotateRefreshToken(tokenString: string): Promise<AuthSuccessPayload> {

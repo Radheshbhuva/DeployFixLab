@@ -9,6 +9,7 @@ import { authService } from '@/services/authService';
 import { useAuthStore } from '@/store/authStore';
 import { useToast } from '@/hooks/useToast';
 import { DemoCredentialsBanner } from './components/DemoCredentialsBanner';
+import { SocialAuthButtons } from './components/SocialAuthButtons';
 import { DemoAccountPreset, LoginFormData } from './types/authForm.types';
 
 const loginSchema = z.object({
@@ -65,7 +66,8 @@ export const LoginPage: React.FC = () => {
       const res = await authService.login(data.email, data.password);
       setUser(res.user, res.accessToken);
       toast.success(`Welcome back, ${res.user.fullName || 'Engineer'}!`);
-      navigate(from, { replace: true });
+      const destination = res.user.role === 'ADMIN' ? '/admin' : from;
+      navigate(destination, { replace: true });
     } catch (err: unknown) {
       const errorMsg =
         err instanceof Error
@@ -95,12 +97,9 @@ export const LoginPage: React.FC = () => {
           Welcome Back
         </h1>
         <p className="text-xs text-slate-400 mt-0.5 leading-tight">
-          Sign in to access your incident diagnostics and chaos sandboxes.
+          Sign in with Google, GitHub, Gmail, or your email credentials.
         </p>
       </div>
-
-      {/* Demo Credentials Quick-Fill Toolbar */}
-      <DemoCredentialsBanner onSelectPreset={handleSelectDemoPreset} />
 
       {/* API Error Alert Banner */}
       {apiError && (
@@ -110,8 +109,11 @@ export const LoginPage: React.FC = () => {
         </div>
       )}
 
+      {/* Social / OAuth Authentication Buttons (Google, GitHub, Gmail) */}
+      <SocialAuthButtons mode="login" onError={(err) => setApiError(err)} />
+
       {/* Sign In Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 text-left mt-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 text-left">
         {/* Email Field */}
         <div className="space-y-1">
           <label className="block text-xs font-mono font-medium text-text-secondary">
@@ -144,7 +146,7 @@ export const LoginPage: React.FC = () => {
               href="#forgot"
               onClick={(e) => {
                 e.preventDefault();
-                alert('For local lab accounts, use the demo credentials above.');
+                alert('For local lab accounts, use the demo credentials below or connect via Google/GitHub.');
               }}
               className="text-[11px] font-mono text-brand-primary hover:underline"
             >
@@ -212,8 +214,13 @@ export const LoginPage: React.FC = () => {
         </button>
       </form>
 
+      {/* Demo Credentials Quick-Fill Toolbar */}
+      <div className="mt-3">
+        <DemoCredentialsBanner onSelectPreset={handleSelectDemoPreset} />
+      </div>
+
       {/* Switch to Register */}
-      <div className="mt-4 pt-3 border-t border-border-default text-center text-xs text-text-secondary">
+      <div className="mt-3 pt-3 border-t border-border-default text-center text-xs text-text-secondary">
         Don&apos;t have an account?{' '}
         <Link to="/register" className="text-brand-primary hover:underline font-mono font-semibold">
           Create an Account Free →

@@ -281,4 +281,61 @@ export class AuthController {
       next(error);
     }
   }
+
+  /**
+   * Handles OAuth social logins for Google, GitHub, and Gmail.
+   */
+  public static async oauth(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { provider, role } = req.body;
+      const validProviders = ['google', 'github', 'gmail'];
+      if (!validProviders.includes(provider)) {
+        res.status(400).json({
+          success: false,
+          statusCode: 400,
+          error: {
+            code: 'INVALID_PROVIDER',
+            message: 'Provider must be one of: google, github, gmail',
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const authData = await AuthService.socialLoginUser(provider, role || 'STUDENT');
+
+      await AuditService.log(authData.user.id, 'OAUTH_LOGIN', 'USER', {
+        provider,
+        email: authData.user.email,
+        role: authData.user.role,
+      });
+
+      res.cookie('refreshToken', authData.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/api/v1/auth/refresh',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(200).json({
+        success: true,
+        statusCode: 200,
+        data: {
+          accessToken: authData.accessToken,
+          expiresIn: authData.expiresIn,
+          user: {
+            id: authData.user.id,
+            name: authData.user.name,
+            fullName: authData.user.name,
+            email: authData.user.email,
+            role: authData.user.role,
+          },
+        },
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
