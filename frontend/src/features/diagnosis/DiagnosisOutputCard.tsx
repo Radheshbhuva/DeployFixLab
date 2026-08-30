@@ -14,7 +14,6 @@ import {
   Copy,
   Check,
   Download,
-  Zap,
 } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 
@@ -24,7 +23,6 @@ export interface DiagnosisOutputCardProps {
 
 export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagnosis }) => {
   const [copiedDiff, setCopiedDiff] = useState(false);
-  const [appliedPatch, setAppliedPatch] = useState(false);
   const toast = useToast();
 
   const handleCopyDiff = (codeDiff: { file: string; oldCode: string; newCode: string }) => {
@@ -45,11 +43,6 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
     link.click();
     URL.revokeObjectURL(url);
     toast.success('Downloaded unified .patch file');
-  };
-
-  const handleApplyPatch = () => {
-    setAppliedPatch(true);
-    toast.success('Remediation patch staged. Rebuilding container...');
   };
 
   return (
@@ -206,16 +199,6 @@ export const DiagnosisOutputCard: React.FC<DiagnosisOutputCardProps> = ({ diagno
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>.patch</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleApplyPatch}
-                        disabled={appliedPatch}
-                        className="px-3 py-1 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-[11px] font-mono flex items-center gap-1.5 disabled:opacity-60"
-                      >
-                        <Zap className="w-3.5 h-3.5 fill-current" />
-                        <span>{appliedPatch ? 'Patch Applied ✓' : 'Apply Patch'}</span>
                       </button>
                     </div>
                   </div>
