@@ -89,7 +89,13 @@ export const RegisterPage: React.FC = () => {
     try {
       const res = await authService.register(data.email, data.password, data.fullName, data.role);
       setUser(res.user, res.accessToken);
-      toast.success(`Account created successfully as ${res.user.role}! Welcome to DeployFix Lab.`);
+      const roleName =
+        res.user.role === 'STUDENT'
+          ? 'Student'
+          : res.user.role === 'INSTRUCTOR'
+          ? 'DevOps/SRE Engineer'
+          : 'Platform Admin';
+      toast.success(`Account created successfully as ${roleName}! Welcome to DeployFix Lab.`);
       const destination = res.user.role === 'ADMIN' ? '/admin' : from;
       navigate(destination, { replace: true });
     } catch (err: unknown) {
@@ -121,7 +127,7 @@ export const RegisterPage: React.FC = () => {
           Create Account
         </h1>
         <p className="text-xs text-slate-400 mt-0.5 leading-tight">
-          Sign up with Google, GitHub, Gmail, or your email credentials.
+          Select your account type (Student, DevOps/SRE Engineer, or Platform Admin) to get started.
         </p>
       </div>
 

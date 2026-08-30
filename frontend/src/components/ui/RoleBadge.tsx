@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserRole, ROLE_METADATA } from '@/types/rbac.types';
-import { GraduationCap, ShieldCheck, Zap } from 'lucide-react';
+import { GraduationCap, ShieldCheck, Terminal } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -37,9 +37,9 @@ export const RoleBadge: React.FC<RoleBadgeProps> = ({
 
     switch (role) {
       case 'ADMIN':
-        return <Zap size={iconSize} className="text-rose-400 animate-pulse" />;
+        return <ShieldCheck size={iconSize} className="text-rose-400" />;
       case 'INSTRUCTOR':
-        return <ShieldCheck size={iconSize} className="text-amber-400" />;
+        return <Terminal size={iconSize} className="text-amber-400" />;
       case 'STUDENT':
       default:
         return <GraduationCap size={iconSize} className="text-cyan-400" />;

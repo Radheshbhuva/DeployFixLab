@@ -198,7 +198,7 @@ export const UserManagementPage: React.FC = () => {
         <Card className="p-4 bg-bg-surface border-border-default shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-amber-500 font-medium">Instructors</p>
+              <p className="text-xs text-amber-500 font-medium">DevOps/SRE Engineers</p>
               <p className="text-2xl font-bold text-text-primary mt-1">
                 {stats?.instructorCount ?? '...'}
               </p>
@@ -212,7 +212,7 @@ export const UserManagementPage: React.FC = () => {
         <Card className="p-4 bg-bg-surface border-border-default shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-rose-500 font-medium">Administrators</p>
+              <p className="text-xs text-rose-500 font-medium">Platform Admins</p>
               <p className="text-2xl font-bold text-text-primary mt-1">
                 {stats?.adminCount ?? '...'}
               </p>
@@ -243,22 +243,30 @@ export const UserManagementPage: React.FC = () => {
 
         {/* Role Pills Filter */}
         <div className="flex items-center gap-1.5 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-          {(['ALL', 'STUDENT', 'INSTRUCTOR', 'ADMIN'] as const).map((r) => (
-            <button
-              key={r}
-              onClick={() => {
-                setSelectedRoleFilter(r);
-                setPage(1);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                selectedRoleFilter === r
-                  ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 shadow-sm'
-                  : 'bg-bg-raised text-text-secondary border border-transparent hover:bg-bg-raised/80 hover:text-text-primary'
-              }`}
-            >
-              {r === 'ALL' ? 'All Roles' : r}
-            </button>
-          ))}
+          {(['ALL', 'STUDENT', 'INSTRUCTOR', 'ADMIN'] as const).map((r) => {
+            const roleLabels: Record<string, string> = {
+              ALL: 'All Roles',
+              STUDENT: 'Student',
+              INSTRUCTOR: 'DevOps/SRE Engineer',
+              ADMIN: 'Platform Admin',
+            };
+            return (
+              <button
+                key={r}
+                onClick={() => {
+                  setSelectedRoleFilter(r);
+                  setPage(1);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  selectedRoleFilter === r
+                    ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 shadow-sm'
+                    : 'bg-bg-raised text-text-secondary border border-transparent hover:bg-bg-raised/80 hover:text-text-primary'
+                }`}
+              >
+                {roleLabels[r] || r}
+              </button>
+            );
+          })}
         </div>
       </Card>
 
