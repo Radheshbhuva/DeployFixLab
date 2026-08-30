@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   Users,
+  Database,
 } from 'lucide-react';
 import { NavItem } from './NavItem';
 import { useAuthStore } from '@/store/authStore';
@@ -108,6 +109,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
                   path="/admin/chaos"
                   onClick={onCloseMobile}
                   badge={{ text: 'SRE', variant: 'warning' }}
+                />
+                <NavItem
+                  icon={<Database className="w-4 h-4 text-emerald-500" />}
+                  label="Database Monitor"
+                  path="/admin/database"
+                  onClick={onCloseMobile}
+                  badge={{ text: 'Supabase', variant: 'success' }}
                 />
               </div>
             </div>
