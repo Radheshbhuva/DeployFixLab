@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`48c8ace`](https://github.com/Radheshbhuva/DeployFixLab/commit/48c8ace) | 2026-08-30 07:31:25 | Radheshbhuva | `main` | `features` | `feat(auth): add traditional Google, GitHub, and Gmail social connect options to signin and signup pages` | Pushed | GitHub Actions |
 | [`eaef274`](https://github.com/Radheshbhuva/DeployFixLab/commit/eaef274) | 2026-08-29 14:30:21 | Radheshbhuva | `main` | `features` | `feat(diagnosis): make website URL optional and require at least 1 of 4 context sources to run diagnosis` | Pushed | GitHub Actions |
 | [`9c6f9ff`](https://github.com/Radheshbhuva/DeployFixLab/commit/9c6f9ff) | 2026-08-29 14:17:45 | Radheshbhuva | `main` | `general` | `docs: update walkthrough with SRE Chaos and Incident Labs overhaul` | Pushed | GitHub Actions |
 | [`bf48ee6`](https://github.com/Radheshbhuva/DeployFixLab/commit/bf48ee6) | 2026-08-29 14:16:57 | Radheshbhuva | `main` | `features` | `feat(labs): implement multi-tab SRE sandbox execution console with command history, live telemetry, and config diff editor` | Pushed | GitHub Actions |
