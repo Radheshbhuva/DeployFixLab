@@ -71,6 +71,14 @@ export const router = createBrowserRouter([
         element: <DiagnosisPage />,
       },
       {
+        path: '/admin',
+        element: (
+          <RoleGuard allowedRoles={['ADMIN', 'INSTRUCTOR']}>
+            <ChaosControlPage />
+          </RoleGuard>
+        ),
+      },
+      {
         path: '/admin/chaos',
         element: (
           <RoleGuard allowedRoles={['ADMIN', 'INSTRUCTOR']}>
