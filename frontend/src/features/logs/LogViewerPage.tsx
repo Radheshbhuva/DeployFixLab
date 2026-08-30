@@ -232,6 +232,112 @@ export const LogViewerPage: React.FC = () => {
           filteredLogs.map((log) => <LogRow key={log.id} log={log} searchQuery={searchQuery} />)
         )}
       </div>
+
+      {/* Interactive SRE Telemetry Terminal Prompt */}
+      <div className="flex-shrink-0 bg-slate-950 border border-terminal-border rounded-xl p-2 font-mono text-xs shadow-lg flex flex-col gap-1.5">
+        <div className="flex items-center justify-between px-1 text-[11px] text-slate-400">
+          <span className="flex items-center gap-1 text-cyan-400 font-semibold">
+            <Terminal className="w-3.5 h-3.5" />
+            Interactive Telemetry CLI
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSearchQuery('error')}
+              className="hover:text-cyan-300 text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800"
+            >
+              grep error
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilterLevel('ERROR')}
+              className="hover:text-rose-300 text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800"
+            >
+              level=ERROR
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setFilterLevel('ALL');
+                setFilterSource('ALL');
+              }}
+              className="hover:text-slate-200 text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800"
+            >
+              reset filters
+            </button>
+          </div>
+        </div>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const inputEl = (e.currentTarget.elements.namedItem('cliCmd') as HTMLInputElement);
+            const cmd = inputEl.value.trim();
+            if (!cmd) return;
+
+            const lower = cmd.toLowerCase();
+            if (lower === 'clear' || lower === 'cls') {
+              clearLogs();
+              toast.info('Telemetry buffer cleared');
+            } else if (lower.startsWith('grep ')) {
+              const query = cmd.substring(5).trim().replace(/^["']|["']$/g, '');
+              setSearchQuery(query);
+              toast.success(`Filter query set to: "${query}"`);
+            } else if (lower.includes('level=error') || lower === 'error') {
+              setFilterLevel('ERROR');
+              toast.info('Filter set to: ERROR');
+            } else if (lower.includes('level=warn') || lower === 'warn') {
+              setFilterLevel('WARN');
+              toast.info('Filter set to: WARN');
+            } else if (lower.includes('level=info') || lower === 'info') {
+              setFilterLevel('INFO');
+              toast.info('Filter set to: INFO');
+            } else if (lower.includes('level=all') || lower === 'all') {
+              setFilterLevel('ALL');
+              toast.info('Filter set to: ALL levels');
+            } else if (lower.includes('source=')) {
+              const src = cmd.split('source=')[1].trim().toUpperCase() as LogSource;
+              setFilterSource(src);
+              toast.info(`Filter set to source: ${src}`);
+            } else if (lower === 'pause') {
+              setPaused(true);
+              toast.warning('Live stream paused');
+            } else if (lower === 'resume' || lower === 'play') {
+              setPaused(false);
+              toast.success('Live stream resumed');
+            } else if (lower === 'export' || lower === 'save') {
+              handleExportLogs();
+            } else if (lower === 'stats' || lower === 'count') {
+              toast.info(`Total: ${logs.length} logs | Errors: ${errorCount} | Warnings: ${warnCount}`);
+            } else if (lower === 'help') {
+              toast.info('Commands: grep <term>, level=ERROR|WARN|INFO|ALL, source=GATEWAY|POSTGRES|REDIS, pause, resume, clear, export, stats');
+            } else {
+              setSearchQuery(cmd);
+              toast.info(`Searching logs for: "${cmd}"`);
+            }
+
+            inputEl.value = '';
+          }}
+          className="flex items-center gap-2 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800 focus-within:border-cyan-500/50"
+        >
+          <span className="text-terminal-green font-bold select-none">telemetry@deployfix:~$</span>
+          <input
+            name="cliCmd"
+            type="text"
+            placeholder="Type CLI command (e.g. grep error, level=ERROR, source=GATEWAY, pause, clear, help)..."
+            className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-600 focus:outline-none text-xs font-mono"
+            autoComplete="off"
+            spellCheck={false}
+          />
+          <button
+            type="submit"
+            className="px-2.5 py-1 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[11px] transition-colors"
+          >
+            Run
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

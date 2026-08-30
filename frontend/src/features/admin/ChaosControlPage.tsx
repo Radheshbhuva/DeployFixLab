@@ -9,7 +9,8 @@ import { FailureType } from '@/types/lab.types';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Card } from '@/components/ui/Card';
 import { useToast } from '@/hooks/useToast';
-import { Zap, Activity } from 'lucide-react';
+import { SreTerminal } from '@/components/terminal/SreTerminal';
+import { Zap, Activity, Terminal as TerminalIcon } from 'lucide-react';
 
 export const ChaosControlPage: React.FC = () => {
   const [sessions, setSessions] = useState<ActiveSession[]>([]);
@@ -92,6 +93,94 @@ export const ChaosControlPage: React.FC = () => {
             <span className="text-xl font-bold text-status-danger">{activeChaosCount} Sessions</span>
           </div>
         </div>
+      </div>
+
+      {/* Interactive Chaos SRE Terminal Console */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-text-primary flex items-center gap-2">
+            <TerminalIcon className="w-5 h-5 text-brand-primary" />
+            Chaos CLI Operator Terminal
+          </h2>
+          <span className="text-xs font-mono text-text-muted">
+            Direct failure injection via SRE shell
+          </span>
+        </div>
+
+        <SreTerminal
+          title="chaos-daemon@deployfix-cluster (Privileged SRE Operator)"
+          height="h-[320px]"
+          quickCommands={[
+            { label: 'chaos list', cmd: 'chaos list' },
+            { label: 'inject latency', cmd: 'chaos inject latency --target=database --delay=500ms' },
+            { label: 'inject cpu-spike', cmd: 'chaos inject cpu-spike --target=gateway --load=95%' },
+            { label: 'inject crash', cmd: 'chaos inject crash --target=redis' },
+            { label: 'chaos status', cmd: 'chaos status' },
+            { label: 'chaos reset all', cmd: 'chaos reset all' },
+          ]}
+          context={{
+            user: 'chaos-admin',
+            hostname: 'chaos-controller',
+            currentDir: '/var/chaos',
+            onCustomCommand: (cmd) => {
+              const lower = cmd.toLowerCase();
+              const now = new Date().toISOString().substring(11, 19);
+              const lineId = () => Math.random().toString(36).substring(2, 9);
+
+              if (lower.startsWith('chaos')) {
+                if (lower.includes('list')) {
+                  const sessList = sessions.map(
+                    (s) => `  [${s.sessionId}] User: ${s.userId} | Lab: ${s.labTitle} | Status: ${s.status}`
+                  ).join('\n');
+                  return [
+                    {
+                      id: lineId(),
+                      type: 'output',
+                      text: `Active Chaos Sessions (${sessions.length}):\n${sessList || '  No active sessions currently found.'}`,
+                      timestamp: now,
+                    },
+                  ];
+                }
+                if (lower.includes('inject')) {
+                  const targetSession = sessions[0];
+                  if (targetSession) {
+                    handleConfirmInject(targetSession.sessionId, 'SERVICE_UNREACHABLE' as FailureType);
+                  }
+                  return [
+                    {
+                      id: lineId(),
+                      type: 'warning',
+                      text: `⚡ Chaos event injected: Fault scenario triggered on active cluster session. Synthetic SLA degraded to 42%.`,
+                      timestamp: now,
+                    },
+                  ];
+                }
+                if (lower.includes('reset')) {
+                  sessions.forEach((s) => handleResetChaos(s.sessionId));
+                  return [
+                    {
+                      id: lineId(),
+                      type: 'success',
+                      text: `✓ All active cluster chaos faults revoked. Target containers restarted with nominal latency.`,
+                      timestamp: now,
+                    },
+                  ];
+                }
+                if (lower.includes('status')) {
+                  return [
+                    {
+                      id: lineId(),
+                      type: 'info',
+                      text: `Chaos Daemon v2.4 Status: ACTIVE (Cluster Mesh: deployfix-chaos-net)\nTotal Active Faults: ${activeChaosCount}\nMonitoring Daemon: Nominal (0 dropped heartbeats)`,
+                      timestamp: now,
+                    },
+                  ];
+                }
+              }
+              return null;
+            },
+          }}
+        />
       </div>
 
       {/* Active Student Sessions Table */}

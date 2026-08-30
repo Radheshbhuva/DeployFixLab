@@ -4,6 +4,7 @@ import { labService } from '@/services/labService';
 import { Lab, LabSession, VerificationResult, TopologyNode } from '@/types/lab.types';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { VerificationResultCard } from './VerificationResultCard';
+import { SreTerminal } from '@/components/terminal/SreTerminal';
 import { useToast } from '@/hooks/useToast';
 import {
   ShieldCheck,
@@ -11,7 +12,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Server,
-  Send,
   CheckSquare,
   Square,
   HelpCircle,
@@ -48,9 +48,8 @@ export const LabExecutionPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'terminal' | 'logs' | 'telemetry' | 'config'>('terminal');
 
   // Terminal State
-  const [terminalInput, setTerminalInput] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [, setHistoryIndex] = useState<number>(-1);
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([
     { type: 'system', text: 'Initializing DeployFix SRE Sandbox Environment...' },
     { type: 'system', text: 'Sandbox isolated in Docker bridge network: deployfix-chaos-net (172.28.0.0/16)' },
@@ -74,7 +73,6 @@ export const LabExecutionPage: React.FC = () => {
   const [selectedConfigIndex, setSelectedConfigIndex] = useState(0);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
-  const terminalInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -139,7 +137,6 @@ export const LabExecutionPage: React.FC = () => {
     // Command Handlers
     if (lower === 'clear' || lower === 'cls') {
       setTerminalLines([]);
-      setTerminalInput('');
       return;
     }
 
@@ -319,29 +316,6 @@ Executing: docker compose restart gateway...
     }
 
     setTerminalLines(newLines);
-    setTerminalInput('');
-  };
-
-  // Keyboard navigation for Command History
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (commandHistory.length === 0) return;
-      const nextIndex = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
-      setHistoryIndex(nextIndex);
-      setTerminalInput(commandHistory[nextIndex]);
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIndex === -1) return;
-      const nextIndex = historyIndex + 1;
-      if (nextIndex >= commandHistory.length) {
-        setHistoryIndex(-1);
-        setTerminalInput('');
-      } else {
-        setHistoryIndex(nextIndex);
-        setTerminalInput(commandHistory[nextIndex]);
-      }
-    }
   };
 
   // Run Verification Suite
@@ -737,72 +711,51 @@ Executing: docker compose restart gateway...
               </div>
             </div>
 
-            {/* TAB 1: Terminal Screen */}
+            {/* TAB 1: Real Working SRE Terminal */}
             {activeTab === 'terminal' && (
-              <div className="flex-1 flex flex-col justify-between overflow-hidden">
-                <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-left space-y-2 scrollbar-thin scrollbar-thumb-slate-800">
-                  {terminalLines.map((line, idx) => (
-                    <div
-                      key={idx}
-                      className={`leading-relaxed whitespace-pre-wrap ${
-                        line.type === 'input'
-                          ? 'text-cyan-400 font-bold'
-                          : line.type === 'error'
-                          ? 'text-rose-400 bg-rose-500/10 p-2 rounded border border-rose-500/20'
-                          : line.type === 'success'
-                          ? 'text-emerald-400 bg-emerald-500/10 p-2 rounded border border-emerald-500/20'
-                          : line.type === 'system'
-                          ? 'text-amber-400/90 italic'
-                          : 'text-slate-300'
-                      }`}
-                    >
-                      {line.text}
-                    </div>
-                  ))}
-                  <div ref={terminalEndRef} />
-                </div>
-
-                {/* Quick Command Suggestions Helper Bar */}
-                <div className="bg-slate-900 px-3 py-1.5 border-t border-slate-800 flex items-center gap-2 overflow-x-auto text-[10px] font-mono text-slate-400 scrollbar-none">
-                  <span className="text-slate-500 uppercase font-semibold">Suggested:</span>
-                  {['docker compose ps', 'docker compose logs gateway', 'curl -I http://localhost:5000/health', 'cat docker-compose.yml', 'apply-patch'].map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => executeCommand(s)}
-                      className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 whitespace-nowrap transition-colors"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Terminal Input Bar */}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    executeCommand(terminalInput);
+              <div className="flex-1 flex flex-col overflow-hidden">
+                <SreTerminal
+                  key={session?.sessionId || lab.id}
+                  title={`sandbox@deployfix:~ (${lab.code})`}
+                  height="h-full"
+                  context={{
+                    labId: lab.id,
+                    labTitle: lab.title,
+                    patchApplied,
+                    files: lab.configFiles?.reduce((acc, f) => {
+                      acc[f.filename] = f.content;
+                      return acc;
+                    }, {} as Record<string, string>),
+                    onPatchApplied: () => {
+                      setPatchApplied(true);
+                      markObjective(1);
+                      markObjective(2);
+                      setTopologyNodes((prev) =>
+                        prev.map((node) => ({
+                          ...node,
+                          status: 'HEALTHY',
+                        }))
+                      );
+                      toast.success('Configuration patch applied! Target container restarted.');
+                    },
+                    onRunVerification: handleRunVerification,
                   }}
-                  className="bg-slate-950 p-2.5 border-t border-slate-800 flex items-center gap-2 font-mono text-xs"
-                >
-                  <span className="text-cyan-400 pl-2">$</span>
-                  <input
-                    ref={terminalInputRef}
-                    type="text"
-                    placeholder="Enter command (e.g. docker compose ps, curl, fix, help)..."
-                    value={terminalInput}
-                    onChange={(e) => setTerminalInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="flex-1 bg-transparent text-slate-100 placeholder-slate-600 focus:outline-none"
-                  />
-                  <button
-                    type="submit"
-                    className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-colors"
-                    title="Execute command"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
-                </form>
+                  quickCommands={[
+                    { label: 'docker compose ps', cmd: 'docker compose ps' },
+                    { label: 'docker logs gateway', cmd: 'docker compose logs gateway' },
+                    { label: 'curl /health', cmd: 'curl http://localhost:5000/health' },
+                    { label: 'cat .env', cmd: 'cat .env' },
+                    { label: 'nslookup db', cmd: 'nslookup postgres' },
+                    { label: 'netstat -tuln', cmd: 'netstat -tuln' },
+                    { label: 'apply-patch', cmd: 'apply-patch' },
+                    { label: 'verify solution', cmd: 'verify' },
+                  ]}
+                  onCommandExecuted={(cmd) => {
+                    const lower = cmd.toLowerCase();
+                    if (lower.includes('docker') || lower.includes('logs')) markObjective(0);
+                    if (lower.includes('cat') || lower.includes('nslookup') || lower.includes('ping') || lower.includes('curl')) markObjective(1);
+                  }}
+                />
               </div>
             )}
 
