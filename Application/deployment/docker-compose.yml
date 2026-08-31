@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # ─────────────────────────────────────────────────────────────────
+  # Backend API & WebSocket Service (Node.js 20 / Express / Prisma)
+  # ─────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: deployfix-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/deployfix_lab?schema=public
+      - DIRECT_URL=postgresql://postgres:postgres@postgres:5432/deployfix_lab?schema=public
+      - JWT_SECRET=deployfix_super_secure_jwt_secret_development_key_64chars_min
+      - JWT_REFRESH_SECRET=deployfix_super_secure_jwt_refresh_secret_development_key_64chars_min
+      - CORS_ORIGIN=http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - deployfix-network
+
+  # ─────────────────────────────────────────────────────────────────
+  # Frontend Client SPA (Vite / React 18 / TailwindCSS)
+  # ─────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: deployfix-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+      - VITE_WS_URL=ws://localhost:5000
+      - VITE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - deployfix-network
+
+  # ─────────────────────────────────────────────────────────────────
+  # Primary PostgreSQL Database (v16 Alpine)
+  # ─────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: deployfix-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=deployfix_lab
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d deployfix_lab"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - deployfix-network
+
+  # ─────────────────────────────────────────────────────────────────
+  # Redis Cache & Live Telemetry Store (v7 Alpine)
+  # ─────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: deployfix-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - deployfix-network
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+
+networks:
+  deployfix-network:
+    driver: bridge

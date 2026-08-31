@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: starter
     region: oregon
-    rootDir: backend
+    rootDir: Application/backend
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm run start
     healthCheckPath: /health

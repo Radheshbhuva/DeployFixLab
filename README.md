@@ -120,33 +120,30 @@ $$\text{READ} \longrightarrow \text{ANALYZE} \longrightarrow \text{EXPLAIN} \lon
 
 ## 🏗️ System Architecture
 
-DeployFix Lab is structured into modular application tiers and domain modules, with the core `ai/` engine package residing alongside `apps/`:
+DeployFix Lab is structured into modular application tiers, container deployment tooling, and a comprehensive engineering documentation set:
 
 ```
 DeployFixLab/
 │
-├── apps/
-│   ├── frontend/              # React 18 + Vite SPA Dashboard
-│   └── backend/               # Express.js REST API Server
+├── .github/                   # CI/CD workflows (Tests, Deployment & Sync)
+│   ├── scripts/               # Automation & commit tracking scripts
+│   └── workflows/             # GitHub Actions CI & Vercel/Render workflows
 │
-├── ai/                        # Core AI Engine Package
-│   ├── context/               # Project Context Builder Pipeline
-│   ├── evidence/              # Log, Health, Docker & Config Parsers
-│   ├── rules/                 # Deterministic Failure Rule Evaluators
-│   ├── diagnosis/             # Correlator, Root-Cause & Confidence Engine
-│   ├── providers/             # LLM Provider Abstractions (OpenAI, Mock)
-│   ├── prompts/               # Version-Controlled Prompt Templates
-│   ├── recovery/              # Guided Recovery Step Generator & Validator
-│   ├── schemas/               # Zod Validation & JSON Schema Contracts
-│   ├── evaluation/            # AI Accuracy Testing, Datasets & Metrics
-│   └── tests/                 # AI Unit & Pipeline Integration Tests
+├── Application/               # Unified Application Ecosystem
+│   ├── backend/               # Express.js 4.19 REST API & AI Engine
+│   │   ├── ai/                # Core AI Hybrid Diagnosis Engine
+│   │   ├── prisma/            # PostgreSQL schema & migrations
+│   │   └── src/               # Domain controllers, services, guards & tests
+│   │
+│   ├── frontend/              # React 18 + Vite SPA Dashboard & SRE Studio
+│   │   └── src/               # Features, components, terminal engine & stores
+│   │
+│   └── deployment/            # Multi-Service Orchestration & Cloud Blueprints
+│       ├── docker-compose.yml # Multi-container local/staging orchestration
+│       ├── render.yaml        # Render backend cloud blueprint
+│       └── README.md          # Infrastructure & deployment runbook
 │
-├── database/                  # Prisma schema, migrations, seeders
-├── infrastructure/            # Docker Compose, Nginx ingress & scripts
-├── reliability/               # Telemetry monitoring & health checks
-├── troubleshooting/           # Chaos failure injection engines
-│
-└── DOCs/                      # Authoritative 18-module documentation set
+└── DOCs/                      # Authoritative architecture & engineering documentation
 ```
 
 ---
