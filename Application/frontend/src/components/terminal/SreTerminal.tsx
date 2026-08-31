@@ -26,6 +26,7 @@ export interface SreTerminalProps {
   height?: string;
   className?: string;
   title?: string;
+  showHeader?: boolean;
   onCommandExecuted?: (cmd: string, output: TerminalOutputLine[]) => void;
 }
 
@@ -45,6 +46,7 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
   height = 'h-[460px]',
   className = '',
   title = 'deployfix-sandbox (Docker 26.0 / Alpine 3.19)',
+  showHeader = true,
   onCommandExecuted,
 }) => {
   const [lines, setLines] = useState<TerminalOutputLine[]>(() => {
@@ -83,7 +85,7 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [completions, setCompletions] = useState<string[]>([]);
 
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
 
@@ -98,9 +100,11 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
     }
   }, [context, engine]);
 
-  // Auto-scroll on new output
+  // Auto-scroll internal terminal body only without scrolling page
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (bodyRef.current) {
+      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+    }
   }, [lines]);
 
   // Handle Autocompletion suggestion calculation
@@ -218,83 +222,85 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
       className={`flex flex-col bg-terminal-bg border border-terminal-border rounded-2xl shadow-2xl overflow-hidden font-mono text-xs text-left ${
         isFullscreen ? 'fixed inset-4 z-50 h-[calc(100vh-32px)]' : height
       } ${className}`}
-      onClick={() => inputRef.current?.focus()}
+      onClick={() => inputRef.current?.focus({ preventScroll: true })}
     >
       {/* Terminal Title Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 border-b border-terminal-border select-none flex-shrink-0">
-        {/* Left Window Traffic Lights & Title */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-rose-500/80 hover:bg-rose-500 inline-block transition-colors cursor-pointer" />
-            <span className="w-3 h-3 rounded-full bg-amber-500/80 hover:bg-amber-500 inline-block transition-colors cursor-pointer" />
-            <span className="w-3 h-3 rounded-full bg-emerald-500/80 hover:bg-emerald-500 inline-block transition-colors cursor-pointer" />
+      {showHeader && (
+        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 border-b border-terminal-border select-none flex-shrink-0">
+          {/* Left Window Traffic Lights & Title */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-rose-500/80 hover:bg-rose-500 inline-block transition-colors cursor-pointer" />
+              <span className="w-3 h-3 rounded-full bg-amber-500/80 hover:bg-amber-500 inline-block transition-colors cursor-pointer" />
+              <span className="w-3 h-3 rounded-full bg-emerald-500/80 hover:bg-emerald-500 inline-block transition-colors cursor-pointer" />
+            </div>
+            <div className="flex items-center gap-2">
+              <TerminalIcon className="w-3.5 h-3.5 text-terminal-cyan" />
+              <span className="text-[11px] font-semibold text-slate-300 tracking-wide truncate max-w-xs">
+                {title}
+              </span>
+            </div>
           </div>
+
+          {/* Right Controls & Actions */}
           <div className="flex items-center gap-2">
-            <TerminalIcon className="w-3.5 h-3.5 text-terminal-cyan" />
-            <span className="text-[11px] font-semibold text-slate-300 tracking-wide truncate max-w-xs">
-              {title}
+            <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              SANDBOX READY
             </span>
+
+            <div className="flex items-center gap-1 border-l border-terminal-border pl-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCopy();
+                }}
+                className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
+                title="Copy output"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownload();
+                }}
+                className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
+                title="Download session log"
+              >
+                <Download className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClear();
+                }}
+                className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors"
+                title="Clear terminal (Ctrl+L)"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsFullscreen(!isFullscreen);
+                }}
+                className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
+                title="Toggle Fullscreen"
+              >
+                {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Right Controls & Actions */}
-        <div className="flex items-center gap-2">
-          <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            SANDBOX READY
-          </span>
-
-          <div className="flex items-center gap-1 border-l border-terminal-border pl-2">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCopy();
-              }}
-              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
-              title="Copy output"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDownload();
-              }}
-              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
-              title="Download session log"
-            >
-              <Download className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClear();
-              }}
-              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors"
-              title="Clear terminal (Ctrl+L)"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsFullscreen(!isFullscreen);
-              }}
-              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
-              title="Toggle Fullscreen"
-            >
-              {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-            </button>
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* Quick Action Shortcut Chips */}
       {quickCommands && quickCommands.length > 0 && (
@@ -321,13 +327,12 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
       )}
 
       {/* Terminal Screen Body */}
-      <div className="flex-1 p-3.5 overflow-y-auto space-y-1.5 text-[12px] leading-relaxed selection:bg-brand-primary/30">
+      <div ref={bodyRef} className="flex-1 p-3.5 overflow-y-auto space-y-1.5 text-[12px] leading-relaxed selection:bg-brand-primary/30">
         {lines.map((line) => (
           <div key={line.id} className="whitespace-pre-wrap break-all">
             {renderLineContent(line)}
           </div>
         ))}
-        <div ref={terminalEndRef} />
       </div>
 
       {/* Autocomplete Hints Toolbar */}
@@ -343,7 +348,7 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
               onClick={(e) => {
                 e.stopPropagation();
                 setInputVal(comp);
-                inputRef.current?.focus();
+                inputRef.current?.focus({ preventScroll: true });
               }}
               className="px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-slate-700 transition-colors"
             >
@@ -366,7 +371,6 @@ export const SreTerminal: React.FC<SreTerminalProps> = ({
           onKeyDown={handleKeyDown}
           placeholder="type SRE command (e.g. docker compose ps, curl /health, apply-patch, help)..."
           className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-600 focus:outline-none font-mono text-xs selection:bg-brand-primary/40"
-          autoFocus
           spellCheck={false}
           autoComplete="off"
         />
