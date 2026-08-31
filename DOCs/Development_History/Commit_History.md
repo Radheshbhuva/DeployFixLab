@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`1893bc0`](https://github.com/Radheshbhuva/DeployFixLab/commit/1893bc0) | 2026-08-31 07:01:54 | Radheshbhuva | `main` | `general` | `refactor(structure): consolidate frontend, backend, and deployment into Application directory` | Pushed | GitHub Actions |
 | [`08953f0`](https://github.com/Radheshbhuva/DeployFixLab/commit/08953f0) | 2026-08-30 09:54:32 | Radheshbhuva | `main` | `maintenance` | `chore(cleanup): remove unused/orphaned files, prototype prompts, and redundant configurations` | Pushed | GitHub Actions |
 | [`759bd74`](https://github.com/Radheshbhuva/DeployFixLab/commit/759bd74) | 2026-08-30 09:35:57 | Radheshbhuva | `main` | `features` | `feat(remove): delete Database Monitor page and all related backend/frontend code` | Pushed | GitHub Actions |
 | [`e54dfff`](https://github.com/Radheshbhuva/DeployFixLab/commit/e54dfff) | 2026-08-30 08:59:51 | Radheshbhuva | `main` | `features` | `feat(supabase): connect DeployFix Lab with Supabase PostgreSQL and add real-time Database Management & Monitoring Console` | Pushed | GitHub Actions |
