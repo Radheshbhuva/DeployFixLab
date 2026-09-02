@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { PageWrapper } from '@/components/ui/PageWrapper';
 import { useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -132,7 +133,8 @@ export const LabCatalogPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 pb-12 text-left">
+    <PageWrapper>
+      <div className="space-y-6 text-left">
       {/* Header Banner & SRE Engine Telemetry */}
       <div className="rounded-2xl border border-border-default bg-bg-surface p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div>
@@ -436,5 +438,6 @@ export const LabCatalogPage: React.FC = () => {
         </div>
       )}
     </div>
+    </PageWrapper>
   );
 };

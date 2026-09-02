@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { PageWrapper } from '@/components/ui/PageWrapper';
 import { MetricCard } from './MetricCard';
 import { ServiceHealthCard } from './ServiceHealthCard';
 import { ActivityFeed } from './ActivityFeed';
@@ -43,7 +44,8 @@ export const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-8 pb-8">
+    <PageWrapper>
+      <div className="space-y-8">
       {/* Top Banner Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-gradient-to-r from-bg-surface to-bg-raised p-6 rounded-2xl border border-border-default shadow-lg">
         <div>
@@ -145,5 +147,6 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 };

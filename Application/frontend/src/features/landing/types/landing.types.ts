@@ -22,10 +22,10 @@ export interface SampleIncident {
 }
 
 export interface ContextSourceData {
-  id: 'url' | 'files' | 'github' | 'deployment';
+  id: 'url' | 'files' | 'github';
   title: string;
   badge: string;
-  iconName: 'Globe' | 'FileCode' | 'GitBranch' | 'Cloud';
+  iconName: 'Globe' | 'FileCode' | 'GitBranch';
   description: string;
   capabilities: string[];
   securityNote: string;

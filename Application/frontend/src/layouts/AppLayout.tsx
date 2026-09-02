@@ -35,9 +35,9 @@ export const AppLayout: React.FC = () => {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <Header onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-        <main className="flex-1 px-4 py-6 lg:px-8 max-w-[1400px] w-full mx-auto animate-in fade-in duration-200">
+        <main className="flex-1 flex flex-col overflow-hidden w-full animate-in fade-in duration-200">
           <Outlet />
         </main>
       </div>

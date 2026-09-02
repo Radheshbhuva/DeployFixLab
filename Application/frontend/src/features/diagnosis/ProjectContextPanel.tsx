@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDiagnosisStore } from '@/store/diagnosisStore';
 import { ContextCompletenessGauge } from '@/components/ui/ContextCompletenessGauge';
 import { FileUploadZone } from './FileUploadZone';
-import { Globe, FileUp, Github, Rocket, CheckCircle2, ArrowRight, Layers, AlertCircle, RotateCcw, Sparkles } from 'lucide-react';
+import { Globe, FileUp, Github, CheckCircle2, ArrowRight, Layers, AlertCircle, RotateCcw, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
@@ -16,8 +16,6 @@ export const ProjectContextPanel: React.FC = () => {
     removeUploadedFile,
     connectGitHub,
     disconnectGitHub,
-    connectDeployment,
-    disconnectDeployment,
     clearAllSources,
     loadSampleSources,
     runFullDiagnosis,
@@ -31,7 +29,6 @@ export const ProjectContextPanel: React.FC = () => {
     Boolean(sources.website?.connected && sources.website?.url),
     Boolean(sources.uploads?.connected && sources.uploads?.files && sources.uploads.files.length > 0),
     Boolean(sources.github?.connected),
-    Boolean(sources.deployment?.connected),
   ].filter(Boolean).length;
 
   // Modals state
@@ -42,10 +39,6 @@ export const ProjectContextPanel: React.FC = () => {
   const [githubOwner, setGithubOwner] = useState('Radheshbhuva');
   const [githubRepo, setGithubRepo] = useState('DeployFixLab');
   const [githubBranch, setGithubBranch] = useState('main');
-
-  const [showDeploymentModal, setShowDeploymentModal] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState<'railway' | 'render' | 'vercel' | 'flyio' | 'other'>('railway');
-  const [serviceName, setServiceName] = useState('my-shop-api');
 
   const handleWebsiteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,12 +51,6 @@ export const ProjectContextPanel: React.FC = () => {
     e.preventDefault();
     connectGitHub(githubOwner, githubRepo, githubBranch);
     setShowGitHubModal(false);
-  };
-
-  const handleDeploymentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    connectDeployment(selectedPlatform, serviceName);
-    setShowDeploymentModal(false);
   };
 
   return (
@@ -81,11 +68,11 @@ export const ProjectContextPanel: React.FC = () => {
                   : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
               }`}
             >
-              {activeSourcesCount}/4 Sources Connected
+              {activeSourcesCount}/3 Sources Connected
             </span>
           </div>
           <p className="text-xs text-text-secondary mt-1">
-            Correlates evidence across Website URL, File Uploads, GitHub, and Deployment Platform. Select at least <strong>1 of 4</strong> sources to diagnose.
+            Correlates evidence across Website URL, File Uploads, and GitHub Repository. Select at least <strong>1 of 3</strong> sources to diagnose.
           </p>
         </div>
 
@@ -119,33 +106,34 @@ export const ProjectContextPanel: React.FC = () => {
         </div>
       </div>
 
-      {/* Error alert if any */}
+      {/* Error Alert if Validation Fails */}
       {error && (
-        <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2 font-medium">
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{error}</span>
-        </div>
-      )}
-
-      {/* 0 Sources Warning Alert */}
-      {!completeness.canRunDiagnosis && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-xs text-amber-800 dark:text-amber-300">
-          <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <div className="font-bold text-sm">Diagnosis Engine Requires at Least 1 Source</div>
-            <p>
-              Please connect at least <strong>1 of the 4 context sources</strong> below (Website URL, File Uploads, GitHub Repository, or Deployment Platform) to synthesize evidence and run the AI Diagnosis.
-            </p>
+        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs flex items-start gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            <span className="font-semibold block mb-0.5">Validation Rule Triggered</span>
+            {error}
           </div>
         </div>
       )}
 
-      {/* Context Completeness Gauge */}
+      {/* Empty State Banner when 0 sources are connected */}
+      {activeSourcesCount === 0 && (
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 text-xs flex items-start gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+          <div>
+            <span className="font-semibold block mb-0.5">No Context Connected</span>
+            Please connect at least <strong>1 of the 3 context sources</strong> below (Website URL, File Uploads, or GitHub Repository) to synthesize evidence and run the AI Diagnosis.
+          </div>
+        </div>
+      )}
+
+      {/* Context Completeness Gauge Component */}
       <ContextCompletenessGauge completeness={completeness} />
 
-      {/* 4 Context Sources Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Source 1: Website URL (Optional) */}
+      {/* 3 Source Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+        {/* Source 1: Website URL */}
         <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
@@ -154,84 +142,75 @@ export const ProjectContextPanel: React.FC = () => {
                   <Globe className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-text-primary text-sm flex items-center gap-1.5">
-                    <span>Website URL Inspection</span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-bg-raised text-text-muted border border-border-default font-normal">
-                      Optional
-                    </span>
-                  </h4>
-                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Public Endpoint Observation</span>
+                  <h4 className="font-semibold text-text-primary text-sm">Website URL</h4>
+                  <span className="text-[11px] text-text-muted">Public Endpoint Probe</span>
                 </div>
               </div>
 
-              {sources.website.connected && sources.website.url ? (
+              {sources.website.connected ? (
                 <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+20%)
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+30%)
                 </span>
               ) : (
-                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+20%</span>
+                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+30%</span>
               )}
             </div>
 
-            {sources.website.connected && sources.website.url ? (
-              <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1.5 font-mono">
-                <div className="text-text-primary truncate font-semibold">{sources.website.url}</div>
-                <div className="flex items-center gap-3 text-text-secondary text-[11px]">
-                  <span className="text-red-500 font-bold">HTTP {sources.website.httpStatus}</span>
-                  <span>TLS: {sources.website.tlsValid ? '✅ Valid' : '❌ Invalid'}</span>
-                  <span>Server: {sources.website.serverHeader}</span>
-                  <span>{sources.website.responseTimeMs}ms</span>
+            {sources.website.connected ? (
+              <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1">
+                <div className="font-mono text-text-primary truncate">{sources.website.url}</div>
+                <div className="flex items-center justify-between text-text-muted text-[11px] pt-1">
+                  <span>HTTP {sources.website.httpStatus} (502 Gateway)</span>
+                  <span className="text-status-warning">TLS Valid (248d)</span>
                 </div>
               </div>
             ) : (
               <p className="text-xs text-text-secondary mt-2">
-                Optional: Inspect public HTTP headers, TLS certificate, and status code (Headless observation).
+                Provide a staging or production URL to test live HTTP status, TLS handshake, and reverse proxy headers.
               </p>
             )}
           </div>
 
           <div className="pt-2 border-t border-border-default flex justify-end gap-2">
-            {sources.website.connected && sources.website.url && (
-              <Button variant="ghost" size="sm" onClick={disconnectWebsite} className="text-text-muted hover:text-red-500">
+            {sources.website.connected ? (
+              <Button variant="ghost" size="sm" onClick={disconnectWebsite}>
                 Disconnect
               </Button>
+            ) : (
+              <Button variant="primary" size="sm" onClick={() => setShowWebsiteModal(true)}>
+                Inspect URL
+              </Button>
             )}
-            <Button
-              variant={sources.website.connected && sources.website.url ? 'ghost' : 'primary'}
-              size="sm"
-              onClick={() => setShowWebsiteModal(true)}
-            >
-              {sources.website.connected && sources.website.url ? 'Update URL' : 'Inspect URL (Optional)'}
-            </Button>
           </div>
         </div>
 
-        {/* Source 2: Manual File Upload (V1 MVP) */}
+        {/* Source 2: File Uploads */}
         <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-brand-primary/10 rounded-lg text-brand-primary">
+                <div className="p-2 bg-amber-500/10 rounded-lg text-amber-500">
                   <FileUp className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-text-primary text-sm">Deployment File Uploads</h4>
-                  <span className="text-[11px] text-brand-primary font-medium">Configuration & Logs (V1)</span>
+                  <h4 className="font-semibold text-text-primary text-sm">File Uploads</h4>
+                  <span className="text-[11px] text-text-muted">Configs & Logs</span>
                 </div>
               </div>
 
-              {sources.uploads.connected ? (
+              {sources.uploads.connected && (sources.uploads.files?.length || 0) > 0 ? (
                 <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+35%)
+                  <CheckCircle2 className="w-3.5 h-3.5" /> {sources.uploads.files.length} Files (+35%)
                 </span>
               ) : (
                 <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+35%</span>
               )}
             </div>
 
+            {/* Drag & Drop Upload Zone */}
             <div className="mt-3">
               <FileUploadZone
-                files={sources.uploads.files}
+                files={sources.uploads.files || []}
                 onUpload={uploadFile}
                 onRemove={removeUploadedFile}
                 error={error}
@@ -240,26 +219,26 @@ export const ProjectContextPanel: React.FC = () => {
           </div>
         </div>
 
-        {/* Source 3: GitHub Repository (V2 Feature) */}
+        {/* Source 3: GitHub Repository */}
         <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-purple-500/10 rounded-lg text-purple-500">
+                <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-500">
                   <Github className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-text-primary text-sm">GitHub Repository</h4>
-                  <span className="text-[11px] text-purple-600 dark:text-purple-400 font-medium">Code & Architecture (V2)</span>
+                  <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-medium">Code & CI Sync</span>
                 </div>
               </div>
 
               {sources.github.connected ? (
                 <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+25%)
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Synced (+35%)
                 </span>
               ) : (
-                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+25%</span>
+                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+35%</span>
               )}
             </div>
 
@@ -268,16 +247,16 @@ export const ProjectContextPanel: React.FC = () => {
                 <div className="font-semibold text-text-primary">
                   {sources.github.repoOwner}/{sources.github.repoName}
                 </div>
-                <div className="text-text-secondary text-[11px]">
-                  Branch: <span className="text-brand-primary font-mono">{sources.github.branch}</span> · Synced {sources.github.syncedAt}
+                <div className="text-text-muted text-[11px]">
+                  Branch: <span className="font-mono text-text-primary">{sources.github.branch}</span> • Synced {sources.github.syncedAt}
                 </div>
-                <div className="text-emerald-600 dark:text-emerald-400 text-[11px] pt-1">
-                  ✓ {sources.github.artifactsCount} repository artifacts ingested (Dockerfile, package.json, nginx.conf)
+                <div className="text-[11px] text-indigo-500 font-medium pt-1">
+                  ✓ {sources.github.artifactsCount || 6} repository artifacts parsed
                 </div>
               </div>
             ) : (
               <p className="text-xs text-text-secondary mt-2">
-                Connect GitHub to automatically analyze Dockerfile, docker-compose.yml, package.json, and CI/CD workflows.
+                Connect your repository to auto-sync Dockerfiles, docker-compose.yml, GitHub Actions workflows, and recent commit diffs.
               </p>
             )}
           </div>
@@ -290,63 +269,6 @@ export const ProjectContextPanel: React.FC = () => {
             ) : (
               <Button variant="primary" size="sm" onClick={() => setShowGitHubModal(true)}>
                 Connect Repo
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Source 4: Deployment Platform (V3 Feature) */}
-        <div className="bg-bg-surface border border-border-default rounded-xl p-4 space-y-3 flex flex-col justify-between shadow-sm">
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
-                  <Rocket className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-text-primary text-sm">Deployment Platform</h4>
-                  <span className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">Runtime Operations (V3)</span>
-                </div>
-              </div>
-
-              {sources.deployment.connected ? (
-                <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Connected (+20%)
-                </span>
-              ) : (
-                <span className="text-xs text-text-muted bg-bg-raised border border-border-default px-2 py-0.5 rounded font-mono">+20%</span>
-              )}
-            </div>
-
-            {sources.deployment.connected ? (
-              <div className="mt-3 bg-bg-raised border border-border-default rounded-lg p-3 text-xs space-y-1">
-                <div className="font-semibold text-text-primary capitalize">
-                  {sources.deployment.platform} — {sources.deployment.serviceName}
-                </div>
-                <div className="text-red-500 font-medium text-[11px]">
-                  Status: 🔴 {sources.deployment.status?.toUpperCase()} (Deploy {sources.deployment.lastDeployAt})
-                </div>
-                {sources.deployment.runtimeLogsSnippet && (
-                  <div className="bg-terminal-bg text-rose-400 font-mono text-[10px] p-2 rounded mt-1 overflow-x-auto truncate border border-terminal-border">
-                    {sources.deployment.runtimeLogsSnippet}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-xs text-text-secondary mt-2">
-                Connect Railway, Render, Vercel, or Fly.io to ingest deployment build logs, runtime crash traces, and environment metadata.
-              </p>
-            )}
-          </div>
-
-          <div className="pt-2 border-t border-border-default flex justify-end gap-2">
-            {sources.deployment.connected ? (
-              <Button variant="ghost" size="sm" onClick={() => disconnectDeployment()}>
-                Disconnect
-              </Button>
-            ) : (
-              <Button variant="primary" size="sm" onClick={() => setShowDeploymentModal(true)}>
-                Connect Platform
               </Button>
             )}
           </div>
@@ -377,7 +299,7 @@ export const ProjectContextPanel: React.FC = () => {
         </form>
       </Modal>
 
-      {/* GitHub Connect Modal (V2 Spec) */}
+      {/* GitHub Connect Modal */}
       <Modal isOpen={showGitHubModal} onClose={() => setShowGitHubModal(false)} title="Connect GitHub Repository">
         <form onSubmit={handleGitHubSubmit} className="space-y-4">
           <Input
@@ -404,40 +326,6 @@ export const ProjectContextPanel: React.FC = () => {
             </Button>
             <Button type="submit" variant="primary">
               Connect Repository
-            </Button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* Deployment Connect Modal (V3 Spec) */}
-      <Modal isOpen={showDeploymentModal} onClose={() => setShowDeploymentModal(false)} title="Connect Deployment Platform">
-        <form onSubmit={handleDeploymentSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-text-secondary mb-1">Select Platform</label>
-            <select
-              value={selectedPlatform}
-              onChange={(e) => setSelectedPlatform(e.target.value as any)}
-              className="w-full bg-bg-primary border border-border-default text-text-primary text-sm rounded-lg p-2.5 focus:ring-brand-primary focus:border-brand-primary"
-            >
-              <option value="railway">Railway</option>
-              <option value="render">Render</option>
-              <option value="vercel">Vercel</option>
-              <option value="flyio">Fly.io</option>
-              <option value="other">Other Platform</option>
-            </select>
-          </div>
-          <Input
-            label="Service / App Name"
-            value={serviceName}
-            onChange={(e) => setServiceName(e.target.value)}
-            required
-          />
-          <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="ghost" onClick={() => setShowDeploymentModal(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="primary">
-              Connect Platform
             </Button>
           </div>
         </form>

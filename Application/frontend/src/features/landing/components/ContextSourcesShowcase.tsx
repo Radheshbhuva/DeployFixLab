@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, FileCode, GitBranch, Cloud, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Globe, FileCode, GitBranch, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { CONTEXT_SOURCES_DATA } from '../data/landingData';
 import { ContextSourceData } from '../types/landing.types';
 
@@ -7,7 +7,6 @@ const iconMap = {
   Globe,
   FileCode,
   GitBranch,
-  Cloud,
 };
 
 export const ContextSourcesShowcase: React.FC = () => {
@@ -20,18 +19,18 @@ export const ContextSourcesShowcase: React.FC = () => {
     <section id="sources" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border-default">
       <div className="text-center max-w-3xl mx-auto mb-16">
         <span className="text-brand-primary font-mono text-xs uppercase tracking-widest font-semibold">
-          4-Source Evidence Ingestion Engine
+          3-Source Evidence Ingestion Engine
         </span>
         <h2 className="text-3xl sm:text-4xl font-bold text-text-primary mt-2 tracking-tight">
-          Correlate All 4 Context Layers
+          Correlate All 3 Context Layers
         </h2>
         <p className="text-text-secondary mt-4 text-base leading-relaxed">
-          Single-log debugging is obsolete. DeployFix Lab synchronizes live endpoint health, container configs, git diffs, and cloud logs into one holistic diagnosis.
+          Single-log debugging is obsolete. DeployFix Lab synchronizes live endpoint health, container configs, and git diffs into one holistic diagnosis.
         </p>
       </div>
 
-      {/* 4 Interactive Tab Selectors */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+      {/* 3 Interactive Tab Selectors */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
         {CONTEXT_SOURCES_DATA.map((source) => {
           const IconComp = iconMap[source.iconName] || Globe;
           const isActive = source.id === activeSource.id;

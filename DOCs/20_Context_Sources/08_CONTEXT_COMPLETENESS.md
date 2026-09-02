@@ -23,15 +23,14 @@ The completeness score directly determines:
 ```
 Base: 0%
 
-+ Website URL connected:          +20%
++ Website URL connected:          +30%
 + File Upload (any files):        +15% min, up to +35% based on:
     - docker-compose.yml present: +5%
     - Dockerfile present:         +5%
     - nginx.conf present:         +5%
     - log files present:          +5%
     - .env.example present:       +5%
-+ GitHub Repository connected:    +25%
-+ Deployment Platform connected:  +20%
++ GitHub Repository connected:    +35%
 
 Maximum: 100%
 ```

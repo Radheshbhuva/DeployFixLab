@@ -5,21 +5,20 @@ import {
   ProjectContextModel,
   ContextCompletenessScore,
   UploadedFile,
-  CompletenessLevel
+  CompletenessLevel,
+  ContextSourceId
 } from '@/types/diagnosis.types';
 
 export function computeCompleteness(sources: ProjectContextModel['sources']): ContextCompletenessScore {
   let websiteScore = 0;
   let uploadsScore = 0;
   let githubScore = 0;
-  let deploymentScore = 0;
 
   const hasWebsite = Boolean(sources.website?.connected && sources.website?.url);
   const hasUploads = Boolean(sources.uploads?.connected && sources.uploads?.files && sources.uploads.files.length > 0);
   const hasGithub = Boolean(sources.github?.connected);
-  const hasDeployment = Boolean(sources.deployment?.connected);
 
-  if (hasWebsite) websiteScore = 20;
+  if (hasWebsite) websiteScore = 30;
 
   if (hasUploads) {
     uploadsScore = 15;
@@ -31,47 +30,41 @@ export function computeCompleteness(sources: ProjectContextModel['sources']): Co
     uploadsScore = Math.min(35, uploadsScore);
   }
 
-  if (hasGithub) githubScore = 25;
-  if (hasDeployment) deploymentScore = 20;
+  if (hasGithub) githubScore = 35;
 
-  const totalScore = websiteScore + uploadsScore + githubScore + deploymentScore;
-  const activeSourcesCount = [hasWebsite, hasUploads, hasGithub, hasDeployment].filter(Boolean).length;
+  const totalScore = websiteScore + uploadsScore + githubScore;
+  const activeSourcesCount = [hasWebsite, hasUploads, hasGithub].filter(Boolean).length;
   const canRunDiagnosis = activeSourcesCount >= 1;
 
   let level: CompletenessLevel = 'none';
   if (totalScore === 0) level = 'none';
-  else if (totalScore <= 20) level = 'minimal';
-  else if (totalScore <= 40) level = 'low';
-  else if (totalScore <= 60) level = 'moderate';
-  else if (totalScore <= 80) level = 'strong';
+  else if (totalScore <= 30) level = 'minimal';
+  else if (totalScore <= 50) level = 'low';
+  else if (totalScore <= 70) level = 'moderate';
+  else if (totalScore <= 90) level = 'strong';
   else level = 'comprehensive';
 
-  let nextRecommendedSource: 'github' | 'deployment' | 'website' | 'uploads' | undefined;
+  let nextRecommendedSource: ContextSourceId | undefined;
   let nextSourceGain = 0;
 
   if (!hasWebsite) {
     nextRecommendedSource = 'website';
-    nextSourceGain = 20;
+    nextSourceGain = 30;
   } else if (!hasUploads) {
     nextRecommendedSource = 'uploads';
     nextSourceGain = 35;
   } else if (!hasGithub) {
     nextRecommendedSource = 'github';
-    nextSourceGain = 25;
-  } else if (!hasDeployment) {
-    nextRecommendedSource = 'deployment';
-    nextSourceGain = 20;
+    nextSourceGain = 35;
   }
 
   let maxConfidence = 0;
   if (!canRunDiagnosis) {
     maxConfidence = 0;
   } else if (activeSourcesCount === 1) {
-    maxConfidence = 55;
+    maxConfidence = 60;
   } else if (activeSourcesCount === 2) {
-    maxConfidence = 75;
-  } else if (activeSourcesCount === 3) {
-    maxConfidence = 88;
+    maxConfidence = 80;
   } else {
     maxConfidence = 96;
   }
@@ -83,7 +76,6 @@ export function computeCompleteness(sources: ProjectContextModel['sources']): Co
       website: websiteScore,
       uploads: uploadsScore,
       github: githubScore,
-      deployment: deploymentScore,
     },
     nextRecommendedSource,
     nextSourceGain,
@@ -115,7 +107,6 @@ const initialSources: ProjectContextModel['sources'] = {
     totalEvidenceCount: 17,
   },
   github: { connected: false },
-  deployment: { connected: false },
 };
 
 const initialCompleteness = computeCompleteness(initialSources);
@@ -136,8 +127,6 @@ export interface DiagnosisState {
   clearAllFiles: () => void;
   connectGitHub: (owner: string, repo: string, branch: string) => void;
   disconnectGitHub: () => void;
-  connectDeployment: (platform: 'railway' | 'render' | 'vercel' | 'flyio' | 'other', serviceName: string) => void;
-  disconnectDeployment: (platform?: string) => void;
   clearAllSources: () => void;
   loadSampleSources: () => void;
 
@@ -331,53 +320,12 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
     });
   },
 
-  connectDeployment: (platform, serviceName) => {
-    set((state) => {
-      const updatedDeployment = {
-        connected: true,
-        platform,
-        serviceName,
-        status: 'crashed' as const,
-        lastDeployAt: '12 min ago',
-        buildStatus: 'success' as const,
-        runtimeLogsSnippet: 'Error: connect ECONNREFUSED 127.0.0.1:5432 at Connection.connect (pg:234)',
-      };
-
-      const updatedSources = { ...state.projectContext.sources, deployment: updatedDeployment };
-      const completeness = computeCompleteness(updatedSources);
-
-      return {
-        error: null,
-        projectContext: {
-          ...state.projectContext,
-          sources: updatedSources,
-          completeness,
-        },
-      };
-    });
-  },
-
-  disconnectDeployment: () => {
-    set((state) => {
-      const updatedSources = { ...state.projectContext.sources, deployment: { connected: false } };
-      const completeness = computeCompleteness(updatedSources);
-      return {
-        projectContext: {
-          ...state.projectContext,
-          sources: updatedSources,
-          completeness,
-        },
-      };
-    });
-  },
-
   clearAllSources: () => {
     set((state) => {
       const clearedSources: ProjectContextModel['sources'] = {
         website: { connected: false },
         uploads: { connected: false, files: [], totalEvidenceCount: 0 },
         github: { connected: false },
-        deployment: { connected: false },
       };
       const completeness = computeCompleteness(clearedSources);
       return {
@@ -417,7 +365,6 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
           totalEvidenceCount: 17,
         },
         github: { connected: false },
-        deployment: { connected: false },
       };
       const completeness = computeCompleteness(sampleSources);
       return {
@@ -447,7 +394,7 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
     if (!completeness.canRunDiagnosis) {
       set({
         error:
-          'Diagnosis cannot run. Please select or connect at least 1 of the 4 context sources (Website URL, File Uploads, GitHub, or Deployment Platform).',
+          'Diagnosis cannot run. Please select or connect at least 1 of the 3 context sources (Website URL, File Uploads, or GitHub Repository).',
       });
       return;
     }
@@ -460,7 +407,6 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
       if (sources.website.connected) activeSources.push('Website URL');
       if (sources.uploads.connected) activeSources.push('Uploaded Files');
       if (sources.github.connected) activeSources.push('GitHub Repository');
-      if (sources.deployment.connected) activeSources.push('Deployment Platform');
 
       // Qualification statement
       let qualification = `Based on evidence from ${activeSources.join(' + ')}.`;

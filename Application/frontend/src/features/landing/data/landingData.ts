@@ -141,30 +141,6 @@ diff --git a/backend/src/config/database.ts b/backend/src/config/database.ts
       { label: 'Offending Diff', value: 'Line 14 Found', status: 'warn' },
       { label: 'CI Status', value: 'Failed on Step 3', status: 'warn' }
     ]
-  },
-  {
-    id: 'deployment',
-    title: 'Deployment Platform Telemetry',
-    badge: 'PLATFORM LOGS',
-    iconName: 'Cloud',
-    description: 'Ingest build artifacts, runtime container events, exit codes, and platform logs from Vercel, AWS ECS, Docker Swarm, and Kubernetes.',
-    capabilities: [
-      'Container crash loop backoff and OOMKilled exit code analysis',
-      'Port binding mismatch detection',
-      'Build step log extraction and dependency failure identification',
-      'Microservice restart counter telemetry'
-    ],
-    securityNote: 'Read-only log stream subscription with automatic buffer rotation.',
-    codeSnippet: `// Runtime Container Event Log
-2026-08-19T12:00:04.12Z container "backend-api" died
-exitCode: 137 (OOMKilled)
-reason: Container memory limit (512MB) exceeded
-restartCount: 4`,
-    previewMetrics: [
-      { label: 'Exit Code', value: '137 (OOM)', status: 'warn' },
-      { label: 'Restarts', value: '4 Cycles', status: 'warn' },
-      { label: 'Platform', value: 'AWS ECS / Docker', status: 'good' }
-    ]
   }
 ];
 
@@ -346,7 +322,7 @@ export const FAQ_DATA: FaqItem[] = [
   {
     id: 'faq-2',
     question: 'How is DeployFix Lab different from ChatGPT or generic LLMs?',
-    answer: 'Generic LLMs only see raw text pasted into a chat prompt and frequently hallucinate confident but ungrounded advice. DeployFix Lab correlates 4 structured layers (Website URL probes, Docker configurations, git commit histories, and deployment logs) using deterministic rules and mathematical evidence scoring. Every diagnosis includes verifiable evidence and capped confidence bounds.',
+    answer: 'Generic LLMs only see raw text pasted into a chat prompt and frequently hallucinate confident but ungrounded advice. DeployFix Lab correlates 3 structured layers (Website URL probes, Docker/Nginx configurations, and git commit histories) using deterministic rules and mathematical evidence scoring. Every diagnosis includes verifiable evidence and capped confidence bounds.',
     category: 'Engine'
   },
   {
@@ -357,8 +333,8 @@ export const FAQ_DATA: FaqItem[] = [
   },
   {
     id: 'faq-4',
-    question: 'What deployment platforms and technologies are supported?',
-    answer: 'DeployFix Lab supports Node.js, Express, React, Vite, Next.js, Python FastAPI, PostgreSQL, Redis, Nginx, Docker Compose, AWS ECS, Vercel, and Kubernetes pod logs.',
+    question: 'What runtime environments and technologies are supported?',
+    answer: 'DeployFix Lab supports Node.js, Express, React, Vite, Next.js, Python FastAPI, PostgreSQL, Redis, Nginx, and Docker Compose.',
     category: 'Compatibility'
   },
   {

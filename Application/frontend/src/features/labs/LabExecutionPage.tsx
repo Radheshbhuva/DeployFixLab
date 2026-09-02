@@ -5,6 +5,7 @@ import { Lab, LabSession, VerificationResult, TopologyNode } from '@/types/lab.t
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { VerificationResultCard } from './VerificationResultCard';
 import { SreTerminal } from '@/components/terminal/SreTerminal';
+import { PageWrapper } from '@/components/ui/PageWrapper';
 import { useToast } from '@/hooks/useToast';
 import {
   ShieldCheck,
@@ -195,7 +196,9 @@ export const LabExecutionPage: React.FC = () => {
   const progressPercent = Math.round((completedObjectivesCount / lab.objectives.length) * 100);
 
   return (
-    <div className="space-y-5 pb-12 text-left">
+    <PageWrapper fullHeight>
+      {/* Full-height split-pane container */}
+      <div className="flex flex-col h-full overflow-hidden px-4 pt-4 pb-4 lg:px-8 gap-4">
       {/* Unified SRE War-Room Mission Header */}
       <div className="rounded-2xl border border-border-default bg-bg-surface p-5 backdrop-blur-xl shadow-sm space-y-4">
         {/* Top Meta Bar */}
@@ -281,10 +284,10 @@ export const LabExecutionPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Main 2-Column Split Workspace */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Left Column: Triage Intel, Objectives & Topology (5 cols) */}
-        <div className="lg:col-span-5 space-y-4">
+      {/* Main 2-Column Split Workspace — fills all remaining height */}
+      <div className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0 overflow-hidden">
+        {/* Left Column: Triage Intel, Objectives & Topology — independently scrollable */}
+        <div className="lg:w-[38%] flex-shrink-0 space-y-4 overflow-y-auto pr-1 pb-4 scrollbar-thin scrollbar-thumb-border-default">
           {/* Card 1: Incident Triage Objectives */}
           <div className="rounded-2xl border border-border-default bg-bg-surface p-4 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
@@ -423,10 +426,10 @@ export const LabExecutionPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Unified SRE Console & Test Suite Results (7 cols) */}
-        <div className="lg:col-span-7 space-y-4">
-          {/* Main SRE Console Window */}
-          <div className="rounded-2xl border border-terminal-border bg-terminal-bg shadow-2xl overflow-hidden flex flex-col min-h-[580px]">
+        {/* Right Column: Unified SRE Console & Test Suite Results — stays fixed in viewport */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden gap-4">
+          {/* Main SRE Console Window — fills remaining height */}
+          <div className="rounded-2xl border border-terminal-border bg-terminal-bg shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0">
             {/* Unified Console Header & Tab Switcher */}
             <div className="bg-slate-950 px-4 py-2.5 border-b border-terminal-border flex items-center justify-between flex-wrap gap-2 select-none">
               <div className="flex items-center gap-2.5">
@@ -504,7 +507,7 @@ export const LabExecutionPage: React.FC = () => {
                   key={session?.sessionId || lab.id}
                   title={`sandbox@deployfix:~ (${lab.code})`}
                   showHeader={false}
-                  height="h-full min-h-[520px]"
+                  height="h-full min-h-0"
                   context={terminalContext}
                   quickCommands={[
                     { label: 'docker compose ps', cmd: 'docker compose ps' },
@@ -527,7 +530,7 @@ export const LabExecutionPage: React.FC = () => {
 
             {/* TAB 2: Live Log Stream Screen */}
             {activeTab === 'logs' && (
-              <div className="flex-1 flex flex-col justify-between overflow-hidden min-h-[520px]">
+              <div className="flex-1 flex flex-col justify-between overflow-hidden min-h-0">
                 {/* Log Controls Header */}
                 <div className="p-3 bg-slate-900 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
                   <div className="flex items-center gap-2">
@@ -600,7 +603,7 @@ export const LabExecutionPage: React.FC = () => {
 
             {/* TAB 3: Telemetry & Container Probes Screen */}
             {activeTab === 'telemetry' && (
-              <div className="flex-1 p-5 overflow-y-auto space-y-5 text-slate-100 min-h-[520px]">
+              <div className="flex-1 p-5 overflow-y-auto space-y-5 text-slate-100 min-h-0">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs">
                     <Activity className="w-4 h-4" />
@@ -669,7 +672,7 @@ export const LabExecutionPage: React.FC = () => {
 
             {/* TAB 4: Config Inspector & Patch Editor */}
             {activeTab === 'config' && (
-              <div className="flex-1 flex flex-col justify-between overflow-hidden min-h-[520px]">
+              <div className="flex-1 flex flex-col justify-between overflow-hidden min-h-0">
                 <div className="p-3 bg-slate-900 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 overflow-x-auto">
                     {(lab.configFiles || [{ filename: 'docker-compose.yml', path: './docker-compose.yml', content: '', patchedContent: '' }]).map(
@@ -731,6 +734,7 @@ export const LabExecutionPage: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </PageWrapper>
   );
 };

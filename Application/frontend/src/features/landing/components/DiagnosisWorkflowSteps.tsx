@@ -6,8 +6,8 @@ export const DiagnosisWorkflowSteps: React.FC = () => {
     {
       number: '01',
       title: 'Ingest Multi-Source Evidence',
-      tag: '4 CONTEXT SOURCES',
-      description: 'Connect your live URL endpoint, drag-and-drop Docker & compose files, link your GitHub branch, or stream deployment logs. The engine strips all secrets client-side before processing.',
+      tag: '3 CONTEXT SOURCES',
+      description: 'Connect your live URL endpoint, drag-and-drop Docker & compose files, or link your GitHub repository. The engine strips all secrets client-side before processing.',
       icon: Layers,
       accent: 'text-cyan-400',
       border: 'border-cyan-500/30',

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { PageWrapper } from '@/components/ui/PageWrapper';
 import { useLogStream } from '@/hooks/useLogStream';
 import { useLogStreamStore } from '@/store/logStreamStore';
 import { LogRow } from './LogRow';
@@ -78,7 +79,8 @@ export const LogViewerPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 pb-8 flex flex-col h-[calc(100vh-100px)] text-left">
+    <PageWrapper fullHeight>
+      <div className="space-y-4 flex flex-col h-full px-4 pt-4 pb-4 lg:px-8 text-left">
       {/* Top Header & Telemetry Summary */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 flex-shrink-0 bg-bg-surface p-4 rounded-2xl border border-border-default shadow-sm backdrop-blur-xl">
         <div className="flex items-center gap-3">
@@ -338,6 +340,7 @@ export const LogViewerPage: React.FC = () => {
           </button>
         </form>
       </div>
-    </div>
+      </div>
+    </PageWrapper>
   );
 };

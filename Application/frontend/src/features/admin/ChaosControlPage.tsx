@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { PageWrapper } from '@/components/ui/PageWrapper';
 import { SessionsTable } from './SessionsTable';
 import { ChaosEventLog } from './ChaosEventLog';
 import { ScenarioReference } from './ScenarioReference';
@@ -72,7 +73,8 @@ export const ChaosControlPage: React.FC = () => {
   const activeChaosCount = sessions.filter((s) => s.status === 'ACTIVE').length;
 
   return (
-    <div className="space-y-6 pb-8">
+    <PageWrapper>
+      <div className="space-y-6">
       {/* Top Banner Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-red-950/40 via-bg-surface to-bg-raised p-6 rounded-2xl border border-red-900/50 shadow-lg">
         <div>
@@ -222,5 +224,6 @@ export const ChaosControlPage: React.FC = () => {
         onConfirmInject={handleConfirmInject}
       />
     </div>
+    </PageWrapper>
   );
 };

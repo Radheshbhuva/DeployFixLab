@@ -1,62 +1,38 @@
-# 00 — Master Context Architecture Specification
+# 00 — DeployFix Master Context Architecture
 
-**Document ID:** DFL-CTX-00  
-**Status:** Active  
-**Version:** 1.0  
-**Last Updated:** 2026-08-13  
-**Owner:** Frontend & AI Architecture Team
+## 1. Overview & Vision
 
----
+DeployFix is an **evidence-based diagnostic platform**. Its core premise is that accurate diagnoses cannot be made from a single log file or error message in isolation.
 
-## 1. Purpose
-
-This document defines the **complete architectural specification** for how DeployFix ingests, correlates, and uses project context from all 4 authorized sources. It serves as the authoritative reference for frontend UI/UX design, backend API design, Evidence Engine implementation, and Diagnosis Engine design.
-
----
-
-## 2. The Four Context Sources
-
-DeployFix accepts project context through exactly **four authorized channels**:
+To diagnose production deployment failures accurately, DeployFix correlates evidence across **3 distinct context layers**:
 
 ```
-         USER PROJECT
-              │
- ┌────────────┼────────────┐
- │            │            │
- ▼            ▼            ▼
-GitHub    Deployment   Website
-Repo      Platform     URL
- │            │            │
- └────────────┼────────────┘
-              │
-              ▼
-     Manual File Upload
-              │
-              ▼
-    ┌──────────────────┐
-    │  PROJECT CONTEXT  │
-    └────────┬─────────┘
-             ▼
-      EVIDENCE ENGINE
-             ▼
-   EVIDENCE CORRELATION
-             ▼
-      DIAGNOSIS ENGINE
-             │
-      ┌──────┴──────┐
-      ▼             ▼
-  Root Cause    Confidence
-      │             │
-      └──────┬──────┘
-             ▼
-        Explanation
-             ▼
-     Guided Recovery
+┌─────────────────────────────────────────────────────────┐
+│                   DEPLOYFIX AI ENGINE                   │
+│                                                         │
+│   ┌───────────────┐ ┌───────────────┐ ┌─────────────┐   │
+│   │   Layer 1:    │ │   Layer 2:    │ │  Layer 3:   │   │
+│   │  Website URL  │ │ Manual Files  │ │ GitHub Repo │   │
+│   │  (External)   │ │  (Configs)    │ │   (Code)    │   │
+│   └───────┬───────┘ └───────┬───────┘ └──────┬──────┘   │
+│           │                 │                │          │
+│           └─────────────────┼────────────────┘          │
+│                             ▼                           │
+│                 ┌───────────────────────┐               │
+│                 │    EVIDENCE ENGINE    │               │
+│                 │  (Correlation Layer)  │               │
+│                 └───────────┬───────────┘               │
+│                             ▼                           │
+│                 ┌───────────────────────┐               │
+│                 │   DIAGNOSIS ENGINE    │               │
+│                 │ (Root Cause Analysis) │               │
+│                 └───────────────────────┘               │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Source Definitions
+## 2. The 3 Context Sources
 
 ### Source 1 — GitHub Repository
 - **Type:** Code + Architecture Source
@@ -64,20 +40,14 @@ Repo      Platform     URL
 - **Answers:** "What did the user build?"
 - **Key Artifacts:** `package.json`, `Dockerfile`, `docker-compose.yml`, `.env.example`, `nginx.conf`, `.github/workflows/`, Prisma schema, source tree, README
 
-### Source 2 — Deployment Platform
-- **Type:** Runtime + Operations Source
-- **Visibility:** Private (user must authorize)
-- **Answers:** "What happened after it was deployed?"
-- **Key Artifacts:** Deployment status, build logs, runtime logs, environment metadata, deployment history, service health
-
-### Source 3 — Website URL
+### Source 2 — Website URL
 - **Type:** Public External Observation
 - **Visibility:** Public only — no private data ever assumed
 - **Answers:** "What is publicly visible from outside the system?"
 - **Key Artifacts:** HTTP status, HTTPS/TLS state, redirects, response headers, observable errors, page structure
 - **Hard Limits:** Must NEVER assume it can see source code, database, environment variables, private APIs, server filesystem, Docker config, CI/CD config
 
-### Source 4 — Manual File Upload
+### Source 3 — Manual File Upload
 - **Type:** User-provided Evidence (MVP capability)
 - **Visibility:** User-controlled
 - **Answers:** "What configuration/logs did the user provide directly?"
@@ -85,9 +55,9 @@ Repo      Platform     URL
 
 ---
 
-## 4. Unified Project Context Model
+## 3. Unified Project Context Model
 
-All 4 sources merge into a single **Project Context** object:
+All 3 sources merge into a single **Project Context** object:
 
 ```typescript
 interface ProjectContext {
@@ -97,7 +67,6 @@ interface ProjectContext {
 
   sources: {
     github?: GitHubContext;
-    deployment?: DeploymentContext;
     website?: WebsiteContext;
     uploads?: UploadedFilesContext;
   };
@@ -110,39 +79,31 @@ interface ProjectContext {
 
 ### Context Completeness Score
 
-The system must calculate a **completeness score** (0–100%) based on how many sources have been provided:
+The system calculates a **completeness score** (0–100%) based on the sources provided:
 
 | Sources Provided | Min Score | Diagnosis Quality |
 |-----------------|-----------|-------------------|
 | 0 | 0% | Cannot diagnose |
-| Website URL only | 20% | Surface-level only |
+| Website URL only | 30% | Surface-level only |
 | File Upload only | 35% | Configuration-level |
-| Website + Uploads | 55% | Moderate |
-| GitHub | +25% | Deep code + config |
-| Deployment Platform | +20% | Runtime + build state |
+| Website + Uploads | 65% | Moderate |
+| GitHub | +35% | Deep code + config |
 
 ---
 
-## 5. Evidence Correlation Rules
+## 4. Evidence Correlation Rules
 
-The Evidence Engine must apply **deterministic correlation logic** before invoking AI:
+The Evidence Engine applies **deterministic correlation logic** before invoking AI:
 
 ### Rule: Port Mismatch Detection
 ```
-IF github.dockerfile.EXPOSE !== nginx.proxy_pass.port
+IF dockerfile.EXPOSE !== nginx.proxy_pass.port
 THEN evidence: PortMismatchEvidence { severity: CRITICAL }
-```
-
-### Rule: Build Failure Propagation
-```
-IF deployment.buildLogs.contains("ERROR")
-AND website.httpStatus === 502
-THEN evidence: BuildFailurePropagationEvidence
 ```
 
 ### Rule: Missing Environment Variables
 ```
-IF github.envExample.keys.any(k => !deployment.envVars.contains(k))
+IF envExample.keys.any(k => !container.envVars.contains(k))
 THEN evidence: MissingEnvVarEvidence
 ```
 
@@ -155,37 +116,35 @@ THEN evidence: TLSMisconfigurationEvidence
 
 ---
 
-## 6. Diagnosis Confidence Boundaries
+## 5. Diagnosis Confidence Boundaries
 
 | Context Completeness | Max Confidence | Diagnosis Type |
 |---------------------|----------------|----------------|
 | < 20% | Cannot produce | — |
-| 20–40% | 50% | Speculative |
-| 40–60% | 70% | Moderate |
-| 60–80% | 85% | Strong |
-| 80–100% | 95% | High-confidence |
+| 20–40% | 60% | Speculative |
+| 40–70% | 80% | Moderate |
+| 70–100% | 96% | High-confidence |
 
 > **Architectural Lock:** DeployFix must NEVER produce a diagnosis confidence higher than the context completeness allows. The AI must be constrained by evidence, not speculation.
 
 ---
 
-## 7. Frontend Implications
+## 6. Frontend Implications
 
 The frontend must:
 1. **Show which sources are connected** — always visible in Project Context Panel
 2. **Show context completeness score** — gauge/progress indicator
 3. **Show what each additional source would unlock** — motivate users to connect more sources
 4. **Qualify all diagnoses** with the sources that produced them
-5. **Prevent diagnosis initiation** if context completeness < 20%
+5. **Prevent diagnosis initiation** if context completeness is 0%
 
 ---
 
-## 8. Related Documents
+## 7. Related Documents
 
 | Document | Path |
 |----------|------|
 | GitHub Integration Spec | [`01_GITHUB_INTEGRATION.md`](./01_GITHUB_INTEGRATION.md) |
-| Deployment Platform Spec | [`02_DEPLOYMENT_PLATFORM.md`](./02_DEPLOYMENT_PLATFORM.md) |
 | Website URL Spec | [`03_WEBSITE_URL.md`](./03_WEBSITE_URL.md) |
 | File Upload Spec | [`04_FILE_UPLOAD.md`](./04_FILE_UPLOAD.md) |
 | Project Context Panel UI | [`05_PROJECT_CONTEXT_PANEL.md`](./05_PROJECT_CONTEXT_PANEL.md) |

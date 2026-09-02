@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-The **Project Context Panel** is the primary UI component where users connect and manage all 4 context sources. It is the **entry point to every diagnosis** and must clearly show:
+The **Project Context Panel** is the primary UI component where users connect and manage all 3 context sources. It is the **entry point to every diagnosis** and clearly shows:
 
 1. Which sources are connected
 2. What data has been collected
@@ -26,8 +26,8 @@ The **Project Context Panel** is the primary UI component where users connect an
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
 ║  Context Completeness                                        ║
-║  ████████████░░░░░░░░░░  55%  — Moderate                    ║
-║  "Add GitHub to reach 80%"                                   ║
+║  ████████████░░░░░░░░░░  65%  — Moderate                    ║
+║  "Add GitHub to reach 100%"                                  ║
 ║                                                              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
@@ -49,19 +49,12 @@ The **Project Context Panel** is the primary UI component where users connect an
 ║  │ 🔗 GitHub Repository                    ⊕ Connect    │   ║
 ║  │ Connect your repo to enable deep code analysis.     │    ║
 ║  │ Unlocks: Port analysis, env var detection, CI/CD    │    ║
-║  │                                  +25% completeness  │    ║
-║  └─────────────────────────────────────────────────────┘    ║
-║                                                              ║
-║  ┌─────────────────────────────────────────────────────┐    ║
-║  │ 🚀 Deployment Platform                  ⊕ Connect    │   ║
-║  │ Connect Railway, Render, or Vercel for runtime logs.│    ║
-║  │ Unlocks: Build failures, crash logs, env var gaps   │    ║
-║  │                                  +20% completeness  │    ║
+║  │                                  +35% completeness  │    ║
 ║  └─────────────────────────────────────────────────────┘    ║
 ║                                                              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
-║  Evidence Items: 17  ·  Sources: 2/4                         ║
+║  Evidence Items: 17  ·  Sources: 2/3                         ║
 ║                                                              ║
 ║             [ 🔬 Run Diagnosis ]                             ║
 ║                                                              ║
@@ -89,48 +82,26 @@ interface ContextCompletenessScore {
   score: number;          // 0-100
   level: 'none' | 'minimal' | 'moderate' | 'strong' | 'comprehensive';
   sourceContributions: {
-    website: number;      // 0 or 20
+    website: number;      // 0 or 30
     uploads: number;      // 0 to 35
-    github: number;       // 0 or 25
-    deployment: number;   // 0 or 20
+    github: number;       // 0 or 35
   };
-  nextRecommendedSource?: 'github' | 'deployment' | 'website' | 'uploads';
+  nextRecommendedSource?: 'github' | 'website' | 'uploads';
   nextSourceGain?: number;
   canRunDiagnosis: boolean; // score >= 20
 }
 ```
 
-**Visual Levels:**
-
-| Score | Label | Bar Color | Diagnosis Allowed |
-|-------|-------|-----------|------------------|
-| 0 | None | — | ❌ No |
-| 1–20 | Minimal | 🔴 Red | ❌ No |
-| 21–40 | Low | 🟠 Orange | ⚠️ Surface only |
-| 41–60 | Moderate | 🟡 Yellow | ✅ Yes |
-| 61–80 | Strong | 🔵 Blue | ✅ Yes |
-| 81–100 | Comprehensive | 🟢 Green | ✅ Yes |
-
 ---
 
-## 5. "Run Diagnosis" Button Rules
-
-| Condition | Button State |
-|-----------|-------------|
-| score < 20 | Disabled — tooltip: "Add at least one context source" |
-| score 20–40 | Enabled — warning: "Low context — diagnosis may be limited" |
-| score > 40 | Enabled — normal |
-
----
-
-## 6. React Component Architecture
+## 5. Component Tree
 
 ```
 <ProjectContextPanel>
-  ├── <ContextCompletenessGauge score={55} level="moderate" />
-  ├── <SourceCard type="website" status="connected" data={websiteCtx} />
-  ├── <SourceCard type="uploads" status="connected" data={uploadsCtx} />
-  ├── <SourceCard type="github" status="disconnected" gainPercent={25} />
-  ├── <SourceCard type="deployment" status="disconnected" gainPercent={20} />
-  └── <RunDiagnosisButton disabled={score < 20} onClick={runDiagnosis} />
+  ├── <ContextCompletenessGauge score={65} level="moderate" />
+  ├── <SourceCard type="website" status="connected" />
+  ├── <SourceCard type="uploads" status="connected" />
+  ├── <SourceCard type="github" status="disconnected" />
+  └── <DiagnosisActionBanner canRun={true} />
+</ProjectContextPanel>
 ```

@@ -372,17 +372,15 @@ When creating or importing this structure into ClickUp:
 
 ---
 
-### 🔹 Sprint 7.4: Deployment Platform Connector & Completeness Gauge
+### 🔹 Sprint 7.4: Unified Project Context Panel & Completeness Gauge
 * **Sprint ID:** `SPRINT-07-04`
 * **Priority:** Medium
 * **Estimated Effort:** 4 Story Points
-* **Description:** Build deployment platform selection and the unified Project Context summary panel with completeness score.
+* **Description:** Build the unified Project Context summary panel and multi-source completeness gauge across Website URL, File Uploads, and GitHub repository.
 * **Sub-tasks / Implementation Checklist:**
-  - [ ] Create `DeploymentPlatformCard.tsx` with platform selector (`Railway`, `Render`, `Vercel`, `Fly.io`).
-  - [ ] Build build log and runtime crash log input slots.
-  - [ ] Create `ProjectContextPanel.tsx` summarizing all active connected context channels (1 to 4).
-  - [ ] Build `ContextCompletenessGauge.tsx` calculating context percentage (e.g., 25% for 1 source, 100% for all 4) with quality level badges.
-* **Deliverable:** Unified Context Management Panel orchestrating all 4 ingestion channels.
+  - [ ] Create `ProjectContextPanel.tsx` summarizing all active connected context channels (1 to 3).
+  - [ ] Build `ContextCompletenessGauge.tsx` calculating context percentage across Website, Uploads, and GitHub with quality level badges.
+* **Deliverable:** Unified Context Management Panel orchestrating 3 ingestion channels.
 
 ---
 

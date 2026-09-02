@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { PageWrapper } from '@/components/ui/PageWrapper';
 import {
   Users,
   Shield,
@@ -135,7 +136,8 @@ export const UserManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <PageWrapper>
+      <div className="space-y-6">
       {/* Page Title & Breadcrumb */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -506,5 +508,6 @@ export const UserManagementPage: React.FC = () => {
         </div>
       )}
     </div>
+    </PageWrapper>
   );
 };

@@ -1,4 +1,4 @@
-export type ContextSourceId = 'github' | 'deployment' | 'website' | 'uploads';
+export type ContextSourceId = 'github' | 'website' | 'uploads';
 
 export type EvidenceSourceType =
   | 'GITHUB_URL'
@@ -30,16 +30,6 @@ export interface GitHubContext {
   branch?: string;
   syncedAt?: string;
   artifactsCount?: number;
-}
-
-export interface DeploymentContext {
-  connected: boolean;
-  platform?: 'railway' | 'render' | 'vercel' | 'flyio' | 'heroku' | 'other';
-  serviceName?: string;
-  status?: 'success' | 'failed' | 'building' | 'crashed';
-  lastDeployAt?: string;
-  buildStatus?: 'success' | 'failed';
-  runtimeLogsSnippet?: string;
 }
 
 export interface WebsiteContext {
@@ -77,7 +67,6 @@ export interface ContextCompletenessScore {
     website: number;
     uploads: number;
     github: number;
-    deployment: number;
   };
   nextRecommendedSource?: ContextSourceId;
   nextSourceGain?: number;
@@ -111,7 +100,6 @@ export interface ProjectContextModel {
   createdAt: string;
   sources: {
     github: GitHubContext;
-    deployment: DeploymentContext;
     website: WebsiteContext;
     uploads: UploadedFilesContext;
   };
@@ -140,4 +128,3 @@ export interface DiagnosisRequest {
   additionalContext?: string;
   projectContext?: ProjectContextModel;
 }
-
