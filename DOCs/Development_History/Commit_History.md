@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`5f7b99b`](https://github.com/Radheshbhuva/DeployFixLab/commit/5f7b99b) | 2026-09-02 08:43:08 | Radheshbhuva | `main` | `features` | `feat(diagnosis): remove Deployment Platform feature and streamline to 3 core context sources` | Pushed | GitHub Actions |
 | [`8142387`](https://github.com/Radheshbhuva/DeployFixLab/commit/8142387) | 2026-08-31 07:41:01 | Radheshbhuva | `main` | `bugfix` | `fix(labs): streamline lab layout hierarchy and fix viewport auto-scroll bug` | Pushed | GitHub Actions |
 | [`1893bc0`](https://github.com/Radheshbhuva/DeployFixLab/commit/1893bc0) | 2026-08-31 07:01:54 | Radheshbhuva | `main` | `general` | `refactor(structure): consolidate frontend, backend, and deployment into Application directory` | Pushed | GitHub Actions |
 | [`08953f0`](https://github.com/Radheshbhuva/DeployFixLab/commit/08953f0) | 2026-08-30 09:54:32 | Radheshbhuva | `main` | `maintenance` | `chore(cleanup): remove unused/orphaned files, prototype prompts, and redundant configurations` | Pushed | GitHub Actions |
