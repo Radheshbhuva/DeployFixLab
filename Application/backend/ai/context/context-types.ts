@@ -1,6 +1,7 @@
 export interface ProjectContextSource {
   githubUrl?: string;
   websiteUrl?: string;
+  uploadedFiles?: string[];
   deploymentFiles?: string[];
 }
 

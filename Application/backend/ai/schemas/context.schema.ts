@@ -6,6 +6,7 @@ export const ContextSchema = z.object({
   source: z.object({
     githubUrl: z.string().optional(),
     websiteUrl: z.string().optional(),
+    uploadedFiles: z.array(z.string()).optional(),
     deploymentFiles: z.array(z.string()).optional(),
   }),
   topology: z.object({

@@ -5,13 +5,17 @@ export function validateProjectContext(context: ProjectContext): {
   errors: string[];
 } {
   const errors: string[] = [];
+  const hasFiles =
+    (context.source.uploadedFiles && context.source.uploadedFiles.length > 0) ||
+    (context.source.deploymentFiles && context.source.deploymentFiles.length > 0);
+
   if (
     !context.source.githubUrl &&
     !context.source.websiteUrl &&
-    (!context.source.deploymentFiles || context.source.deploymentFiles.length === 0)
+    !hasFiles
   ) {
     errors.push(
-      'Project context must contain at least one valid source: GitHub Repository, Website URL, or Deployment Files.'
+      'Project context must contain at least one valid source: GitHub Repository, Website URL, or Uploaded Files.'
     );
   }
   return { valid: errors.length === 0, errors };
