@@ -151,3 +151,127 @@ model AuditLog {
 
   @@map("audit_logs")
 }
+
+// ==========================================
+// GitHub Repository Integration Models
+// ==========================================
+
+model GitHubConnection {
+  id                   String   @id @default(uuid()) @db.Uuid
+  userId               String   @map("user_id") @db.Uuid
+  githubInstallationId BigInt   @unique @map("github_installation_id")
+  githubAccount        String   @map("github_account")
+  accountType          String   @default("User") @map("account_type") // "User" | "Organization"
+  avatarUrl            String?  @map("avatar_url")
+  encryptedToken       String?  @map("encrypted_token") @db.Text // AES-256-GCM encrypted token
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  repositories Repository[]
+
+  @@index([userId])
+  @@map("github_connections")
+}
+
+model Repository {
+  id            String            @id @default(uuid()) @db.Uuid
+  connectionId  String?           @map("connection_id") @db.Uuid
+  githubRepoId  BigInt?           @unique @map("github_repo_id")
+  owner         String            @db.VarChar(255)
+  name          String            @db.VarChar(255)
+  fullName      String            @map("full_name") @db.VarChar(511) // "owner/name"
+  defaultBranch String            @default("main") @map("default_branch") @db.VarChar(100)
+  visibility    String            @default("public") @db.VarChar(20) // "public" | "private"
+  url           String            @db.Text
+  isFork        Boolean           @default(false) @map("is_fork")
+  sourceType    String            @default("github_app") @map("source_type") @db.VarChar(50) // "github_app" | "public_url" | "zip_upload"
+  lastSyncedAt  DateTime?         @map("last_synced_at")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+
+  connection GitHubConnection?  @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  scans      RepositoryScan[]
+  contexts   ProjectContext[]
+
+  @@index([connectionId])
+  @@index([fullName])
+  @@map("repositories")
+}
+
+model RepositoryScan {
+  id             String         @id @default(uuid()) @db.Uuid
+  repositoryId   String         @map("repository_id") @db.Uuid
+  commitSha      String?        @map("commit_sha") @db.VarChar(40)
+  branch         String         @default("main") @db.VarChar(100)
+  status         String         @default("PENDING") @db.VarChar(20) // "PENDING" | "SCANNING" | "COMPLETED" | "FAILED"
+  errorSummary   String?        @map("error_summary") @db.Text
+  artifactsCount Int            @default(0) @map("artifacts_count")
+  durationMs     Int?           @map("duration_ms")
+  startedAt      DateTime       @default(now()) @map("started_at")
+  completedAt    DateTime?      @map("completed_at")
+
+  repository     Repository     @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  projectContext ProjectContext?
+
+  @@index([repositoryId])
+  @@map("repository_scans")
+}
+
+model ProjectContext {
+  id                String   @id @default(uuid()) @db.Uuid
+  scanId            String   @unique @map("scan_id") @db.Uuid
+  repositoryId      String   @map("repository_id") @db.Uuid
+
+  // Tech Stack Classifications
+  languages         String[] @default([])
+  frontendFramework String?  @map("frontend_framework") @db.VarChar(100)
+  backendFramework  String?  @map("backend_framework") @db.VarChar(100)
+  buildTool         String?  @map("build_tool") @db.VarChar(100)
+  packageManager    String?  @map("package_manager") @db.VarChar(50)
+  databaseEngine    String?  @map("database_engine") @db.VarChar(100)
+  orm               String?  @db.VarChar(100)
+
+  // Infrastructure Flags
+  dockerDetected  Boolean @default(false) @map("docker_detected")
+  dockerCompose   Boolean @default(false) @map("docker_compose")
+  nginxDetected   Boolean @default(false) @map("nginx_detected")
+  ciDetected      Boolean @default(false) @map("ci_detected")
+  prismaDetected  Boolean @default(false) @map("prisma_detected")
+
+  // Completeness & Raw Context (Structured JSON)
+  completenessScore Int    @default(25) @map("completeness_score")
+  parsedArtifacts   Json   @default("{}") @map("parsed_artifacts")
+  treeSummary       Json   @default("{}") @map("tree_summary")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  scan        RepositoryScan @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  repository  Repository     @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  diagnostics Diagnostic[]
+
+  @@index([repositoryId])
+  @@map("project_contexts")
+}
+
+model Diagnostic {
+  id             String   @id @default(uuid()) @db.Uuid
+  contextId      String   @map("context_id") @db.Uuid
+  ruleId         String   @map("rule_id") @db.VarChar(100) // e.g., "RULE_PORT_MISMATCH"
+  category       String   @db.VarChar(50) // "CONTAINER" | "NETWORKING" | "ENVIRONMENT" | "CI_CD"
+  severity       String   @db.VarChar(20) // "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | "INFO"
+  fileAffected   String?  @map("file_affected") @db.VarChar(500)
+  lineAffected   Int?     @map("line_affected")
+  title          String   @db.VarChar(255)
+  message        String   @db.Text
+  rootCause      String?  @map("root_cause") @db.Text
+  recommendation String?  @db.Text
+  evidence       Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  context ProjectContext @relation(fields: [contextId], references: [id], onDelete: Cascade)
+
+  @@index([contextId])
+  @@index([ruleId])
+  @@map("diagnostics")
+}
