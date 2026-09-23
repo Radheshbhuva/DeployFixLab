@@ -9,7 +9,8 @@ export function useLogStream(labSessionId?: string) {
   const setConnected = useLogStreamStore((s) => s.setConnected);
 
   const connect = useCallback(() => {
-    const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:3000';
+    const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = import.meta.env.VITE_WS_URL || `${proto}//${window.location.host}/ws`;
     const query = labSessionId ? `?sessionId=${labSessionId}` : '';
     const socket = new WebSocket(`${wsUrl}/logs/stream${query}`);
 

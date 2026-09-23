@@ -17,6 +17,7 @@ import { UserManagementPage } from '@/features/admin/UserManagementPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { ForbiddenPage } from '@/pages/ForbiddenPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { GitHubIntegrationPage } from '@/features/integrations/GitHubIntegrationPage';
 
 export const router = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ export const router = createBrowserRouter([
       {
         path: '/settings',
         element: <SettingsPage />,
+      },
+      {
+        path: '/integrations/github',
+        element: <GitHubIntegrationPage />,
       },
     ],
   },

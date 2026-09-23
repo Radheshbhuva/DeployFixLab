@@ -27,7 +27,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
   const from =
     (location.state as { from?: { pathname: string } })?.from?.pathname ||
     searchParams.get('redirect') ||
-    (selectedRole === 'ADMIN' ? '/admin' : '/dashboard');
+    '/dashboard';
 
   const handleSocialClick = async (provider: 'google' | 'github' | 'gmail') => {
     setActiveProvider(provider);
@@ -40,7 +40,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
       const providerLabel = provider === 'google' ? 'Google' : provider === 'github' ? 'GitHub' : 'Gmail';
       toast.success(`Authenticated with ${providerLabel} successfully! Welcome, ${res.user.fullName}.`);
 
-      const destination = res.user.role === 'ADMIN' ? '/admin' : from;
+      const destination = from && from !== '/login' ? from : '/dashboard';
       navigate(destination, { replace: true });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : `Failed to authenticate with ${provider}.`;

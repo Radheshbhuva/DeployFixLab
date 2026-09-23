@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   Users,
+  Github,
 } from 'lucide-react';
 import { NavItem } from './NavItem';
 import { useAuthStore } from '@/store/authStore';
@@ -131,6 +132,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
               </div>
             </div>
           )}
+
+          {/* Integrations Section */}
+          <div>
+            <span className="text-[10px] font-semibold text-text-muted uppercase tracking-widest px-3 block mb-2">
+              Integrations
+            </span>
+            <div className="space-y-1">
+              <NavItem
+                icon={<Github className="w-4 h-4" />}
+                label="GitHub"
+                path="/integrations/github"
+                onClick={onCloseMobile}
+                badge={{ text: 'Live', variant: 'info' }}
+              />
+            </div>
+          </div>
 
           <div>
             <span className="text-[10px] font-semibold text-text-muted uppercase tracking-widest px-3 block mb-2">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDiagnosisStore } from '@/store/diagnosisStore';
 import { ContextCompletenessGauge } from '@/components/ui/ContextCompletenessGauge';
 import { FileUploadZone } from './FileUploadZone';
@@ -23,6 +24,7 @@ export const ProjectContextPanel: React.FC = () => {
     error,
   } = useDiagnosisStore();
 
+  const navigate = useNavigate();
   const { completeness, sources } = projectContext;
 
   const activeSourcesCount = [
@@ -261,7 +263,15 @@ export const ProjectContextPanel: React.FC = () => {
             )}
           </div>
 
-          <div className="pt-2 border-t border-border-default flex justify-end gap-2">
+          <div className="pt-2 border-t border-border-default flex justify-end items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/integrations/github')}
+              title="Open dedicated GitHub Integration workspace"
+            >
+              App & Scans
+            </Button>
             {sources.github.connected ? (
               <Button variant="ghost" size="sm" onClick={disconnectGitHub}>
                 Disconnect
@@ -320,6 +330,19 @@ export const ProjectContextPanel: React.FC = () => {
             onChange={(e) => setGithubBranch(e.target.value)}
             required
           />
+          <div className="p-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-400 flex items-center justify-between">
+            <span>Want to scan public repos or link your GitHub App?</span>
+            <button
+              type="button"
+              onClick={() => {
+                setShowGitHubModal(false);
+                navigate('/integrations/github');
+              }}
+              className="text-xs font-semibold text-brand-primary underline ml-2"
+            >
+              Open Integration Page
+            </button>
+          </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="ghost" onClick={() => setShowGitHubModal(false)}>
               Cancel
