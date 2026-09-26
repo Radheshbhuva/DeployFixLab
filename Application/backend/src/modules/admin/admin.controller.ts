@@ -133,7 +133,7 @@ export class AdminController {
   /**
    * Retrieves summary statistics on user roles.
    */
-  public static async getStats(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public static async getStats(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const stats = await AdminService.getUserStats();
 

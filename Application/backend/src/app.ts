@@ -14,6 +14,7 @@ import { diagnosisRouter } from './modules/diagnosis/diagnosis.routes';
 import { recoveryRouter } from './modules/recovery/recovery.routes';
 import { auditRouter } from './modules/audit/audit.routes';
 import { adminRouter } from './modules/admin/admin.routes';
+import { githubRouter } from './modules/github/github.routes';
 
 // Load environment variables
 dotenv.config();
@@ -21,9 +22,24 @@ dotenv.config();
 const app = express();
 
 // --- CORS Configuration ---
-// Whitelists only the configured frontend origin; allows cookies/auth headers
+// Whitelists configured frontend origin, localhost ports, and Cloudflare tunnel origins
+const configuredOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim());
+
 const corsOptions: cors.CorsOptions = {
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: (requestOrigin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+    if (!requestOrigin) return callback(null, true);
+    if (
+      configuredOrigins.includes(requestOrigin) ||
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestOrigin) ||
+      /\.trycloudflare\.com$/.test(requestOrigin)
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error(`Origin ${requestOrigin} not allowed by CORS`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Refresh-Token'],
@@ -69,6 +85,9 @@ app.use('/api/v1/audit', auditRouter);
 
 // Mounting Admin Routes
 app.use('/api/v1/admin', adminRouter);
+
+// Mounting GitHub Integration Routes
+app.use('/api/v1/github', githubRouter);
 
 // Basic root route for verification
 app.get('/', (_req: Request, res: Response) => {

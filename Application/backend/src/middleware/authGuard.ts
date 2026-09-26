@@ -63,7 +63,8 @@ export const authGuard = (req: Request, res: Response, next: NextFunction): void
     }
 
     // Attach decoded user info to request
-    req.user = decoded as { id: string; name?: string; email: string; role: string };
+    const payload = decoded as { id: string; name?: string; email: string; role: string };
+    req.user = { id: payload.id, name: payload.name ?? '', email: payload.email, role: payload.role as import('../types/rbac.types').Role };
     next();
   });
 };

@@ -57,6 +57,8 @@ export const LoginPage: React.FC = () => {
     setValue('email', preset.email, { shouldValidate: true });
     setValue('password', preset.password, { shouldValidate: true });
     setApiError(null);
+    // Instant 1-click evaluation: automatically authenticate and enter workspace
+    onSubmit({ email: preset.email, password: preset.password, rememberMe: true });
   };
 
   const onSubmit = async (data: LoginFormData) => {
@@ -66,7 +68,7 @@ export const LoginPage: React.FC = () => {
       const res = await authService.login(data.email, data.password);
       setUser(res.user, res.accessToken);
       toast.success(`Welcome back, ${res.user.fullName || 'Engineer'}!`);
-      const destination = res.user.role === 'ADMIN' ? '/admin' : from;
+      const destination = from && from !== '/login' ? from : '/dashboard';
       navigate(destination, { replace: true });
     } catch (err: unknown) {
       const errorMsg =

@@ -1,34 +1,61 @@
 import { apiClient } from './apiClient';
-import { LoginResponse, RegisterResponse } from '@/types/auth.types';
+import { LoginResponse, RegisterResponse, UserRole } from '@/types/auth.types';
+
+function extractAuthPayload(
+  responseBody: any,
+  fallbackEmail: string,
+  fallbackRole: UserRole = 'STUDENT'
+): LoginResponse {
+  // Supports { success: true, data: { user, accessToken } } OR direct { user, accessToken }
+  const payload =
+    responseBody?.data?.user || responseBody?.data?.accessToken
+      ? responseBody.data
+      : responseBody?.user || responseBody?.accessToken
+      ? responseBody
+      : responseBody?.data || {};
+
+  const user = payload.user || {};
+  const email = user.email || fallbackEmail;
+  const rawRole = user.role || fallbackRole;
+  const role = (['STUDENT', 'INSTRUCTOR', 'ADMIN'].includes(rawRole) ? rawRole : 'STUDENT') as UserRole;
+
+  const rawName = user.fullName || user.name || (email ? email.split('@')[0] : 'User');
+  const fullName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+
+  return {
+    user: {
+      id: user.id || `usr-${Date.now()}`,
+      email,
+      fullName,
+      name: fullName,
+      role,
+      avatarUrl: user.avatarUrl,
+      createdAt: user.createdAt || new Date().toISOString(),
+    },
+    accessToken: payload.accessToken || `mock-jwt-token-${Date.now()}`,
+  };
+}
 
 export const authService = {
   login: async (email: string, password: string): Promise<LoginResponse> => {
     try {
-      const res = await apiClient.post<LoginResponse>('/auth/login', { email, password });
-      const data = res.data;
-      if (data?.user) {
-        data.user.fullName =
-          data.user.fullName || (data.user as any).name || email.split('@')[0];
+      const res = await apiClient.post('/auth/login', { email, password });
+      return extractAuthPayload(res.data, email);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      const msg = err?.response?.data?.error?.message || err?.response?.data?.message;
+      if (status === 400 || status === 401) {
+        throw new Error(msg || 'Invalid email or password');
       }
-      return data;
-    } catch {
-      // Mock response for offline/dev demo mode
-      const isStudent = email.toLowerCase().includes('student');
-      const isInstructor = email.toLowerCase().includes('instructor');
-      const role = isStudent ? 'STUDENT' : isInstructor ? 'INSTRUCTOR' : 'ADMIN';
-      const rawName = email.split('@')[0];
-      const fullName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
 
-      return {
-        user: {
-          id: 'usr-1',
-          email,
-          fullName,
-          role,
-          createdAt: new Date().toISOString(),
-        },
-        accessToken: 'mock-jwt-token-12345',
-      };
+      // Offline / network failure / server degraded fallback:
+      const isStudent = email.toLowerCase().includes('student');
+      const isInstructor =
+        email.toLowerCase().includes('instructor') ||
+        email.toLowerCase().includes('devops') ||
+        email.toLowerCase().includes('sre');
+      const role: UserRole = isStudent ? 'STUDENT' : isInstructor ? 'INSTRUCTOR' : 'ADMIN';
+      return extractAuthPayload(null, email, role);
     }
   },
 
@@ -36,48 +63,34 @@ export const authService = {
     email: string,
     password: string,
     fullName: string,
-    role: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN' = 'STUDENT'
+    role: UserRole = 'STUDENT'
   ): Promise<RegisterResponse> => {
     try {
-      const res = await apiClient.post<RegisterResponse>('/auth/register', {
+      const res = await apiClient.post('/auth/register', {
         email,
         password,
         name: fullName,
         fullName,
         role,
       });
-      const data = res.data;
-      if (data?.user) {
-        data.user.fullName =
-          data.user.fullName || (data.user as any).name || fullName;
+      return extractAuthPayload(res.data, email, role);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      const msg = err?.response?.data?.error?.message || err?.response?.data?.message;
+      if (status === 400 || status === 409) {
+        throw new Error(msg || 'Email is already registered');
       }
-      return data;
-    } catch {
-      return {
-        user: {
-          id: 'usr-2',
-          email,
-          fullName,
-          role,
-          createdAt: new Date().toISOString(),
-        },
-        accessToken: 'mock-jwt-token-67890',
-      };
+      return extractAuthPayload(null, email, role);
     }
   },
 
   socialLogin: async (
     provider: 'google' | 'github' | 'gmail',
-    role: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN' = 'STUDENT'
+    role: UserRole = 'STUDENT'
   ): Promise<LoginResponse> => {
     try {
-      const res = await apiClient.post<LoginResponse>('/auth/oauth', { provider, role });
-      const data = res.data;
-      if (data?.user) {
-        data.user.fullName =
-          data.user.fullName || (data.user as any).name || `${provider} User`;
-      }
-      return data;
+      const res = await apiClient.post('/auth/oauth', { provider, role });
+      return extractAuthPayload(res.data, `${provider}@deployfix.lab`, role);
     } catch {
       const mockProfiles = {
         google: {
@@ -94,12 +107,17 @@ export const authService = {
         },
       };
 
-      const profile = mockProfiles[provider];
+      const profile = mockProfiles[provider] || {
+        email: `${provider}@deployfix.lab`,
+        fullName: `${provider} Engineer`,
+      };
+
       return {
         user: {
           id: `usr-oauth-${provider}-${Date.now()}`,
           email: profile.email,
           fullName: profile.fullName,
+          name: profile.fullName,
           role,
           createdAt: new Date().toISOString(),
         },
@@ -117,7 +135,9 @@ export const authService = {
   },
 
   refreshToken: async (): Promise<{ accessToken: string }> => {
-    const res = await apiClient.post<{ accessToken: string }>('/auth/refresh');
-    return res.data;
+    const res = await apiClient.post('/auth/refresh');
+    const token = res.data?.data?.accessToken || res.data?.accessToken || '';
+    return { accessToken: token };
   },
 };
+
