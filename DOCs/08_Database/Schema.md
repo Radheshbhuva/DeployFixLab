@@ -176,3 +176,4 @@ model AuditLog {
   @@map("audit_logs")
 }
 ```
+

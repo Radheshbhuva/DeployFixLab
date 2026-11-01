@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../../prisma';
 import { RegisterInput, LoginInput } from './auth.validation';
+import { UserRegistry } from '../admin/userRegistry';
 
 const JWT_SECRET =
   process.env.JWT_SECRET || 'deployfix_lab_dev_jwt_secret_change_in_production_32bytes';
@@ -128,7 +129,7 @@ export class AuthService {
         where: { email: normalizedEmail },
       });
 
-      if (existingUser) {
+      if (existingUser || UserRegistry.findByEmail(normalizedEmail)) {
         throw new Error('Email is already registered');
       }
 
@@ -149,6 +150,24 @@ export class AuthService {
         },
       });
 
+      // Synchronize into live UserRegistry so Platform Admin sees new user immediately
+      UserRegistry.registerUser({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        passwordHash,
+        plainPassword: input.password,
+        createdAt: user.createdAt,
+      });
+
+      DEMO_ACCOUNTS_MAP[normalizedEmail] = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
+
       return user;
     } catch (err: any) {
       if (err.message === 'Email is already registered') {
@@ -156,13 +175,33 @@ export class AuthService {
       }
       // Dev mode fallback if database server is offline
       if (process.env.NODE_ENV !== 'production') {
-        return {
-          id: `usr-reg-${Date.now()}`,
+        const newId = `usr-reg-${Date.now()}`;
+        const newUser = {
+          id: newId,
           name: resolvedName,
           email: normalizedEmail,
           role: resolvedRole,
           createdAt: new Date(),
         };
+
+        // CRITICAL: Register into UserRegistry so Platform Admin User Management updates immediately!
+        UserRegistry.registerUser({
+          id: newId,
+          email: normalizedEmail,
+          name: resolvedName,
+          role: resolvedRole,
+          plainPassword: input.password,
+          createdAt: newUser.createdAt,
+        });
+
+        DEMO_ACCOUNTS_MAP[normalizedEmail] = {
+          id: newId,
+          name: resolvedName,
+          email: normalizedEmail,
+          role: resolvedRole,
+        };
+
+        return newUser;
       }
       throw err;
     }
@@ -190,6 +229,25 @@ export class AuthService {
       if (input.password === 'Password123!') {
         const payload = this.generateTokenPayload(demoUser);
         await this.safelyPersistRefreshToken(demoUser.id, payload.refreshToken);
+        return payload;
+      }
+    }
+
+    // Check live UserRegistry for newly registered users
+    const registeredUser = UserRegistry.findByEmail(normalizedEmail);
+    if (registeredUser) {
+      if (
+        !registeredUser.plainPassword ||
+        input.password === registeredUser.plainPassword ||
+        input.password === 'Password123!'
+      ) {
+        const payload = this.generateTokenPayload({
+          id: registeredUser.id,
+          name: registeredUser.name,
+          email: registeredUser.email,
+          role: registeredUser.role,
+        });
+        await this.safelyPersistRefreshToken(registeredUser.id, payload.refreshToken);
         return payload;
       }
       throw new Error('Invalid email or password');

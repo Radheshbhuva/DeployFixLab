@@ -3,7 +3,7 @@ import { DashboardService } from './dashboard.service';
 
 export class DashboardController {
   /**
-   * Retrieves the dashboard metrics package.
+   * Retrieves the comprehensive dashboard metrics package for the authenticated user.
    */
   public static async getDashboard(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -41,6 +41,60 @@ export class DashboardController {
         });
         return;
       }
+      next(error);
+    }
+  }
+
+  /**
+   * Retrieves personalized system metrics.
+   */
+  public static async getMetrics(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.id || 'demo-user';
+      const data = await DashboardService.getDashboardData(userId);
+      res.status(200).json({
+        success: true,
+        statusCode: 200,
+        data: data.metrics,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Retrieves personalized microservice health.
+   */
+  public static async getServices(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.id || 'demo-user';
+      const data = await DashboardService.getDashboardData(userId);
+      res.status(200).json({
+        success: true,
+        statusCode: 200,
+        data: data.healthServices,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Retrieves personalized recent activity.
+   */
+  public static async getActivity(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.id || 'demo-user';
+      const data = await DashboardService.getDashboardData(userId);
+      res.status(200).json({
+        success: true,
+        statusCode: 200,
+        data: data.activities,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
       next(error);
     }
   }

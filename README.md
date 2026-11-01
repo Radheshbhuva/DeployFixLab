@@ -219,7 +219,7 @@ DeployFix Lab contains an exhaustive 18-module technical documentation library l
 - 📂 **[`05_AI_Development_System`](DOCs/05_AI_Development_System/)** — Master AI Agent Execution Instructions & Agent Rules.
 - 📂 **[`06_Development_History`](DOCs/Development_History/)** — Master Git Audit Trail & Commit History Log.
 - 📂 **[`07_Development_Workflow`](DOCs/07_Development_Workflow/)** — Branching, PRs, Release & Hotfix Workflows.
-- 📂 **[`08_Database`](DOCs/08_Database/)** — 3NF Design, ER Diagram, Prisma Schema, Migration & Seeding Guides.
+- 📂 **[`08_Database`](DOCs/08_Database/)** — 3NF Design, ER Diagram, Prisma Schema, Migration, Seeding & Supabase Integration Guides.
 - 📂 **[`09_API`](DOCs/09_API/)** — OpenAPI 3.0 Specs, Endpoint Standards, Response Envelopes, Error Codes.
 - 📂 **[`10_Frontend`](DOCs/10_Frontend/)** — React Guidelines, Routing, Component Architecture, Zustand Stores.
 - 📂 **[`11_Backend`](DOCs/11_Backend/)** — Express Guidelines, Module Layout, Middleware Standards, Logging.

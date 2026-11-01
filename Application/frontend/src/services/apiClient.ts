@@ -1,13 +1,16 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/authStore';
 
-const rawApiBase = import.meta.env.VITE_API_BASE_URL;
-// Defaults to relative '/api/v1' when not explicitly provided.
-// This routes through Vite's dev proxy to localhost:5000 and works seamlessly
-// across both localhost and Cloudflare tunnel URLs (e.g. *.trycloudflare.com).
-const baseURL = rawApiBase && rawApiBase.trim() !== ''
-  ? (rawApiBase.endsWith('/api/v1') ? rawApiBase : `${rawApiBase.replace(/\/+$/, '')}/api/v1`)
-  : '/api/v1';
+const rawApiBase = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '').trim();
+// Normalizes base URL to always point to /api/v1
+const getBaseUrl = (): string => {
+  if (!rawApiBase) return '/api/v1';
+  const clean = rawApiBase.replace(/\/+$/, '');
+  if (clean.endsWith('/api/v1')) return clean;
+  if (clean.endsWith('/api')) return `${clean}/v1`;
+  return `${clean}/api/v1`;
+};
+const baseURL = getBaseUrl();
 
 export const apiClient = axios.create({
   baseURL,

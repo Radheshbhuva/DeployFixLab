@@ -61,4 +61,4 @@ If a migration fails during deployment:
 # 5. Database Inspection & Administration Tools
 
 * **Developer Local Inspection:** Developers launch Prisma Studio (`npx prisma studio`) to visually inspect records and verify CRUD migrations against local Docker PostgreSQL.
-* **Cloud Database Administration:** Production schema migrations run against **Supabase PostgreSQL** via `DATABASE_URL`. Remote table monitoring and cloud SQL execution are performed via **Supabase Dashboard / Supabase Studio**.
+* **Cloud Database Administration:** Production schema migrations run against **Supabase PostgreSQL** via `DATABASE_URL`. Remote table monitoring and cloud SQL execution are performed via **Supabase Dashboard / Supabase Studio**. See [`Supabase_Integration_Guide.md`](./Supabase_Integration_Guide.md) for full connection setup, dual-URL pooler configuration, and data query procedures.
