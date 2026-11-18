@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`8208d2e`](https://github.com/Radheshbhuva/DeployFixLab/commit/8208d2e) | 2026-11-18 12:39:11 | Radheshbhuva | `main` | `bugfix` | `fix(docker): install openssl and add linux-musl-openssl-3.0.x binary target for Prisma on Alpine` | Pushed | GitHub Actions |
 | [`6014b66`](https://github.com/Radheshbhuva/DeployFixLab/commit/6014b66) | 2026-11-18 07:46:33 | Radheshbhuva | `main` | `bugfix` | `fix(backend): move zod to runtime dependencies, compile seed script, and clean compose syntax` | Pushed | GitHub Actions |
 | [`8070cd1`](https://github.com/Radheshbhuva/DeployFixLab/commit/8070cd1) | 2026-11-18 06:33:18 | Radheshbhuva | `main` | `features` | `feat(deployment): configure root deployment, AWS Free Tier automation, and NGINX reverse proxy` | Pushed | GitHub Actions |
 | [`7a417ae`](https://github.com/Radheshbhuva/DeployFixLab/commit/7a417ae) | 2026-11-01 08:40:36 | Radheshbhuva | `main` | `features` | `feat(deployment): configure production builds, sync dashboard, user registry and docs` | Pushed | GitHub Actions |
