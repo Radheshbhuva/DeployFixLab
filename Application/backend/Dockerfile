@@ -18,16 +18,18 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
+# Fix permissions for non-root node user
+RUN chown -R node:node /app
+
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Security: Run as non-root user
 USER node
 
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node prisma ./prisma/
 
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --chown=node:node --from=builder /app/dist ./dist
 COPY --chown=node:node --from=builder /app/node_modules/.prisma ./node_modules/.prisma

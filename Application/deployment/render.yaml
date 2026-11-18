@@ -1,12 +1,12 @@
 services:
   - type: web
-    name: deployfix-backend-api
+    name: deployfix-api
     runtime: node
     plan: starter
     region: oregon
     rootDir: Application/backend
     buildCommand: npm install && npx prisma generate && npm run build
-    startCommand: npm run start
+    startCommand: npx prisma migrate deploy && npm run start
     healthCheckPath: /health
     autoDeploy: true
     envVars:

@@ -1,0 +1,130 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  DeployFix Lab — Automated AWS EC2 Free Tier Infrastructure Stack.
+  Deploys a t2.micro / t3.micro Ubuntu 22.04 LTS instance with 30GB gp3 EBS,
+  4GB swap configuration, Docker Compose, and automated DeployFix Lab launch.
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t3.micro
+    Description: EC2 instance type eligible for AWS 12-Month Free Tier.
+
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance.
+
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id'
+    Description: Automated SSM reference to the latest official Ubuntu 22.04 LTS AMI.
+
+Resources:
+  DeployFixSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for DeployFix Lab (HTTP, HTTPS, SSH)
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: SSH Access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: HTTP Web Application & API
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: HTTPS Secure Web Traffic
+      Tags:
+        - Key: Name
+          Value: deployfix-lab-sg
+
+  DeployFixInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref LatestAmiId
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !GetAtt DeployFixSecurityGroup.GroupId
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: DeployFixLab-Production-Server
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+
+          # 1. Configure 4GB Swap Space (Essential for 1GB RAM)
+          fallocate -l 4G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=4096
+          chmod 600 /swapfile
+          mkswap /swapfile
+          swapon /swapfile
+          echo '/swapfile none swap sw 0 0' >> /etc/fstab
+          sysctl vm.swappiness=20
+          echo 'vm.swappiness=20' >> /etc/sysctl.conf
+
+          # 2. Update and Install Prerequisites
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -y && apt-get upgrade -y
+          apt-get install -y ca-certificates curl gnupg lsb-release git ufw
+
+          # 3. Install Docker Engine & Compose Plugin
+          install -m 0755 -d /etc/apt/keyrings
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+          chmod a+r /etc/apt/keyrings/docker.asc
+
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+          apt-get update -y
+          apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          systemctl enable docker
+          systemctl start docker
+
+          # 4. Clone and Setup DeployFix Lab
+          APP_DIR="/opt/deployfixlab"
+          git clone https://github.com/Radheshbhuva/DeployFixLab.git "$APP_DIR"
+          cd "$APP_DIR"
+
+          cp .env.example .env
+          JWT_SEC=$(head -c 32 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 48)
+          JWT_REF_SEC=$(head -c 32 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 48)
+          sed -i "s|JWT_SECRET=.*|JWT_SECRET=$JWT_SEC|g" .env
+          sed -i "s|JWT_REFRESH_SECRET=.*|JWT_REFRESH_SECRET=$JWT_REF_SEC|g" .env
+          sed -i "s|NODE_ENV=.*|NODE_ENV=production|g" .env
+
+          # 5. Launch Application
+          docker compose up -d --build
+
+          # 6. Database Migration & Seed
+          sleep 15
+          docker compose exec -T backend npx prisma migrate deploy || true
+          docker compose exec -T backend npx prisma db seed || true
+
+Outputs:
+  PublicIPv4:
+    Description: Public IPv4 address of the DeployFix Lab EC2 server
+    Value: !GetAtt DeployFixInstance.PublicIp
+
+  ApplicationURL:
+    Description: HTTP URL to access DeployFix Lab SRE Studio
+    Value: !Sub "http://${DeployFixInstance.PublicIp}"
+
+  HealthCheckURL:
+    Description: API Healthcheck URL
+    Value: !Sub "http://${DeployFixInstance.PublicIp}/health"
+

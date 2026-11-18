@@ -12,20 +12,16 @@ RUN npm run build
 # Production NGINX Static Server
 FROM nginx:alpine AS runner
 
+# Remove default nginx static assets and config
+RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
+
+# Copy production assets from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose Vite/NGINX port
-EXPOSE 80 5173
+# Copy optimized SPA NGINX configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Custom NGINX SPA fallback configuration
-RUN echo 'server { \
-    listen 5173; \
-    listen 80; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html; \
-        try_files $$uri $$uri/ /index.html; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
+# Expose ports
+EXPOSE 80 5173
 
 CMD ["nginx", "-g", "daemon off;"]

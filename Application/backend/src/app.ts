@@ -22,7 +22,7 @@ dotenv.config();
 const app = express();
 
 // --- CORS Configuration ---
-// Whitelists configured frontend origin, localhost ports, and Cloudflare tunnel origins
+// Whitelists configured frontend origin, localhost ports, Cloudflare tunnels, and Vercel domains
 const configuredOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
   .split(',')
   .map((o) => o.trim());
@@ -34,7 +34,8 @@ const corsOptions: cors.CorsOptions = {
     if (
       configuredOrigins.includes(requestOrigin) ||
       /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestOrigin) ||
-      /\.trycloudflare\.com$/.test(requestOrigin)
+      /\.trycloudflare\.com$/.test(requestOrigin) ||
+      /\.vercel\.app$/.test(requestOrigin)
     ) {
       return callback(null, true);
     }
@@ -51,7 +52,6 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 // Mounting Health Routes directly under root
 app.use('/', healthRouter);

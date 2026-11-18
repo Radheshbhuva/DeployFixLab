@@ -1,0 +1,32 @@
+{
+  "name": "deployfix-lab-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DeployFix Lab — Full-Stack Production Deployment Troubleshooting Platform",
+  "author": "Radhesh Bhuva <@Radheshbhuva>",
+  "license": "MIT",
+  "scripts": {
+    "install:all": "npm --prefix Application/backend install && npm --prefix Application/frontend install",
+    "build": "npm --prefix Application/backend run build && npm --prefix Application/frontend run build",
+    "build:backend": "npm --prefix Application/backend run build",
+    "build:frontend": "npm --prefix Application/frontend run build",
+    "type-check": "npm --prefix Application/backend run type-check && npm --prefix Application/frontend run type-check",
+    "test": "npm --prefix Application/backend test && npm --prefix Application/frontend test",
+    "test:backend": "npm --prefix Application/backend test",
+    "test:frontend": "npm --prefix Application/frontend test",
+    "lint": "npm --prefix Application/backend run lint && npm --prefix Application/frontend run lint",
+    "dev:backend": "npm --prefix Application/backend run dev",
+    "dev:frontend": "npm --prefix Application/frontend run dev",
+    "prisma:generate": "npm --prefix Application/backend run prisma:generate",
+    "prisma:migrate": "npm --prefix Application/backend run db:migrate",
+    "prisma:seed": "npm --prefix Application/backend run db:seed",
+    "verify:deploy": "node scripts/verify-deployment.js",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

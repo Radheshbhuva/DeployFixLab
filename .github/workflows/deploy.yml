@@ -71,23 +71,31 @@ jobs:
     needs: [deploy-frontend, deploy-backend]
 
     steps:
-      - name: Wait for Render deploy to stabilize
-        run: sleep 30
-
-      - name: Probe Backend Healthcheck Endpoint
+      - name: Probe Backend Healthcheck Endpoint (with Retry)
         run: |
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://deployfix-api.onrender.com/health)
-          echo "Health endpoint returned: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" != "200" ]; then
-            echo "ERROR: Health check failed with status $HTTP_STATUS"
+          echo "Probing backend health endpoint with retries..."
+          SUCCESS=0
+          for i in {1..24}; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://deployfix-api.onrender.com/health || true)
+            echo "Attempt $i (wait 10s): status $HTTP_STATUS"
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "✅ Backend health check passed with HTTP 200!"
+              SUCCESS=1
+              break
+            fi
+            sleep 10
+          done
+          if [ "$SUCCESS" -ne 1 ]; then
+            echo "❌ ERROR: Backend health check failed to return HTTP 200 within timeout."
             exit 1
           fi
-          echo "Health check passed."
 
       - name: Probe Frontend Bundle
         run: |
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://deployfixlab.vercel.app)
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://deployfixlab.vercel.app || true)
           echo "Frontend returned: $HTTP_STATUS"
           if [ "$HTTP_STATUS" != "200" ]; then
             echo "WARNING: Frontend returned $HTTP_STATUS"
+          else
+            echo "✅ Frontend bundle probe passed with HTTP 200!"
           fi

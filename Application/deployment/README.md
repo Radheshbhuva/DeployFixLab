@@ -18,16 +18,17 @@ Application/
 
 ---
 
-## 🚀 Local Multi-Container Deployment
+## 🚀 Multi-Container Deployment
 
-Run the complete multi-service ecosystem (Backend, Frontend, PostgreSQL, Redis) with a single command:
+Run the complete multi-service ecosystem (Backend, Frontend, PostgreSQL, Redis) from either the project root or the deployment directory:
 
 ```bash
-# Navigate to deployment directory
-cd Application/deployment
+# From repository root:
+docker compose up -d --build
 
-# Start all containers in background
-docker compose up -d
+# Or from deployment directory:
+cd Application/deployment
+docker compose up -d --build
 
 # View running container states
 docker compose ps
@@ -40,7 +41,7 @@ docker compose logs -f
 
 | Service | Technology | Port | Description |
 |---|---|---|---|
-| **Frontend** | React / Vite SPA | `5173` | SRE Interactive Studio UI |
+| **Frontend** | React / Vite SPA / NGINX | `5173`, `80` | SRE Interactive Studio UI |
 | **Backend** | Express / Prisma | `5000` | REST API & Real-time WebSockets |
 | **PostgreSQL** | Postgres 16 Alpine | `5432` | Relational storage & lab telemetry |
 | **Redis** | Redis 7 Alpine | `6379` | Ephemeral caching & log buffers |
@@ -59,5 +60,5 @@ docker compose logs -f
 - **Root Directory:** `Application/backend`
 - **Environment:** Node.js 20
 - **Build Command:** `npm install && npx prisma generate && npm run build`
-- **Start Command:** `npm run start`
+- **Start Command:** `npx prisma migrate deploy && npm run start`
 - **Health Check Path:** `/health`
