@@ -21,6 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["ai/**/*", "src/**/*"],
+  "include": ["ai/**/*", "src/**/*", "prisma/**/*"],
   "exclude": ["node_modules", "dist", "coverage"]
 }
