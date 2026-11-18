@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`8070cd1`](https://github.com/Radheshbhuva/DeployFixLab/commit/8070cd1) | 2026-11-18 06:33:18 | Radheshbhuva | `main` | `features` | `feat(deployment): configure root deployment, AWS Free Tier automation, and NGINX reverse proxy` | Pushed | GitHub Actions |
 | [`7a417ae`](https://github.com/Radheshbhuva/DeployFixLab/commit/7a417ae) | 2026-11-01 08:40:36 | Radheshbhuva | `main` | `features` | `feat(deployment): configure production builds, sync dashboard, user registry and docs` | Pushed | GitHub Actions |
 | [`d7f7ed9`](https://github.com/Radheshbhuva/DeployFixLab/commit/d7f7ed9) | 2026-09-23 12:56:30 | Radheshbhuva | `main` | `features` | `feat(frontend): add github integration page and resolve authentication flow` | Pushed | GitHub Actions |
 | [`768d9f7`](https://github.com/Radheshbhuva/DeployFixLab/commit/768d9f7) | 2026-09-23 12:54:36 | Radheshbhuva | `main` | `features` | `feat(backend): add live github app integration module and resilient auth system` | Pushed | GitHub Actions |
