@@ -22,24 +22,11 @@ dotenv.config();
 const app = express();
 
 // --- CORS Configuration ---
-// Whitelists configured frontend origin, localhost ports, Cloudflare tunnels, and Vercel domains
-const configuredOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
-  .split(',')
-  .map((o) => o.trim());
-
+// Whitelists all request origins (reflects origin) with credentials support
 const corsOptions: cors.CorsOptions = {
-  origin: (requestOrigin, callback) => {
-    // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
-    if (!requestOrigin) return callback(null, true);
-    if (
-      configuredOrigins.includes(requestOrigin) ||
-      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestOrigin) ||
-      /\.trycloudflare\.com$/.test(requestOrigin) ||
-      /\.vercel\.app$/.test(requestOrigin)
-    ) {
-      return callback(null, true);
-    }
-    return callback(new Error(`Origin ${requestOrigin} not allowed by CORS`));
+  origin: (_requestOrigin, callback) => {
+    // Reflect request origin to allow any frontend (IP address, domain, tunnel, localhost)
+    callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

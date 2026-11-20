@@ -48,14 +48,18 @@ export const authService = {
         throw new Error(msg || 'Invalid email or password');
       }
 
-      // Offline / network failure / server degraded fallback:
-      const isStudent = email.toLowerCase().includes('student');
-      const isInstructor =
-        email.toLowerCase().includes('instructor') ||
-        email.toLowerCase().includes('devops') ||
-        email.toLowerCase().includes('sre');
-      const role: UserRole = isStudent ? 'STUDENT' : isInstructor ? 'INSTRUCTOR' : 'ADMIN';
-      return extractAuthPayload(null, email, role);
+      if (import.meta.env.VITE_OFFLINE_DEMO === 'true') {
+        // Offline / network failure / server degraded fallback (explicitly enabled only):
+        const isStudent = email.toLowerCase().includes('student');
+        const isInstructor =
+          email.toLowerCase().includes('instructor') ||
+          email.toLowerCase().includes('devops') ||
+          email.toLowerCase().includes('sre');
+        const role: UserRole = isStudent ? 'STUDENT' : isInstructor ? 'INSTRUCTOR' : 'ADMIN';
+        return extractAuthPayload(null, email, role);
+      }
+
+      throw new Error(msg || err?.message || 'Authentication failed. Please check connection.');
     }
   },
 

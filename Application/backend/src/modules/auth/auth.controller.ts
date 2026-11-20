@@ -3,6 +3,10 @@ import { RegisterSchema, LoginSchema } from './auth.validation';
 import { AuthService } from './auth.service';
 import { AuditService } from '../audit/audit.service';
 
+const isRequestSecure = (req: Request): boolean => {
+  return req.secure || req.headers['x-forwarded-proto'] === 'https';
+};
+
 export class AuthController {
   /**
    * Handles user registration.
@@ -37,8 +41,8 @@ export class AuthController {
       // Set long-lived refresh token in HTTP-only cookie
       res.cookie('refreshToken', authData.refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isRequestSecure(req),
+        sameSite: 'lax',
         path: '/api/v1/auth/refresh',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
@@ -106,8 +110,8 @@ export class AuthController {
       // Set long-lived refresh token in HTTP-only cookie
       res.cookie('refreshToken', authData.refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isRequestSecure(req),
+        sameSite: 'lax',
         path: '/api/v1/auth/refresh',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
@@ -209,8 +213,8 @@ export class AuthController {
       // Set new refresh token in cookie
       res.cookie('refreshToken', authData.refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isRequestSecure(req),
+        sameSite: 'lax',
         path: '/api/v1/auth/refresh',
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
@@ -262,8 +266,8 @@ export class AuthController {
       // Clear HttpOnly refresh cookie
       res.clearCookie('refreshToken', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isRequestSecure(req),
+        sameSite: 'lax',
         path: '/api/v1/auth/refresh',
       });
 
@@ -312,8 +316,8 @@ export class AuthController {
 
       res.cookie('refreshToken', authData.refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isRequestSecure(req),
+        sameSite: 'lax',
         path: '/api/v1/auth/refresh',
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
