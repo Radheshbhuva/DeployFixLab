@@ -13,8 +13,8 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=5000
-      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/deployfix_lab?schema=public}
-      - DIRECT_URL=${DIRECT_URL:-postgresql://postgres:postgres@postgres:5432/deployfix_lab?schema=public}
+      - DATABASE_URL=${EXTERNAL_DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/deployfix_lab?schema=public}
+      - DIRECT_URL=${EXTERNAL_DIRECT_URL:-postgresql://postgres:postgres@postgres:5432/deployfix_lab?schema=public}
       - JWT_SECRET=${JWT_SECRET:-deployfix_super_secure_jwt_secret_development_key_64chars_min}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-deployfix_super_secure_jwt_refresh_secret_development_key_64chars_min}
       - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:5173,http://localhost}

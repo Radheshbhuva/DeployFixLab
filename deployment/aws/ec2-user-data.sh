@@ -92,7 +92,10 @@ if [ ! -f .env ]; then
     sed -i "s|JWT_REFRESH_SECRET=.*|JWT_REFRESH_SECRET=${JWT_REF_SEC}|g" .env
     sed -i "s|NODE_ENV=.*|NODE_ENV=production|g" .env
     sed -i "s|VITE_ENVIRONMENT=.*|VITE_ENVIRONMENT=production|g" .env
+    sed -i "s|@localhost:5432|@postgres:5432|g" .env
 fi
+# Ensure database host is always postgres container in existing .env
+sed -i "s|@localhost:5432|@postgres:5432|g" .env || true
 
 # 7. Launch Containerized Multi-Service Stack
 echo "🚀 Building and starting DeployFix Lab containers..."
@@ -102,7 +105,7 @@ docker compose up -d --build
 echo "🌱 Running database migrations and seed..."
 sleep 15
 docker compose exec -T backend npx prisma migrate deploy || true
-docker compose exec -T backend npx prisma db seed || true
+docker compose exec -T backend npm run db:seed || true
 
 echo "=================================================="
 echo "✨ DeployFix Lab successfully deployed on AWS EC2!"
