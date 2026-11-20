@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`e1ce090`](https://github.com/Radheshbhuva/DeployFixLab/commit/e1ce090) | 2026-11-20 12:18:24 | Radheshbhuva | `main` | `bugfix` | `fix(auth): reflect request origin for CORS and dynamic secure cookie detection` | Pushed | GitHub Actions |
 | [`7bdbfa7`](https://github.com/Radheshbhuva/DeployFixLab/commit/7bdbfa7) | 2026-11-20 03:09:33 | Radheshbhuva | `main` | `bugfix` | `fix(db): ensure backend connects to postgres service container instead of localhost and add dockerignore` | Pushed | GitHub Actions |
 | [`8208d2e`](https://github.com/Radheshbhuva/DeployFixLab/commit/8208d2e) | 2026-11-18 12:39:11 | Radheshbhuva | `main` | `bugfix` | `fix(docker): install openssl and add linux-musl-openssl-3.0.x binary target for Prisma on Alpine` | Pushed | GitHub Actions |
 | [`6014b66`](https://github.com/Radheshbhuva/DeployFixLab/commit/6014b66) | 2026-11-18 07:46:33 | Radheshbhuva | `main` | `bugfix` | `fix(backend): move zod to runtime dependencies, compile seed script, and clean compose syntax` | Pushed | GitHub Actions |
