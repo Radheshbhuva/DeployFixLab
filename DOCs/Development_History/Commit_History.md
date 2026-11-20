@@ -52,6 +52,7 @@ For specific feature commits, bug fixes, database schema updates, and subsystem 
 
 | Commit Hash | Date & Time (ISO) | Author | Source Branch | Target Branch | Merge / Sync Type | Summary Description | Execution Env | Status |
 |---|---|---|---|---|---|---|---|
+| [`778cec5`](https://github.com/Radheshbhuva/DeployFixLab/commit/778cec5) | 2026-11-20 13:02:41 | Radheshbhuva | `main` | `maintenance` | `chore(rules): update help_level to HIGH` | Pushed | GitHub Actions |
 | [`55f3f48`](https://github.com/Radheshbhuva/DeployFixLab/commit/55f3f48) | 2026-11-20 12:31:28 | Radheshbhuva | `main` | `features` | `feat(aws): add AWS starter rules for Agent Toolkit` | Pushed | GitHub Actions |
 | [`e1ce090`](https://github.com/Radheshbhuva/DeployFixLab/commit/e1ce090) | 2026-11-20 12:18:24 | Radheshbhuva | `main` | `bugfix` | `fix(auth): reflect request origin for CORS and dynamic secure cookie detection` | Pushed | GitHub Actions |
 | [`7bdbfa7`](https://github.com/Radheshbhuva/DeployFixLab/commit/7bdbfa7) | 2026-11-20 03:09:33 | Radheshbhuva | `main` | `bugfix` | `fix(db): ensure backend connects to postgres service container instead of localhost and add dockerignore` | Pushed | GitHub Actions |
