@@ -647,12 +647,13 @@ def main():
     # CHAPTER 7 – MODULE DESCRIPTION
     # =========================================================
     SHOTS_DIR = r"c:\House_of_Growth\DeployFix_Lab-Trial\scripts\screenshots"
+    AWS_BUILD_SHOT = r"C:\Users\RADHESH\.gemini\antigravity\brain\0e22baf9-17c7-45ce-a8e3-5be80852c54c\.user_uploaded\media_1794984869317_5c1e4737.png"
 
-    def add_screenshot(filename, caption):
-        img_path = os.path.join(SHOTS_DIR, filename)
+    def add_screenshot(filename_or_path, caption, width_in=5.8):
+        img_path = filename_or_path if os.path.isabs(filename_or_path) else os.path.join(SHOTS_DIR, filename_or_path)
         if os.path.exists(img_path):
             p_img = add_p(doc, "", align=WD_ALIGN_PARAGRAPH.CENTER, space_before=4, space_after=3)
-            p_img.add_run().add_picture(img_path, width=Inches(5.8))
+            p_img.add_run().add_picture(img_path, width=Inches(width_in))
             add_p(doc, caption, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, size_pt=10, space_after=8)
 
     add_chapter(doc, "7", "MODULE DESCRIPTION")
@@ -681,8 +682,9 @@ def main():
     add_p(doc, "Correlates website URL health probes, uploaded configuration/log files, and GitHub commit diffs to synthesize deterministic root-cause analysis and remediation steps.")
     add_screenshot("fig_7_7_diagnosis.png", "Figure 7.6: AI Evidence-Based Diagnosis Engine correlating URL probes, file uploads, and GitHub context.")
 
-    add_section_heading(doc, "7.7 Labs, Tasks & RBAC User Management Modules (labs, tasks, admin, audit)")
+    add_section_heading(doc, "7.7 Admin & RBAC User Management Module (admin, audit, labs, tasks)")
     add_p(doc, "Provides CRUD operations for incident scenarios, guided recovery steps, role-based user governance (Admin, Instructor, Student), and immutable audit trails.")
+    add_screenshot("fig_7_8_users.png", "Figure 7.7: Identity & Access Management (RBAC) console for administering platform roles.")
 
     # =========================================================
     # CHAPTER 8 – IMPLEMENTATION DETAILS
@@ -787,6 +789,7 @@ def main():
         size_pt=10,
         space_after=8,
     )
+    add_screenshot(AWS_BUILD_SHOT, "Figure 12.2: Live Amazon EC2 Instance Connect session executing multi-stage Docker Compose container builds on Ubuntu Linux.", width_in=5.8)
 
     add_screenshot("fig_12_2_ec2_build.png", "Figure 12.2: Live AWS EC2 (ap-southeast-2) Instance Connect session executing multi-stage Docker Compose container builds.")
 
