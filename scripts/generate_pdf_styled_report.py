@@ -646,17 +646,43 @@ def main():
     # =========================================================
     # CHAPTER 7 – MODULE DESCRIPTION
     # =========================================================
+    SHOTS_DIR = r"c:\House_of_Growth\DeployFix_Lab-Trial\scripts\screenshots"
+
+    def add_screenshot(filename, caption):
+        img_path = os.path.join(SHOTS_DIR, filename)
+        if os.path.exists(img_path):
+            p_img = add_p(doc, "", align=WD_ALIGN_PARAGRAPH.CENTER, space_before=4, space_after=3)
+            p_img.add_run().add_picture(img_path, width=Inches(5.8))
+            add_p(doc, caption, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, size_pt=10, space_after=8)
+
     add_chapter(doc, "7", "MODULE DESCRIPTION")
-    add_section_heading(doc, "7.1 Auth & RBAC Module (auth)")
-    add_p(doc, "Handles user registration, login, token refresh, logout, and role-based middleware guards for Admin, Instructor, and Student routes.")
-    add_section_heading(doc, "7.2 Labs & Tasks Module (labs, tasks)")
-    add_p(doc, "Provides CRUD operations for incident scenarios, guided recovery steps, and task assignments.")
-    add_section_heading(doc, "7.3 Chaos Injection Engine (chaos)")
-    add_p(doc, "Simulates production faults (latency spikes, service degradation, connection errors) and records active failure states in Redis and PostgreSQL.")
-    add_section_heading(doc, "7.4 Recovery, Evidence & Diagnosis Modules (recovery, evidence, diagnosis)")
-    add_p(doc, "Collects diagnostic evidence, evaluates student remediation actions, and logs verification outcomes.")
-    add_section_heading(doc, "7.5 Admin, Audit & Health Modules (admin, audit, health, dashboard)")
-    add_p(doc, "Exposes platform-wide metrics, immutable audit trails, and /api/health readiness probes.")
+
+    add_section_heading(doc, "7.1 Landing & Entry Module")
+    add_p(doc, "The Landing Module presents the DeployFix Lab v2.0 platform overview, operational status indicator, and navigation entry points for launching the diagnostic sandbox or signing in.")
+    add_screenshot("fig_7_1_landing.png", "Figure 7.1: DeployFix Lab landing page interface showcasing multi-source diagnostic overview and live operational status.")
+
+    add_section_heading(doc, "7.2 Auth & RBAC Login Module (auth)")
+    add_p(doc, "Handles user registration, login, token refresh, logout, and role-based middleware guards for Platform Admin, Lead Instructor, and Student Engineer accounts.")
+    add_screenshot("fig_7_2_login.png", "Figure 7.2: Role-based authentication login interface supporting Admin, Instructor, and Student accounts.")
+
+    add_section_heading(doc, "7.3 Platform Telemetry Dashboard Module (dashboard, health)")
+    add_p(doc, "Displays cluster telemetry requests, gateway average latency, cluster error rate, active users, and real-time microservice health probes across Frontend, Backend, PostgreSQL, and NGINX.")
+    add_screenshot("fig_7_3_dashboard.png", "Figure 7.3: Platform Fleet Telemetry & Infrastructure Health dashboard displaying cluster metrics and microservice health probes.")
+
+    add_section_heading(doc, "7.4 Chaos Injection Control Module (chaos)")
+    add_p(doc, "Simulates controlled production faults (latency spikes, CPU spikes, service crashes) via an interactive Chaos CLI Operator Terminal and tracks active student lab sessions.")
+    add_screenshot("fig_7_5_chaos.png", "Figure 7.4: Admin Failure Injection Sandbox & Chaos CLI Operator Terminal for controlled fault injection.")
+
+    add_section_heading(doc, "7.5 Live Log Streaming Module (recovery, evidence)")
+    add_p(doc, "Streams container and application telemetry logs in real time with regex/level/service filtering and an interactive telemetry CLI for live incident triage.")
+    add_screenshot("fig_7_6_logs.png", "Figure 7.5: Live SRE Telemetry Stream & Interactive CLI for real-time container log inspection.")
+
+    add_section_heading(doc, "7.6 Multi-Source AI Diagnosis Module (diagnosis)")
+    add_p(doc, "Correlates website URL health probes, uploaded configuration/log files, and GitHub commit diffs to synthesize deterministic root-cause analysis and remediation steps.")
+    add_screenshot("fig_7_7_diagnosis.png", "Figure 7.6: AI Evidence-Based Diagnosis Engine correlating URL probes, file uploads, and GitHub context.")
+
+    add_section_heading(doc, "7.7 Labs, Tasks & RBAC User Management Modules (labs, tasks, admin, audit)")
+    add_p(doc, "Provides CRUD operations for incident scenarios, guided recovery steps, role-based user governance (Admin, Instructor, Student), and immutable audit trails.")
 
     # =========================================================
     # CHAPTER 8 – IMPLEMENTATION DETAILS
@@ -761,6 +787,8 @@ def main():
         size_pt=10,
         space_after=8,
     )
+
+    add_screenshot("fig_12_2_ec2_build.png", "Figure 12.2: Live AWS EC2 (ap-southeast-2) Instance Connect session executing multi-stage Docker Compose container builds.")
 
     add_section_heading(doc, "12.3 AWS Services and Their Roles")
     add_styled_table(
