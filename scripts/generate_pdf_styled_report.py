@@ -22,7 +22,7 @@ PROJECT_TITLE_UPPER = "DEPLOYFIX LAB: CLOUD INCIDENT RESPONSE & SRE DEPLOYMENT P
 PROJECT_TITLE = "DeployFix Lab: Cloud Incident Response & SRE Deployment Platform"
 STUDENT_NAME = "Radhesh Bhuva"
 STUDENT_NAME_UPPER = "RADHESH BHUVA"
-ENROLLMENT_NO = "[Enrollment No.]"
+ENROLLMENT_NO = "92400103102"
 
 
 def extract_logo():
@@ -40,7 +40,7 @@ def set_run_font(r, bold=False, italic=False, size_pt=11.5, color=BLACK):
     r.font.color.rgb = color
 
 
-def add_p(doc, text="", align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=False, italic=False, size_pt=11.5, color=BLACK, space_before=0, space_after=5, line_spacing=1.15, page_break_before=False):
+def add_p(doc, text="", align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=False, italic=False, size_pt=11.5, color=BLACK, space_before=0, space_after=5, line_spacing=1.15, page_break_before=False, keep_with_next=False):
     p = doc.add_paragraph()
     p.alignment = align
     pf = p.paragraph_format
@@ -49,6 +49,8 @@ def add_p(doc, text="", align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=False, italic=Fal
     pf.line_spacing = line_spacing
     if page_break_before:
         pf.page_break_before = True
+    if keep_with_next:
+        pf.keep_with_next = True
     if text:
         r = p.add_run(text)
         set_run_font(r, bold=bold, italic=italic, size_pt=size_pt, color=color)
@@ -99,7 +101,7 @@ def add_chapter(doc, num_str, title_str, page_break=True):
 
 
 def add_section_heading(doc, title):
-    add_p(doc, title, align=WD_ALIGN_PARAGRAPH.LEFT, bold=True, size_pt=13, space_before=10, space_after=4)
+    add_p(doc, title, align=WD_ALIGN_PARAGRAPH.LEFT, bold=True, size_pt=13, space_before=10, space_after=4, keep_with_next=True)
 
 
 def add_front_title(doc, title):
@@ -418,21 +420,21 @@ def main():
             ["Abstract", "5"],
             ["Abbreviations", "6"],
             ["Table of Contents", "7"],
-            ["Chapter 1 – Introduction", "8"],
-            ["Chapter 2 – Objectives and Scope", "9"],
-            ["Chapter 3 – Technology Stack and Development Environment", "10"],
-            ["Chapter 4 – System Analysis and Requirements", "11"],
-            ["Chapter 5 – System Architecture and Design", "12"],
-            ["Chapter 6 – Database & Cache Design", "13"],
-            ["Chapter 7 – Module Description", "14"],
-            ["Chapter 8 – Implementation Details", "15"],
-            ["Chapter 9 – Testing and Validation", "16"],
-            ["Chapter 10 – Security, Constraints and Limitations", "17"],
-            ["Chapter 11 – Future Enhancements", "18"],
-            ["Chapter 12 – Live AWS Cloud Deployment Architecture", "19"],
-            ["Chapter 13 – Conclusion", "22"],
-            ["References", "23"],
-            ["Appendices", "24"],
+            ["Chapter 1 – Introduction", "9"],
+            ["Chapter 2 – Objectives and Scope", "10"],
+            ["Chapter 3 – Technology Stack and Development Environment", "11"],
+            ["Chapter 4 – System Analysis and Requirements", "12"],
+            ["Chapter 5 – System Architecture and Design", "14"],
+            ["Chapter 6 – Database & Cache Design", "15"],
+            ["Chapter 7 – Module Description", "16"],
+            ["Chapter 8 – Implementation Details", "21"],
+            ["Chapter 9 – Testing and Validation", "22"],
+            ["Chapter 10 – Security, Constraints and Limitations", "23"],
+            ["Chapter 11 – Future Enhancements", "24"],
+            ["Chapter 12 – Live AWS Cloud Deployment Architecture", "25"],
+            ["Chapter 13 – Conclusion", "28"],
+            ["References", "29"],
+            ["Appendices", "30"],
         ],
         col_widths=[5.4, 1.3],
     )
@@ -646,45 +648,50 @@ def main():
     # =========================================================
     # CHAPTER 7 – MODULE DESCRIPTION
     # =========================================================
-    SHOTS_DIR = r"c:\House_of_Growth\DeployFix_Lab-Trial\scripts\screenshots"
+    SHOTS_DIR = r"c:\House_of_Growth\DeployFix_Lab-Trial\scripts"
     AWS_BUILD_SHOT = r"C:\Users\RADHESH\.gemini\antigravity\brain\0e22baf9-17c7-45ce-a8e3-5be80852c54c\.user_uploaded\media_1794984869317_5c1e4737.png"
 
-    def add_screenshot(filename_or_path, caption, width_in=5.8):
+    def add_screenshot(filename_or_path, caption, width_in=5.3):
         img_path = filename_or_path if os.path.isabs(filename_or_path) else os.path.join(SHOTS_DIR, filename_or_path)
-        if os.path.exists(img_path):
-            p_img = add_p(doc, "", align=WD_ALIGN_PARAGRAPH.CENTER, space_before=4, space_after=3)
-            p_img.add_run().add_picture(img_path, width=Inches(width_in))
-            add_p(doc, caption, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, size_pt=10, space_after=8)
+        if not os.path.exists(img_path):
+            raise FileNotFoundError(f"Missing screenshot: {img_path}")
+        p_img = add_p(doc, "", align=WD_ALIGN_PARAGRAPH.CENTER, space_before=3, space_after=2, keep_with_next=True)
+        p_img.add_run().add_picture(img_path, width=Inches(width_in))
+        add_p(doc, caption, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, size_pt=10, space_after=6)
 
     add_chapter(doc, "7", "MODULE DESCRIPTION")
 
     add_section_heading(doc, "7.1 Landing & Entry Module")
-    add_p(doc, "The Landing Module presents the DeployFix Lab v2.0 platform overview, operational status indicator, and navigation entry points for launching the diagnostic sandbox or signing in.")
+    add_p(doc, "The Landing Module presents the DeployFix Lab v2.0 platform overview, operational status indicator, and navigation entry points for launching the diagnostic sandbox or signing in.", keep_with_next=True)
     add_screenshot("fig_7_1_landing.png", "Figure 7.1: DeployFix Lab landing page interface showcasing multi-source diagnostic overview and live operational status.")
 
     add_section_heading(doc, "7.2 Auth & RBAC Login Module (auth)")
-    add_p(doc, "Handles user registration, login, token refresh, logout, and role-based middleware guards for Platform Admin, Lead Instructor, and Student Engineer accounts.")
+    add_p(doc, "Handles user registration, login, token refresh, logout, and role-based middleware guards for Platform Admin, Lead Instructor, and Student Engineer accounts.", keep_with_next=True)
     add_screenshot("fig_7_2_login.png", "Figure 7.2: Role-based authentication login interface supporting Admin, Instructor, and Student accounts.")
 
     add_section_heading(doc, "7.3 Platform Telemetry Dashboard Module (dashboard, health)")
-    add_p(doc, "Displays cluster telemetry requests, gateway average latency, cluster error rate, active users, and real-time microservice health probes across Frontend, Backend, PostgreSQL, and NGINX.")
+    add_p(doc, "Displays cluster telemetry requests, gateway average latency, cluster error rate, active users, and real-time microservice health probes across Frontend, Backend, PostgreSQL, and NGINX.", keep_with_next=True)
     add_screenshot("fig_7_3_dashboard.png", "Figure 7.3: Platform Fleet Telemetry & Infrastructure Health dashboard displaying cluster metrics and microservice health probes.")
 
-    add_section_heading(doc, "7.4 Chaos Injection Control Module (chaos)")
-    add_p(doc, "Simulates controlled production faults (latency spikes, CPU spikes, service crashes) via an interactive Chaos CLI Operator Terminal and tracks active student lab sessions.")
-    add_screenshot("fig_7_5_chaos.png", "Figure 7.4: Admin Failure Injection Sandbox & Chaos CLI Operator Terminal for controlled fault injection.")
+    add_section_heading(doc, "7.4 Chaos Sandbox & Incident Labs Module (labs)")
+    add_p(doc, "Provides an interactive catalog of containerized failure simulation labs covering database bridge mismatches, DNS resolution failures, Redis eviction crash loops, and recovery verification.", keep_with_next=True)
+    add_screenshot("fig_7_4_labs.png", "Figure 7.4: Chaos Sandbox & Incident Labs catalog featuring filterable production incident scenarios.")
 
-    add_section_heading(doc, "7.5 Live Log Streaming Module (recovery, evidence)")
-    add_p(doc, "Streams container and application telemetry logs in real time with regex/level/service filtering and an interactive telemetry CLI for live incident triage.")
-    add_screenshot("fig_7_6_logs.png", "Figure 7.5: Live SRE Telemetry Stream & Interactive CLI for real-time container log inspection.")
+    add_section_heading(doc, "7.5 Chaos Injection Control Module (chaos)")
+    add_p(doc, "Simulates controlled production faults (latency spikes, CPU spikes, service crashes) via an interactive Chaos CLI Operator Terminal and tracks active student lab sessions.", keep_with_next=True)
+    add_screenshot("fig_7_5_chaos.png", "Figure 7.5: Admin Failure Injection Sandbox & Chaos CLI Operator Terminal for controlled fault injection.")
 
-    add_section_heading(doc, "7.6 Multi-Source AI Diagnosis Module (diagnosis)")
-    add_p(doc, "Correlates website URL health probes, uploaded configuration/log files, and GitHub commit diffs to synthesize deterministic root-cause analysis and remediation steps.")
-    add_screenshot("fig_7_7_diagnosis.png", "Figure 7.6: AI Evidence-Based Diagnosis Engine correlating URL probes, file uploads, and GitHub context.")
+    add_section_heading(doc, "7.6 Live Log Streaming Module (recovery, evidence)")
+    add_p(doc, "Streams container and application telemetry logs in real time with regex/level/service filtering and an interactive telemetry CLI for live incident triage.", keep_with_next=True)
+    add_screenshot("fig_7_6_logs.png", "Figure 7.6: Live SRE Telemetry Stream & Interactive CLI for real-time container log inspection.")
 
-    add_section_heading(doc, "7.7 Admin & RBAC User Management Module (admin, audit, labs, tasks)")
-    add_p(doc, "Provides CRUD operations for incident scenarios, guided recovery steps, role-based user governance (Admin, Instructor, Student), and immutable audit trails.")
-    add_screenshot("fig_7_8_users.png", "Figure 7.7: Identity & Access Management (RBAC) console for administering platform roles.")
+    add_section_heading(doc, "7.7 Multi-Source AI Diagnosis Module (diagnosis)")
+    add_p(doc, "Correlates website URL health probes, uploaded configuration/log files, and GitHub commit diffs to synthesize deterministic root-cause analysis and remediation steps.", keep_with_next=True)
+    add_screenshot("fig_7_7_diagnosis.png", "Figure 7.7: AI Evidence-Based Diagnosis Engine correlating URL probes, file uploads, and GitHub context.")
+
+    add_section_heading(doc, "7.8 Admin & RBAC User Management Module (admin, audit, tasks)")
+    add_p(doc, "Provides CRUD operations for incident scenarios, guided recovery steps, role-based user governance (Admin, Instructor, Student), and immutable audit trails.", keep_with_next=True)
+    add_screenshot("fig_7_8_users.png", "Figure 7.8: Identity & Access Management (RBAC) console for administering platform roles.")
 
     # =========================================================
     # CHAPTER 8 – IMPLEMENTATION DETAILS
@@ -790,8 +797,6 @@ def main():
         space_after=8,
     )
     add_screenshot(AWS_BUILD_SHOT, "Figure 12.2: Live Amazon EC2 Instance Connect session executing multi-stage Docker Compose container builds on Ubuntu Linux.", width_in=5.8)
-
-    add_screenshot("fig_12_2_ec2_build.png", "Figure 12.2: Live AWS EC2 (ap-southeast-2) Instance Connect session executing multi-stage Docker Compose container builds.")
 
     add_section_heading(doc, "12.3 AWS Services and Their Roles")
     add_styled_table(
